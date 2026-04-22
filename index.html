@@ -1430,14 +1430,28 @@ async function interpretDream() {
     console.error('[ReaDream 오류]', msg);
 
     const shouldSwitch = /no longer available|deprecated|not found|404/i.test(msg)
-                      || /quota|rate.?limit|resource.?exhausted|exceeded.*quota/i.test(msg);
+                      || /quota|rate.?limit|resource.?exhausted|exceeded.*quota/i.test(msg)
+                      || /permission_denied|forbidden|403/i.test(msg);
     if (shouldSwitch) {
       failedModels.add(MODEL_CANDIDATES[modelIndex]);
       modelIndex++;
       if (modelIndex < MODEL_CANDIDATES.length) { isLoading = false; showLoading(false); interpretDream(); return; }
     }
 
-    showDreamNotice('해몽 연결에 실패했어요. 잠시 후 다시 시도해주세요 🌙', 'warn');
+    /* 에러 종류별 사용자 메시지 */
+    let userMsg;
+    if (/api.?key|invalid.?key|api_key_invalid|key_invalid/i.test(msg)) {
+      userMsg = 'API 키 오류예요. 키 설정을 확인해주세요 🔑';
+    } else if (/quota|rate.?limit|resource.?exhausted|exceeded/i.test(msg)) {
+      userMsg = '오늘 무료 해몽 횟수를 모두 사용했어요. 내일 다시 만나요 🌙';
+    } else if (/network|failed to fetch|load failed|networkerror/i.test(msg)) {
+      userMsg = '인터넷 연결을 확인하고 다시 시도해주세요 📶';
+    } else if (/timeout|abort/i.test(msg)) {
+      userMsg = '응답 시간이 초과됐어요. 다시 시도해주세요 ⏳';
+    } else {
+      userMsg = `해몽 연결에 실패했어요. 잠시 후 다시 시도해주세요 🌙`;
+    }
+    showDreamNotice(userMsg, 'warn');
   } finally {
     isLoading = false;
     showLoading(false);
