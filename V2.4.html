@@ -1314,8 +1314,9 @@ let modelIndex    = 0;
 let failedModels  = new Set();
 let isLoading          = false;
 let lastInterpretTime  = 0;
-let blockedByShortText = false; /* 직전 클릭이 20자 미만으로 막힌 경우 쿨다운 면제 */
+let blockedByShortText = false;
 const COOLDOWN_MS      = 60 * 1000;
+const PAGE_LOAD_TIME   = Date.now(); /* 이 페이지 세션 시작 시각 */
 
 function currentModel() {
   while (modelIndex < MODEL_CANDIDATES.length) {
@@ -1345,7 +1346,7 @@ async function interpretDream() {
   }
 
   const now = Date.now();
-  if (!blockedByShortText && lastInterpretTime > 0 && now - lastInterpretTime < COOLDOWN_MS) {
+  if (!blockedByShortText && lastInterpretTime > PAGE_LOAD_TIME && now - lastInterpretTime < COOLDOWN_MS) {
     startCooldownNotice(COOLDOWN_MS - (now - lastInterpretTime));
     return;
   }
