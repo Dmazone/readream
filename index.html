@@ -1312,9 +1312,10 @@ const MODEL_CANDIDATES = [
 
 let modelIndex    = 0;
 let failedModels  = new Set();
-let isLoading     = false;
-let lastInterpretTime = 0;
-const COOLDOWN_MS = 60 * 1000;
+let isLoading          = false;
+let lastInterpretTime  = 0;
+let blockedByShortText = false; /* 직전 클릭이 20자 미만으로 막힌 경우 쿨다운 면제 */
+const COOLDOWN_MS      = 60 * 1000;
 
 function currentModel() {
   while (modelIndex < MODEL_CANDIDATES.length) {
@@ -1336,6 +1337,7 @@ async function interpretDream() {
   if (isLoading) { showDreamNotice('해몽 중이니 잠시만 기다리세요 🌙', 'info'); return; }
 
   if (dream.length < 20) {
+    blockedByShortText = true;
     showDreamNotice('꿈에 대해 좀 더 자세히 써주세요 🌙', 'info');
     dreamInput.focus();
     dreamInput.setSelectionRange(dreamInput.value.length, dreamInput.value.length);
@@ -1343,10 +1345,11 @@ async function interpretDream() {
   }
 
   const now = Date.now();
-  if (lastInterpretTime > 0 && now - lastInterpretTime < COOLDOWN_MS) {
+  if (!blockedByShortText && lastInterpretTime > 0 && now - lastInterpretTime < COOLDOWN_MS) {
     startCooldownNotice(COOLDOWN_MS - (now - lastInterpretTime));
     return;
   }
+  blockedByShortText = false;
 
   hideDreamNotice();
   hideResult();
