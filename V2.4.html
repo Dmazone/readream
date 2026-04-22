@@ -1253,10 +1253,8 @@ document.getElementById('signupPassword').addEventListener('keydown', (e) => {
 /* ============================================================
    API 설정
    ============================================================ */
-const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const API_KEY  = 'AIzaSyBotwBexQ0uqBQ_xv_6kZfgzSMzIiLejpo';
-
-function getApiKey() { return API_KEY; }
+/* API 키는 Cloudflare Worker 환경변수에만 보관 — 프론트엔드에 노출 없음 */
+const API_BASE = 'https://dalbit-haemong.ekaledma.workers.dev';
 
 /* 글자 수 카운터 */
 document.getElementById('dreamInput').addEventListener('input', function () {
@@ -1376,7 +1374,7 @@ async function interpretDream() {
 
   try {
     const model = currentModel();
-    const res = await fetch(`${API_BASE}/${model}:generateContent?key=${getApiKey()}`, {
+    const res = await fetch(`${API_BASE}/models/${model}:generateContent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,
