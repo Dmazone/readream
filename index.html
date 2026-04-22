@@ -1310,13 +1310,10 @@ const MODEL_CANDIDATES = [
   'gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash',
 ];
 
-let modelIndex    = 0;
-let failedModels  = new Set();
-let isLoading          = false;
-let lastInterpretTime  = 0;
-let blockedByShortText = false;
-const COOLDOWN_MS      = 60 * 1000;
-const PAGE_LOAD_TIME   = Date.now(); /* 이 페이지 세션 시작 시각 */
+let modelIndex   = 0;
+let failedModels = new Set();
+let isLoading    = false;
+let cooldownTimer = null; /* null이면 해몽 가능, 실행 중이면 쿨다운 */
 
 function currentModel() {
   while (modelIndex < MODEL_CANDIDATES.length) {
@@ -1327,6 +1324,28 @@ function currentModel() {
   throw new Error('NO_AVAILABLE_MODEL');
 }
 
+/* 성공 후 버튼에 60초 카운트다운 표시 */
+function startButtonCooldown() {
+  const btn = document.getElementById('interpretBtn');
+  let remaining = 60;
+
+  function tick() {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      btn.textContent = '✦ 해몽하기';
+      btn.classList.remove('loading');
+    } else {
+      btn.textContent = `⏳ ${remaining}초 후 해몽 가능`;
+    }
+  }
+
+  btn.classList.add('loading');
+  btn.textContent = `⏳ ${remaining}초 후 해몽 가능`;
+  cooldownTimer = setInterval(tick, 1000);
+}
+
 let currentResult = null;
 
 document.getElementById('interpretBtn').addEventListener('click', interpretDream);
@@ -1335,22 +1354,17 @@ async function interpretDream() {
   const dreamInput = document.getElementById('dreamInput');
   const dream      = dreamInput.value.trim();
 
+  /* 쿨다운 중 — 버튼이 직접 카운트다운을 보여주므로 별도 메시지 불필요 */
+  if (cooldownTimer) return;
+
   if (isLoading) { showDreamNotice('해몽 중이니 잠시만 기다리세요 🌙', 'info'); return; }
 
   if (dream.length < 20) {
-    blockedByShortText = true;
     showDreamNotice('꿈에 대해 좀 더 자세히 써주세요 🌙', 'info');
     dreamInput.focus();
     dreamInput.setSelectionRange(dreamInput.value.length, dreamInput.value.length);
     return;
   }
-
-  const now = Date.now();
-  if (!blockedByShortText && lastInterpretTime > PAGE_LOAD_TIME && now - lastInterpretTime < COOLDOWN_MS) {
-    startCooldownNotice(COOLDOWN_MS - (now - lastInterpretTime));
-    return;
-  }
-  blockedByShortText = false;
 
   hideDreamNotice();
   hideResult();
@@ -1405,7 +1419,7 @@ async function interpretDream() {
     }));
     while (parsed.symbols.length < 3) parsed.symbols.push({ emoji:'✦', name:'—', meaning:'' });
 
-    lastInterpretTime = Date.now();
+    startButtonCooldown();
     currentResult = parsed;
     renderResult(parsed);
     showResult();
@@ -1423,7 +1437,7 @@ async function interpretDream() {
       if (modelIndex < MODEL_CANDIDATES.length) { isLoading = false; showLoading(false); interpretDream(); return; }
     }
 
-    showDreamNotice('다음 해몽까지 잠시만 기다려주세요 🌙', 'warn');
+    showDreamNotice('해몽 연결에 실패했어요. 잠시 후 다시 시도해주세요 🌙', 'warn');
   } finally {
     isLoading = false;
     showLoading(false);
@@ -1432,7 +1446,10 @@ async function interpretDream() {
 
 function showLoading(on) {
   document.getElementById('loadingSection').classList.toggle('active', on);
-  document.getElementById('interpretBtn').classList.toggle('loading', on);
+  /* 쿨다운 중에는 버튼 클래스를 건드리지 않음 */
+  if (on || !cooldownTimer) {
+    document.getElementById('interpretBtn').classList.toggle('loading', on);
+  }
 }
 
 function showResult() {
