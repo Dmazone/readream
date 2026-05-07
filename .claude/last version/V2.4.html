@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>ReaDream</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* === 기본 리셋 === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:        #0c0720;
+      --purple-dark:    #1e0a3c;
+      --purple-mid:     #6d28d9;
+      --purple-light:   #8b5cf6;
+      --indigo:         #4f46e5;
+      --gold:           #f59e0b;
+      --gold-light:     #fcd34d;
+      --text-primary:   #ede0ff;
+      --text-secondary: #c4b5fd;
+      --text-muted:     #7c7a9a;
+      --card-bg:        rgba(109, 40, 217, 0.12);
+      --card-border:    rgba(196, 181, 253, 0.18);
+      --glass:          rgba(255, 255, 255, 0.035);
+      --glass-border:   rgba(255, 255, 255, 0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== 캔버스 배경 ===== */
+    #starCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== 레이아웃 ===== */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px 48px;
+    }
+
+    /* ===== 헤더 ===== */
+    .header {
+      text-align: center;
+      padding: 52px 0 36px;
+      position: relative;
+    }
+
+    .header-moon {
+      font-size: 52px;
+      display: block;
+      margin-bottom: 14px;
+      animation: moonGlow 3.5s ease-in-out infinite;
+    }
+
+    @keyframes moonGlow {
+      0%, 100% { filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.55)) drop-shadow(0 0 40px rgba(139, 92, 246, 0.2)); }
+      50%       { filter: drop-shadow(0 0 32px rgba(245, 158, 11, 0.9))  drop-shadow(0 0 60px rgba(139, 92, 246, 0.35)); }
+    }
+
+    .header h1 {
+      font-size: 30px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fcd34d 20%, #c4b5fd 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 6px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      opacity: 0.7;
+    }
+
+    /* ===== 유저 인디케이터 ===== */
+    .user-bar {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-login:hover {
+      background: rgba(139, 92, 246, 0.22);
+      border-color: var(--purple-light);
+      color: var(--text-primary);
+    }
+
+    .user-pill {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 6px 6px 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #6ee7b7;
+    }
+
+    .user-pill.active { display: inline-flex; }
+
+    .user-email-text {
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-logout {
+      padding: 4px 10px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      color: #fca5a5;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover { background: rgba(239, 68, 68, 0.22); }
+
+    /* ===== 로그인 모달 오버레이 ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 7, 32, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 380px;
+      background: linear-gradient(160deg, #1a0a38, #0f0525);
+      border: 1px solid rgba(196, 181, 253, 0.2);
+      border-radius: 24px;
+      padding: 32px 28px 28px;
+      position: relative;
+      animation: slideUp 0.3s ease both;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover { color: var(--text-primary); }
+
+    .modal-moon {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 6px;
+    }
+
+    /* 탭 */
+    .modal-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 3px;
+      margin-bottom: 24px;
+    }
+
+    .modal-tab {
+      flex: 1;
+      padding: 9px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .modal-tab.active {
+      background: var(--purple-mid);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(109, 40, 217, 0.4);
+    }
+
+    /* 폼 */
+    .modal-form { display: flex; flex-direction: column; gap: 14px; }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .modal-form input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .modal-form input:focus {
+      border-color: var(--purple-light);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-family: inherit;
+      border: none;
+      border-radius: 13px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #5b21b6, #4338ca);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(91, 33, 182, 0.4);
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+
+    .btn-auth:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(91, 33, 182, 0.6);
+    }
+
+    .btn-auth:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .auth-notice {
+      font-size: 12px;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .auth-notice.success {
+      display: block;
+      color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .auth-notice.error {
+      display: block;
+      color: #fca5a5;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* ===== 공통 카드 ===== */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+
+    /* ===== API 키 섹션 ===== */
+    .api-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .api-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ef4444;
+      flex-shrink: 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .status-dot.active {
+      background: #10b981;
+      box-shadow: 0 0 7px rgba(16, 185, 129, 0.6);
+    }
+
+    .api-chevron {
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      line-height: 1;
+    }
+
+    .api-chevron.open { transform: rotate(180deg); }
+
+    .api-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .api-body.open { max-height: 200px; }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .api-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* ===== 입력 공통 ===== */
+    input[type="password"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--purple-light);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    ::placeholder { color: rgba(196, 181, 253, 0.35); }
+
+    /* ===== 버튼 ===== */
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-key {
+      background: var(--purple-mid);
+      color: #fff;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-key:hover { background: var(--purple-light); transform: translateY(-1px); }
+
+    .btn-interpret {
+      width: 100%;
+      margin-top: 14px;
+      padding: 17px;
+      font-size: 15px;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #5b21b6, #4338ca);
+      color: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(91, 33, 182, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-interpret::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+    }
+
+    .btn-interpret:hover:not(.loading) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(91, 33, 182, 0.65);
+    }
+
+    .btn-interpret.loading { opacity: 0.55; cursor: not-allowed; }
+
+    /* ===== 꿈 텍스트에어리어 ===== */
+    .dream-textarea {
+      min-height: 148px;
+      resize: vertical;
+      line-height: 1.75;
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 7px;
+    }
+
+    /* ===== 인라인 알림 메시지 ===== */
+    .dream-notice {
+      display: none;
+      font-size: 13px;
+      text-align: center;
+      padding: 11px 14px;
+      margin-top: 12px;
+      border-radius: 11px;
+      animation: fadeInUp 0.25s ease both;
+    }
+
+    .dream-notice.active { display: block; }
+
+    .dream-notice.info {
+      color: var(--text-secondary);
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.22);
+    }
+
+    .dream-notice.warn {
+      color: var(--gold-light);
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+    }
+
+    /* ===== 광고 placeholder ===== */
+    .ad-placeholder {
+      border: 2px dashed rgba(196, 181, 253, 0.18);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      color: rgba(196, 181, 253, 0.25);
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin: 18px 0;
+    }
+
+    .ad-icon { font-size: 20px; display: block; margin-bottom: 5px; opacity: 0.3; }
+
+    /* ===== 로딩 ===== */
+    .loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 48px 20px;
+      text-align: center;
+    }
+
+    .loading.active { display: flex; }
+
+    .loading-moon {
+      font-size: 44px;
+      display: inline-block;
+      animation: moonSpin 2.2s linear infinite;
+    }
+
+    @keyframes moonSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 1.5px;
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.6s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: ''; }
+      33%  { content: '.'; }
+      66%  { content: '..'; }
+      100% { content: '...'; }
+    }
+
+    /* ===== 결과 섹션 ===== */
+    .result-section {
+      display: none;
+      animation: fadeInUp 0.55s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      text-align: center;
+      padding: 8px 0 20px;
+    }
+
+    .result-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 3px;
+    }
+
+    .gold-divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    .symbols-label {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .symbols-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .symbol-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px 10px 14px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .symbol-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(109, 40, 217, 0.35);
+    }
+
+    .symbol-emoji { font-size: 30px; display: block; margin-bottom: 8px; }
+    .symbol-name  { font-size: 13px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
+    .symbol-meaning { font-size: 10.5px; color: var(--text-secondary); line-height: 1.55; }
+
+    .interpretation-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+
+    .interpretation-card p { font-size: 14px; line-height: 1.85; color: var(--text-primary); }
+
+    .advice-card {
+      background: linear-gradient(135deg,
+        rgba(245, 158, 11, 0.09) 0%,
+        rgba(79, 70, 229, 0.09) 100%
+      );
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .advice-card::before {
+      content: '✦';
+      position: absolute;
+      bottom: -20px;
+      right: -6px;
+      font-size: 90px;
+      color: rgba(245, 158, 11, 0.04);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .advice-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+    .advice-card p { font-size: 14px; line-height: 1.85; color: var(--gold-light); font-style: italic; }
+
+    .btn-save-diary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: 13px;
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+
+    .btn-save-diary:hover { background: rgba(245, 158, 11, 0.2); transform: translateY(-1px); }
+
+    /* ===== 공유 버튼 ===== */
+    .share-section { margin-top: 14px; }
+
+    .share-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .share-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-share {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 14px 8px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-share svg { width: 26px; height: 26px; flex-shrink: 0; }
+
+    .btn-share-kakao  { background: #FEE500; color: #3A1D1D; }
+    .btn-share-kakao:hover  { filter: brightness(0.92); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(254,229,0,0.35); }
+
+    .btn-share-insta   { background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; }
+    .btn-share-insta:hover  { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220,39,67,0.4); }
+
+    .btn-share-tiktok  { background: #010101; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+    .btn-share-tiktok:hover { background: #1a1a1a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(105,201,208,0.3); }
+
+    .btn-share-general { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-secondary); }
+    .btn-share-general:hover { background: rgba(255,255,255,0.07); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,92,246,0.25); }
+
+    /* ===== 꿈 일기 섹션 ===== */
+    .diary-wrapper { margin-top: 6px; }
+
+    .diary-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background 0.2s;
+    }
+
+    .diary-toggle:hover { background: rgba(255, 255, 255, 0.06); }
+
+    .diary-toggle-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+
+    .diary-badge {
+      background: var(--purple-mid);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      min-width: 22px;
+      text-align: center;
+    }
+
+    .diary-chevron { font-size: 18px; color: var(--text-muted); transition: transform 0.3s ease; line-height: 1; }
+    .diary-chevron.open { transform: rotate(180deg); }
+
+    .diary-list { display: none; padding-top: 8px; }
+    .diary-list.open { display: block; }
+
+    .diary-item {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .diary-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+    .diary-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .diary-date { font-size: 11px; color: var(--gold); }
+    .diary-emojis { font-size: 16px; letter-spacing: 3px; }
+
+    .diary-preview {
+      font-size: 13px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .diary-empty { text-align: center; color: var(--text-muted); font-size: 13px; padding: 24px 0; }
+
+    /* ===== 토스트 알림 ===== */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(30, 10, 60, 0.95);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      font-size: 13px;
+      padding: 13px 24px;
+      border-radius: 30px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 200;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      white-space: nowrap;
+      max-width: calc(100vw - 48px);
+      text-align: center;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ===== 푸터 ===== */
+    .footer {
+      text-align: center;
+      padding: 28px 0 12px;
+      font-size: 10.5px;
+      color: rgba(196, 181, 253, 0.25);
+      letter-spacing: 1.5px;
+    }
+
+    /* ===== API 키 카드 숨김 ===== */
+    #apiCard { display: none; }
+
+    /* ===== 반응형 ===== */
+    @media (max-width: 360px) {
+      .symbol-card    { padding: 14px 6px 10px; }
+      .symbol-emoji   { font-size: 24px; }
+      .symbol-name    { font-size: 11px; }
+      .symbol-meaning { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+
+<div class="container">
+
+  <!-- ========== 헤더 ========== -->
+  <header class="header">
+    <span class="header-moon">🌙</span>
+    <h1>ReaDream</h1>
+    <p>꿈이 전하는 내면의 메시지</p>
+
+    <!-- 유저 상태 -->
+    <div class="user-bar">
+      <button class="btn-login" id="btnLogin">🔮 로그인 / 회원가입</button>
+      <div class="user-pill" id="userPill">
+        <span class="user-email-text" id="userEmailText"></span>
+        <button class="btn-logout" id="btnLogout">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== API 키 카드 (숨김) ========== -->
+  <div class="card" id="apiCard">
+    <div class="api-toggle" id="apiToggle">
+      <div>
+        <div class="section-label">Gemini API 키</div>
+        <div class="api-status">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">키 없음</span>
+        </div>
+      </div>
+      <span class="api-chevron open" id="apiChevron">▾</span>
+    </div>
+    <div class="api-body open" id="apiBody">
+      <div class="input-row">
+        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off">
+        <button class="btn btn-key" id="btnSaveKey">저장</button>
+      </div>
+      <p class="api-hint">키는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
+    </div>
+  </div>
+
+  <!-- ========== 꿈 입력 ========== -->
+  <div class="card">
+    <div class="section-label">오늘의 꿈</div>
+    <textarea
+      class="dream-textarea"
+      id="dreamInput"
+      placeholder="오늘 꾼 꿈을 자세히 적어주세요..."
+      maxlength="500"
+    ></textarea>
+    <div class="char-count"><span id="charCount">0</span> / 500자</div>
+    <div class="dream-notice" id="dreamNotice"></div>
+    <button class="btn btn-interpret" id="interpretBtn">✦ 해몽하기</button>
+  </div>
+
+  <!-- ========== 광고 (상단) ========== -->
+  <div class="ad-placeholder">
+    <span class="ad-icon">📢</span>
+    광고 영역
+  </div>
+
+  <!-- ========== 로딩 ========== -->
+  <div class="loading" id="loadingSection">
+    <span class="loading-moon">🌕</span>
+    <p class="loading-text">꿈을 해석하는 중<span class="loading-dots"></span></p>
+  </div>
+
+  <!-- ========== 결과 영역 ========== -->
+  <div class="result-section" id="resultSection">
+
+    <div class="result-header">
+      <h2>✦ 해몽 결과 ✦</h2>
+      <div class="gold-divider"></div>
+    </div>
+
+    <div class="section-label symbols-label">핵심 상징</div>
+    <div class="symbols-grid" id="symbolsGrid"></div>
+
+    <div class="interpretation-card">
+      <div class="section-label">전체 해석</div>
+      <p id="interpretationText"></p>
+    </div>
+
+    <div class="advice-card">
+      <div class="advice-label">✦ 오늘의 조언</div>
+      <p id="adviceText"></p>
+    </div>
+
+    <button class="btn-save-diary" id="btnSaveDiary">
+      📖 꿈 일기에 저장하기
+    </button>
+
+    <!-- 공유 버튼 -->
+    <div class="share-section">
+      <div class="share-label">결과 공유하기</div>
+      <div class="share-grid">
+
+        <button class="btn-share btn-share-kakao" id="btnShareKakao">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3C6.477 3 2 6.598 2 11.07c0 2.9 1.888 5.452 4.74 6.956l-.96 3.576a.3.3 0 0 0 .458.327L10.54 19.6A11.9 11.9 0 0 0 12 19.14C17.523 19.14 22 15.542 22 11.07 22 6.598 17.523 3 12 3z"/>
+          </svg>
+          카카오톡
+        </button>
+
+        <button class="btn-share btn-share-insta" id="btnShareInsta">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.975.975 1.249 2.242 1.311 3.608.058 1.265.069 1.645.069 4.848s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.975.975-2.242 1.249-3.608 1.311-1.265.058-1.645.069-4.848.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311C2.499 19.483 2.225 18.216 2.163 16.85 2.105 15.584 2.094 15.204 2.094 12s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608C4.45 2.567 5.717 2.293 7.083 2.231 8.349 2.174 8.729 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.745 1.978 2.122.601 3.499.013 5.341-.072 7.196-.13 8.476-.144 8.885-.144 12s.014 3.524.072 4.804c.085 1.855.673 3.697 2.05 5.074 1.377 1.377 3.219 1.965 5.074 2.05C8.476 23.986 8.885 24 12 24s3.524-.014 4.804-.072c1.855-.085 3.697-.673 5.074-2.05 1.377-1.377 1.965-3.219 2.05-5.074.058-1.28.072-1.689.072-4.804s-.014-3.524-.072-4.804c-.085-1.855-.673-3.697-2.05-5.074C20.501.745 18.659.157 16.804.072 15.524.014 15.115 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          </svg>
+          인스타그램
+        </button>
+
+        <button class="btn-share btn-share-tiktok" id="btnShareTiktok">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.321 5.562a5.122 5.122 0 0 1-.443-.258 6.228 6.228 0 0 1-1.137-.966c-.849-.971-1.166-1.956-1.282-2.645h.004C16.368 1.384 16.4 1 16.4 1h-3.696v14.801c0 .199 0 .396-.008.59 0 .023-.002.044-.004.068v.012c-.053.976-.476 1.894-1.187 2.566a3.505 3.505 0 0 1-2.388.943 3.535 3.535 0 0 1-3.535-3.535 3.535 3.535 0 0 1 3.535-3.536c.346 0 .68.05.996.143v-3.77a7.26 7.26 0 0 0-.996-.069 7.232 7.232 0 0 0-7.232 7.232A7.232 7.232 0 0 0 9.117 23a7.232 7.232 0 0 0 7.232-7.232V8.586a9.893 9.893 0 0 0 5.786 1.857V6.762c-.001 0-1.158.061-2.814-.9-.287-.167-.565-.354-.831-.564a6.3 6.3 0 0 1-.169-.136z"/>
+          </svg>
+          틱톡
+        </button>
+
+        <button class="btn-share btn-share-general" id="btnShareGeneral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+          더 많이 공유
+        </button>
+
+      </div>
+    </div>
+
+  </div><!-- /result-section -->
+
+  <!-- ========== 꿈 일기 ========== -->
+  <div class="diary-wrapper" style="margin-top: 20px;">
+    <div class="diary-toggle" id="diaryToggle">
+      <div class="diary-toggle-left">
+        <span>📔</span>
+        <span>꿈 일기</span>
+        <span class="diary-badge" id="diaryCount">0</span>
+      </div>
+      <span class="diary-chevron" id="diaryChevron">▾</span>
+    </div>
+    <div class="diary-list" id="diaryList"></div>
+  </div>
+
+  <!-- ========== 광고 (하단) ========== -->
+  <div class="ad-placeholder" style="margin-top: 22px;">
+    <span class="ad-icon">📢</span>
+    광고 영역
+  </div>
+
+  <footer class="footer">ReaDream · 꿈이 전하는 이야기</footer>
+
+</div><!-- /container -->
+
+<!-- ========== 토스트 ========== -->
+<div class="toast" id="toast"></div>
+
+<!-- ========== 로그인 모달 ========== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-moon">🌙</div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabLogin" data-tab="login">로그인</button>
+      <button class="modal-tab"        id="tabSignup" data-tab="signup">회원가입</button>
+    </div>
+
+    <!-- 로그인 폼 -->
+    <div id="formLogin">
+      <div class="modal-form">
+        <div>
+          <label class="form-label">이메일</label>
+          <input type="text" id="loginEmail" placeholder="dream@example.com" autocomplete="email">
+        </div>
+        <div>
+          <label class="form-label">비밀번호</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-auth" id="btnDoLogin">✦ 로그인하기</button>
+        <div class="auth-notice" id="loginNotice"></div>
+      </div>
+    </div>
+
+    <!-- 회원가입 폼 -->
+    <div id="formSignup" style="display:none;">
+      <div class="modal-form">
+        <div>
+          <label class="form-label">이메일</label>
+          <input type="text" id="signupEmail" placeholder="dream@example.com" autocomplete="email">
+        </div>
+        <div>
+          <label class="form-label">비밀번호 (6자 이상)</label>
+          <input type="password" id="signupPassword" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <button class="btn-auth" id="btnDoSignup">✦ 회원가입하기</button>
+        <div class="auth-notice" id="signupNotice"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+/* ============================================================
+   별 파티클 캔버스
+   ============================================================ */
+(function initCanvas() {
+  const canvas = document.getElementById('starCanvas');
+  const ctx    = canvas.getContext('2d');
+  let stars    = [];
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+
+  function makeStar() {
+    return { x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+             r: Math.random()*1.4+0.2, speed: Math.random()*0.5+0.25, phase: Math.random()*Math.PI*2 };
+  }
+
+  function draw(ts) {
+    const t = ts / 1000;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const alpha = 0.25 + 0.65 * Math.abs(Math.sin(t * s.speed + s.phase));
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(218,204,255,${alpha})`; ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  stars = Array.from({ length: 130 }, makeStar);
+  window.addEventListener('resize', () => { resize(); stars = Array.from({ length: 130 }, makeStar); });
+  requestAnimationFrame(draw);
+})();
+
+
+/* ============================================================
+   Supabase 초기화
+   ============================================================ */
+const SUPABASE_URL  = 'https://mbznbrvxgjlvvegrxrzt.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1iem5icnZ4Z2psdnZlZ3J4cnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MzI2NDgsImV4cCI6MjA5MjQwODY0OH0.fGIrXWam5PTioO5EB5OgxrPDrQlaPxnI1pC-GJ8mEf8';
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+
+
+/* ============================================================
+   인증 상태 관리
+   ============================================================ */
+sb.auth.onAuthStateChange(async (_event, session) => {
+  currentUser = session?.user ?? null;
+  updateUserUI();
+  await renderDiary();
+});
+
+function updateUserUI() {
+  const btnLogin  = document.getElementById('btnLogin');
+  const userPill  = document.getElementById('userPill');
+  const emailText = document.getElementById('userEmailText');
+
+  if (currentUser) {
+    btnLogin.style.display = 'none';
+    userPill.classList.add('active');
+    emailText.textContent  = currentUser.email;
+  } else {
+    btnLogin.style.display = '';
+    userPill.classList.remove('active');
+  }
+}
+
+/* 로그아웃 */
+document.getElementById('btnLogout').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  showToast('로그아웃됐어요 🌙');
+});
+
+
+/* ============================================================
+   로그인 모달
+   ============================================================ */
+const modalOverlay = document.getElementById('modalOverlay');
+
+document.getElementById('btnLogin').addEventListener('click', () => {
+  modalOverlay.classList.add('active');
+  document.getElementById('loginEmail').focus();
+});
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) closeModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function closeModal() {
+  modalOverlay.classList.remove('active');
+  clearAuthNotices();
+}
+
+/* 탭 전환 */
+document.querySelectorAll('.modal-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const isLogin = tab.dataset.tab === 'login';
+    document.getElementById('formLogin').style.display  = isLogin ? '' : 'none';
+    document.getElementById('formSignup').style.display = isLogin ? 'none' : '';
+    clearAuthNotices();
+  });
+});
+
+function clearAuthNotices() {
+  ['loginNotice', 'signupNotice'].forEach(id => {
+    const el = document.getElementById(id);
+    el.className = 'auth-notice';
+    el.textContent = '';
+  });
+}
+
+function showAuthNotice(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className   = `auth-notice ${type}`;
+}
+
+/* 로그인 */
+document.getElementById('btnDoLogin').addEventListener('click', async () => {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn      = document.getElementById('btnDoLogin');
+
+  if (!email || !password) { showAuthNotice('loginNotice', '이메일과 비밀번호를 입력해주세요.', 'error'); return; }
+
+  btn.disabled = true; btn.textContent = '로그인 중...';
+
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+
+  btn.disabled = false; btn.textContent = '✦ 로그인하기';
+
+  if (error) {
+    const msg = error.message.includes('Invalid login') ? '이메일 또는 비밀번호가 올바르지 않아요.' : '로그인 중 오류가 발생했어요.';
+    showAuthNotice('loginNotice', msg, 'error');
+  } else {
+    closeModal();
+    showToast('환영해요! 꿈 여행을 시작해요 🌙');
+  }
+});
+
+/* 회원가입 */
+document.getElementById('btnDoSignup').addEventListener('click', async () => {
+  const email    = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const btn      = document.getElementById('btnDoSignup');
+
+  if (!email || !password) { showAuthNotice('signupNotice', '이메일과 비밀번호를 입력해주세요.', 'error'); return; }
+  if (password.length < 6)  { showAuthNotice('signupNotice', '비밀번호는 6자 이상이어야 해요.', 'error'); return; }
+
+  btn.disabled = true; btn.textContent = '가입 중...';
+
+  const { data, error } = await sb.auth.signUp({ email, password });
+
+  btn.disabled = false; btn.textContent = '✦ 회원가입하기';
+
+  if (error) {
+    const msg = error.message.includes('already registered') ? '이미 가입된 이메일이에요. 로그인해주세요.' : '가입 중 오류가 발생했어요.';
+    showAuthNotice('signupNotice', msg, 'error');
+  } else if (data.user && !data.session) {
+    /* 이메일 확인 ON인 경우 */
+    showAuthNotice('signupNotice', '📧 가입 확인 메일을 보냈어요. 메일함을 확인해주세요!', 'success');
+  } else {
+    /* 이메일 확인 OFF인 경우 — 즉시 로그인 */
+    closeModal();
+    showToast('가입 완료! 꿈 여행을 시작해요 🌙');
+  }
+});
+
+/* Enter 키 지원 */
+document.getElementById('loginPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('btnDoLogin').click();
+});
+document.getElementById('signupPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('btnDoSignup').click();
+});
+
+
+/* ============================================================
+   API 설정
+   ============================================================ */
+/* API 키는 Cloudflare Worker 환경변수에만 보관 — 프론트엔드에 노출 없음 */
+const API_BASE = 'https://dalbit-haemong.ekaledma.workers.dev';
+
+/* 글자 수 카운터 */
+document.getElementById('dreamInput').addEventListener('input', function () {
+  document.getElementById('charCount').textContent = this.value.length;
+});
+
+
+/* ============================================================
+   인라인 알림 메시지
+   ============================================================ */
+let noticeTimer = null;
+
+function showDreamNotice(msg, type = 'info') {
+  if (noticeTimer) { clearTimeout(noticeTimer); noticeTimer = null; }
+  const el = document.getElementById('dreamNotice');
+  el.textContent = msg;
+  el.className = `dream-notice active ${type}`;
+}
+
+function hideDreamNotice() {
+  if (noticeTimer) { clearTimeout(noticeTimer); noticeTimer = null; }
+  document.getElementById('dreamNotice').className = 'dream-notice';
+}
+
+function startCooldownNotice(remainingMs) {
+  let remaining = Math.ceil(remainingMs / 1000);
+  showDreamNotice(`다음 해몽까지 잠시만 기다려주세요 (${remaining}초)`, 'warn');
+  function tick() {
+    remaining--;
+    if (remaining <= 0) { hideDreamNotice(); return; }
+    showDreamNotice(`다음 해몽까지 잠시만 기다려주세요 (${remaining}초)`, 'warn');
+    noticeTimer = setTimeout(tick, 1000);
+  }
+  noticeTimer = setTimeout(tick, 1000);
+}
+
+
+/* ============================================================
+   Gemini API 호출
+   ============================================================ */
+const SYSTEM_PROMPT =
+  '당신은 융 분석심리학과 프로이트 심리학에 기반한 꿈 해몽 전문가입니다.\n' +
+  '사용자가 꿈 내용을 입력하면 반드시 아래 JSON 형식으로만 응답하세요.\n' +
+  '다른 텍스트나 마크다운 없이 순수 JSON만 출력하세요:\n' +
+  '{\n  "symbols": [\n    {"emoji": "이모지 1개", "name": "상징명", "meaning": "의미 설명"}\n  ],\n' +
+  '  "interpretation": "전체 해석 텍스트 (3~4문장)",\n  "advice": "오늘의 조언 (1~2문장)"\n}\n' +
+  '항상 한국어로 답변하세요. 따뜻하고 신비로운 톤을 유지하세요.';
+
+const MODEL_CANDIDATES = [
+  'gemini-1.5-flash-8b', 'gemini-1.5-flash',
+  'gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash',
+];
+
+let modelIndex   = 0;
+let failedModels = new Set();
+let isLoading    = false;
+let cooldownTimer = null; /* null이면 해몽 가능, 실행 중이면 쿨다운 */
+
+function currentModel() {
+  while (modelIndex < MODEL_CANDIDATES.length) {
+    const m = MODEL_CANDIDATES[modelIndex];
+    if (!failedModels.has(m)) return m;
+    modelIndex++;
+  }
+  throw new Error('NO_AVAILABLE_MODEL');
+}
+
+/* 성공 후 버튼에 60초 카운트다운 표시 */
+function startButtonCooldown() {
+  const btn = document.getElementById('interpretBtn');
+  let remaining = 60;
+
+  function tick() {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      btn.textContent = '✦ 해몽하기';
+      btn.classList.remove('loading');
+    } else {
+      btn.textContent = `⏳ ${remaining}초 후 해몽 가능`;
+    }
+  }
+
+  btn.classList.add('loading');
+  btn.textContent = `⏳ ${remaining}초 후 해몽 가능`;
+  cooldownTimer = setInterval(tick, 1000);
+}
+
+let currentResult = null;
+
+document.getElementById('interpretBtn').addEventListener('click', interpretDream);
+
+async function interpretDream() {
+  const dreamInput = document.getElementById('dreamInput');
+  const dream      = dreamInput.value.trim();
+
+  /* 쿨다운 중 — 버튼이 직접 카운트다운을 보여주므로 별도 메시지 불필요 */
+  if (cooldownTimer) return;
+
+  if (isLoading) { showDreamNotice('해몽 중이니 잠시만 기다리세요 🌙', 'info'); return; }
+
+  if (dream.length < 20) {
+    showDreamNotice('꿈에 대해 좀 더 자세히 써주세요 🌙', 'info');
+    dreamInput.focus();
+    dreamInput.setSelectionRange(dreamInput.value.length, dreamInput.value.length);
+    return;
+  }
+
+  hideDreamNotice();
+  hideResult();
+  isLoading = true;
+  showLoading(true);
+
+  const controller = new AbortController();
+  const timeoutId  = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const model = currentModel();
+    const res = await fetch(`${API_BASE}/models/${model}:generateContent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents:           [{ parts: [{ text: dream }] }],
+        generationConfig:   { maxOutputTokens: 2048, temperature: 0.9 },
+      }),
+    });
+
+    clearTimeout(timeoutId);
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error?.message || `HTTP_${res.status}`);
+
+    const data      = await res.json();
+    const candidate = data.candidates?.[0];
+    if (!candidate) throw new Error('NO_CANDIDATE');
+
+    const reason = candidate.finishReason;
+    if (reason && reason !== 'STOP' && reason !== 'MAX_TOKENS') throw new Error(`FINISH_${reason}`);
+
+    const rawText = candidate.content?.parts?.[0]?.text ?? '';
+    let parsed;
+    try {
+      const m = rawText.match(/\{[\s\S]*\}/);
+      parsed = JSON.parse(m ? m[0] : rawText.trim());
+    } catch {
+      parsed = {
+        symbols: [
+          { emoji:'🌙', name:'달빛', meaning:'신비로운 메시지' },
+          { emoji:'✨', name:'별빛', meaning:'내면의 빛'       },
+          { emoji:'🌿', name:'자연', meaning:'생명의 흐름'     },
+        ],
+        interpretation: rawText || '꿈의 메시지를 읽어내는 데 어려움이 있었어요.',
+        advice: '꿈이 전하는 메시지에 천천히 귀를 기울여 보세요.',
+      };
+    }
+
+    parsed.symbols = (parsed.symbols || []).slice(0, 3).map(s => ({
+      emoji: s.emoji || '✨', name: s.name || '상징', meaning: s.meaning || '',
+    }));
+    while (parsed.symbols.length < 3) parsed.symbols.push({ emoji:'✦', name:'—', meaning:'' });
+
+    startButtonCooldown();
+    currentResult = parsed;
+    renderResult(parsed);
+    showResult();
+
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const msg = err.name === 'AbortError' ? 'TIMEOUT' : err.message;
+    console.error('[ReaDream 오류]', msg);
+
+    const shouldSwitch = /no longer available|deprecated|not found|404/i.test(msg)
+                      || /quota|rate.?limit|resource.?exhausted|exceeded.*quota/i.test(msg)
+                      || /permission_denied|forbidden|403/i.test(msg);
+    if (shouldSwitch) {
+      failedModels.add(MODEL_CANDIDATES[modelIndex]);
+      modelIndex++;
+      if (modelIndex < MODEL_CANDIDATES.length) { isLoading = false; showLoading(false); interpretDream(); return; }
+    }
+
+    /* 에러 종류별 사용자 메시지 */
+    let userMsg;
+    if (/api.?key|invalid.?key|api_key_invalid|key_invalid/i.test(msg)) {
+      userMsg = 'API 키 오류예요. 키 설정을 확인해주세요 🔑';
+    } else if (/quota|rate.?limit|resource.?exhausted|exceeded/i.test(msg)) {
+      userMsg = '오늘 무료 해몽 횟수를 모두 사용했어요. 내일 다시 만나요 🌙';
+    } else if (/network|failed to fetch|load failed|networkerror/i.test(msg)) {
+      userMsg = '인터넷 연결을 확인하고 다시 시도해주세요 📶';
+    } else if (/timeout|abort/i.test(msg)) {
+      userMsg = '응답 시간이 초과됐어요. 다시 시도해주세요 ⏳';
+    } else {
+      userMsg = `해몽 연결에 실패했어요. 잠시 후 다시 시도해주세요 🌙`;
+    }
+    showDreamNotice(userMsg, 'warn');
+  } finally {
+    isLoading = false;
+    showLoading(false);
+  }
+}
+
+function showLoading(on) {
+  document.getElementById('loadingSection').classList.toggle('active', on);
+  /* 쿨다운 중에는 버튼 클래스를 건드리지 않음 */
+  if (on || !cooldownTimer) {
+    document.getElementById('interpretBtn').classList.toggle('loading', on);
+  }
+}
+
+function showResult() {
+  const el = document.getElementById('resultSection');
+  el.style.display = 'block';
+  el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
+  setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'nearest' }), 60);
+}
+
+function hideResult() { document.getElementById('resultSection').style.display = 'none'; }
+
+function renderResult(data) {
+  const grid = document.getElementById('symbolsGrid');
+  grid.innerHTML = '';
+  data.symbols.forEach(s => {
+    const card    = document.createElement('div');  card.className    = 'symbol-card';
+    const emoji   = document.createElement('span'); emoji.className   = 'symbol-emoji';   emoji.textContent   = s.emoji;
+    const name    = document.createElement('div');  name.className    = 'symbol-name';    name.textContent    = s.name;
+    const meaning = document.createElement('div');  meaning.className = 'symbol-meaning'; meaning.textContent = s.meaning;
+    card.append(emoji, name, meaning);
+    grid.appendChild(card);
+  });
+  document.getElementById('interpretationText').textContent = data.interpretation;
+  document.getElementById('adviceText').textContent         = data.advice;
+}
+
+
+/* ============================================================
+   공유 기능
+   ============================================================ */
+let toastTimeout = null;
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  document.execCommand('copy'); document.body.removeChild(ta);
+  return Promise.resolve();
+}
+
+function buildShareText() {
+  const dream   = document.getElementById('dreamInput').value.trim();
+  const interp  = document.getElementById('interpretationText').textContent;
+  const advice  = document.getElementById('adviceText').textContent;
+  const symbols = currentResult ? currentResult.symbols.map(s => s.emoji).join(' ') : '';
+  const preview = dream.length > 60 ? dream.slice(0, 60) + '…' : dream;
+  return `🌙 오늘의 꿈 해몽 ${symbols}\n\n"${preview}"\n\n✦ ${interp}\n\n💫 ${advice}\n\n꿈을 해몽해보세요 👉 https://dmazone.github.io/readream/`;
+}
+
+document.getElementById('btnShareKakao').addEventListener('click', async () => {
+  await copyToClipboard(buildShareText());
+  showToast('복사됐어요! 카카오톡에 붙여넣기 해주세요 💬');
+});
+
+document.getElementById('btnShareInsta').addEventListener('click', async () => {
+  await copyToClipboard(buildShareText());
+  showToast('복사됐어요! 인스타그램 앱에서 붙여넣기 해주세요 📸');
+});
+
+document.getElementById('btnShareTiktok').addEventListener('click', async () => {
+  await copyToClipboard(buildShareText());
+  showToast('복사됐어요! 틱톡 앱에서 붙여넣기 해주세요 🎵');
+});
+
+document.getElementById('btnShareGeneral').addEventListener('click', async () => {
+  const text = buildShareText();
+  if (navigator.share) {
+    try { await navigator.share({ text }); }
+    catch (e) { if (e.name !== 'AbortError') { await copyToClipboard(text); showToast('링크가 복사됐어요 🔗'); } }
+  } else {
+    await copyToClipboard(text); showToast('링크가 복사됐어요 🔗');
+  }
+});
+
+
+/* ============================================================
+   꿈 일기 (로그인 시 Supabase, 비로그인 시 localStorage)
+   ============================================================ */
+const DIARY_LS = 'readream_diary';
+let diaryOpen  = false;
+
+document.getElementById('btnSaveDiary').addEventListener('click', saveDiary);
+document.getElementById('diaryToggle').addEventListener('click', toggleDiary);
+
+function getDiaryLocal() {
+  try { return JSON.parse(localStorage.getItem(DIARY_LS)) || []; } catch { return []; }
+}
+
+async function saveDiary() {
+  if (!currentResult) { showToast('먼저 해몽하기를 실행해주세요 🌙'); return; }
+  const dream = document.getElementById('dreamInput').value.trim();
+  if (!dream) return;
+
+  if (currentUser) {
+    /* Supabase 저장 */
+    const { error } = await sb.from('dream_diary').insert({
+      user_id:        currentUser.id,
+      dream,
+      symbols:        currentResult.symbols,
+      interpretation: document.getElementById('interpretationText').textContent,
+      advice:         document.getElementById('adviceText').textContent,
+    });
+    if (error) { showToast('저장 실패. 다시 시도해주세요 😥'); return; }
+    showToast('클라우드에 저장됐어요 ☁️🌙');
+    await renderDiary();
+  } else {
+    /* localStorage 저장 */
+    const diary = getDiaryLocal();
+    diary.unshift({
+      id:             Date.now(),
+      date:           new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'short', day:'numeric', weekday:'short' }),
+      dream,
+      symbols:        currentResult.symbols,
+      interpretation: document.getElementById('interpretationText').textContent,
+      advice:         document.getElementById('adviceText').textContent,
+    });
+    if (diary.length > 10) diary.length = 10;
+    localStorage.setItem(DIARY_LS, JSON.stringify(diary));
+    showToast('이 기기에 저장됐어요 📖  (로그인 시 클라우드 동기화)');
+    await renderDiary();
+  }
+}
+
+async function renderDiary() {
+  let entries = [];
+
+  if (currentUser) {
+    const { data, error } = await sb
+      .from('dream_diary')
+      .select('id, dream, symbols, created_at')
+      .eq('user_id', currentUser.id)
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (!error && data) {
+      entries = data.map(row => ({
+        id:      row.id,
+        date:    new Date(row.created_at).toLocaleDateString('ko-KR', { year:'numeric', month:'short', day:'numeric', weekday:'short' }),
+        dream:   row.dream,
+        symbols: row.symbols || [],
+      }));
+    }
+  } else {
+    entries = getDiaryLocal().slice(0, 3).map(e => ({
+      id: e.id, date: e.date, dream: e.dream, symbols: e.symbols || [],
+    }));
+  }
+
+  document.getElementById('diaryCount').textContent = entries.length;
+
+  const list = document.getElementById('diaryList');
+  if (entries.length === 0) {
+    list.innerHTML = '<p class="diary-empty">저장된 꿈 일기가 없습니다.</p>';
+    return;
+  }
+
+  list.innerHTML = '';
+  entries.slice(0, 3).forEach(entry => {
+    const item    = document.createElement('div');  item.className    = 'diary-item';
+    const top     = document.createElement('div');  top.className     = 'diary-item-top';
+    const date    = document.createElement('span'); date.className    = 'diary-date';    date.textContent    = '🌙 ' + entry.date;
+    const emojis  = document.createElement('span'); emojis.className  = 'diary-emojis'; emojis.textContent  = (entry.symbols).map(s => s.emoji).join('');
+    const preview = document.createElement('div');  preview.className = 'diary-preview'; preview.textContent = entry.dream;
+    top.append(date, emojis);
+    item.append(top, preview);
+    list.appendChild(item);
+  });
+}
+
+function toggleDiary() {
+  diaryOpen = !diaryOpen;
+  document.getElementById('diaryList').classList.toggle('open', diaryOpen);
+  document.getElementById('diaryChevron').classList.toggle('open', diaryOpen);
+}
+
+
+/* ============================================================
+   초기화
+   ============================================================ */
+(async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  currentUser = session?.user ?? null;
+  updateUserUI();
+  await renderDiary();
+})();
+</script>
+</body>
+</html>
