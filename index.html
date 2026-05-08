@@ -754,6 +754,103 @@
       line-height: 1.85;
       color: var(--text-primary);
     }
+    .person-limit-banner {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.25);
+      text-align: center;
+      font-size: 13px;
+      color: var(--gold-light);
+      line-height: 1.6;
+      display: none;
+    }
+    .person-limit-banner.active { display: block; }
+
+    /* ===== 오늘의 달빛 운세 ===== */
+    .fortune-card {
+      background: linear-gradient(135deg, rgba(109,40,217,0.14), rgba(79,70,229,0.1));
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .fortune-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .fortune-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .fortune-date-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .btn-fortune {
+      width: 100%;
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(139,92,246,0.4);
+      background: rgba(109,40,217,0.15);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-fortune:hover:not(:disabled) { background: rgba(109,40,217,0.28); }
+    .btn-fortune:disabled { opacity: 0.5; cursor: not-allowed; }
+    .fortune-result {
+      display: none;
+      animation: fadeInUp 0.45s ease both;
+    }
+    .fortune-result.active { display: block; }
+    .fortune-message {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+    .fortune-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .fortune-item {
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 10px;
+      padding: 11px 6px;
+      text-align: center;
+    }
+    .fortune-item-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .fortune-item-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #c4b5fd;
+    }
+    .fortune-caution {
+      font-size: 12px;
+      color: rgba(252,165,165,0.85);
+      background: rgba(239,68,68,0.07);
+      border: 1px solid rgba(239,68,68,0.18);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+      line-height: 1.6;
+    }
 
     /* ===== 광고 영역 ===== */
     .ad-unit {
@@ -1615,6 +1712,33 @@
       </div>
     </div>
 
+    <!-- 오늘의 달빛 운세 -->
+    <div class="fortune-card">
+      <div class="fortune-header">
+        <span class="fortune-title">🌙 오늘의 달빛 운세</span>
+        <span class="fortune-date-label" id="fortuneDateLabel"></span>
+      </div>
+      <button class="btn-fortune" id="btnFortune">✦ 오늘의 운세 보기</button>
+      <div class="fortune-result" id="fortuneResult">
+        <p class="fortune-message" id="fortuneMessage"></p>
+        <div class="fortune-items">
+          <div class="fortune-item">
+            <div class="fortune-item-label">행운의 숫자</div>
+            <div class="fortune-item-value" id="fortuneNumber">—</div>
+          </div>
+          <div class="fortune-item">
+            <div class="fortune-item-label">행운의 색상</div>
+            <div class="fortune-item-value" id="fortuneColor">—</div>
+          </div>
+          <div class="fortune-item">
+            <div class="fortune-item-label">행운의 방향</div>
+            <div class="fortune-item-value" id="fortuneDirection">—</div>
+          </div>
+        </div>
+        <div class="fortune-caution" id="fortuneCaution"></div>
+      </div>
+    </div>
+
     <!-- 프로필 (사주 연계 맞춤 해몽) -->
     <div class="profile-card">
       <div class="profile-toggle" id="profileToggle">
@@ -1734,6 +1858,10 @@
         <div class="person-result-card" id="personResultCard">
           <div class="person-result-label">💫 그 사람이 나타난 이유</div>
           <p id="personResultText"></p>
+        </div>
+        <div class="person-limit-banner" id="personLimitBanner">
+          오늘의 무료 분석 1회를 이미 사용했어요 🌙<br>
+          <small style="opacity:0.7;">추가 분석 기능은 곧 오픈 예정이에요</small>
         </div>
       </div>
       <div class="result-actions">
@@ -2218,7 +2346,7 @@ async function interpretDream() {
     showLoading(false);
 
     /* 광고 인터스티셜: API 완료 후 30초 대기 */
-    const action = await showInterstitial(30);
+    const action = await showInterstitial(10);
     if (action === 'rewrite') return;
 
     renderResult(parsed);
@@ -2260,6 +2388,82 @@ function renderResult(data) {
 
   resetPersonSection();
 }
+
+
+/* ============================================================
+   오늘의 달빛 운세
+   ============================================================ */
+const FORTUNE_PREFIX = 'rd_fortune_';
+
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function initFortune() {
+  const d = new Date();
+  document.getElementById('fortuneDateLabel').textContent =
+    d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
+
+  const cached = localStorage.getItem(FORTUNE_PREFIX + getTodayKey());
+  if (cached) {
+    try {
+      renderFortune(JSON.parse(cached));
+      document.getElementById('btnFortune').style.display = 'none';
+    } catch {}
+  }
+}
+
+function renderFortune(data) {
+  document.getElementById('fortuneMessage').textContent   = data.message        || '';
+  document.getElementById('fortuneNumber').textContent    = data.luckyNumber    || '—';
+  document.getElementById('fortuneColor').textContent     = data.luckyColor     || '—';
+  document.getElementById('fortuneDirection').textContent = data.luckyDirection || '—';
+  document.getElementById('fortuneCaution').textContent   = data.caution        || '';
+  document.getElementById('fortuneResult').classList.add('active');
+}
+
+document.getElementById('btnFortune').addEventListener('click', async () => {
+  const apiKey = localStorage.getItem(API_KEY_LS);
+  if (!apiKey) { showToast('해몽 키가 필요해요 🌙'); return; }
+
+  const btn     = document.getElementById('btnFortune');
+  btn.disabled  = true;
+  btn.textContent = '달빛을 읽는 중...';
+
+  const dateStr = new Date().toLocaleDateString('ko-KR',
+    { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+  const prompt =
+    `오늘은 ${dateStr}입니다. 이 날의 달빛 기운을 바탕으로 오늘 하루의 운세를 알려주세요.\n` +
+    `다른 텍스트 없이 순수 JSON만 출력하세요:\n` +
+    `{"message":"오늘의 운세 (2~3문장, 신비롭고 따뜻하게)","luckyNumber":숫자1개,"luckyColor":"색상명","luckyDirection":"방위(예:동쪽)","caution":"오늘 주의할 점 (1문장)"}`;
+
+  try {
+    const model    = await resolveModel(apiKey);
+    const endpoint = `${GEMINI_BASE}/models/${model}:generateContent`;
+    const res = await fetch(`${endpoint}?key=${encodeURIComponent(apiKey)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents:         [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 300, temperature: 0.85 },
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP_${res.status}`);
+    const data  = await res.json();
+    const raw   = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const match = raw.match(/\{[\s\S]*\}/);
+    const parsed = JSON.parse(match ? match[0] : raw.trim());
+    localStorage.setItem(FORTUNE_PREFIX + getTodayKey(), JSON.stringify(parsed));
+    renderFortune(parsed);
+    btn.style.display = 'none';
+  } catch {
+    btn.disabled    = false;
+    btn.textContent = '✦ 오늘의 운세 보기';
+    showToast('운세를 가져오지 못했어요. 다시 시도해주세요 🌙');
+  }
+});
 
 
 /* ============================================================
@@ -2319,6 +2523,16 @@ document.getElementById('btnSaveProfile').addEventListener('click', () => {
 /* ============================================================
    꿈 속 그 사람 분석
    ============================================================ */
+const PERSON_LIMIT_PREFIX = 'rd_person_';
+const FREE_PERSON_PER_DAY = 1;
+
+function getPersonUsedToday() {
+  return parseInt(localStorage.getItem(PERSON_LIMIT_PREFIX + getTodayKey()) || '0');
+}
+function incrementPersonUsed() {
+  localStorage.setItem(PERSON_LIMIT_PREFIX + getTodayKey(), String(getPersonUsedToday() + 1));
+}
+
 const PERSON_TYPES = [
   { value: '연인',       emoji: '💕' },
   { value: '가족',       emoji: '👨‍👩‍👧' },
@@ -2352,8 +2566,12 @@ function resetPersonSection() {
   selectedPerson = '';
   document.getElementById('personForm').classList.remove('open');
   document.getElementById('personResultCard').classList.remove('active');
+  document.getElementById('personLimitBanner').classList.remove('active');
   const opts = document.getElementById('personOptions');
   if (opts) opts.querySelectorAll('.person-opt').forEach(b => b.classList.remove('selected'));
+  if (getPersonUsedToday() >= FREE_PERSON_PER_DAY) {
+    document.getElementById('btnPersonTrigger').textContent = '👤 꿈 속 그 사람의 의미 (오늘 1회 사용 완료)';
+  }
 }
 
 document.getElementById('btnPersonTrigger').addEventListener('click', () => {
@@ -2362,6 +2580,13 @@ document.getElementById('btnPersonTrigger').addEventListener('click', () => {
 
 document.getElementById('btnPersonAnalyze').addEventListener('click', async () => {
   if (!selectedPerson) { showToast('관계를 선택해주세요 🌙'); return; }
+
+  if (getPersonUsedToday() >= FREE_PERSON_PER_DAY) {
+    document.getElementById('personLimitBanner').classList.add('active');
+    document.getElementById('personForm').classList.remove('open');
+    return;
+  }
+
   const apiKey = localStorage.getItem(API_KEY_LS);
   const dream  = $dreamInput.value.trim();
   if (!apiKey || !dream) return;
@@ -2391,6 +2616,7 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
     const data = await res.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '분석을 완료하지 못했어요.';
+    incrementPersonUsed();
     document.getElementById('personResultText').textContent = text;
     const card = document.getElementById('personResultCard');
     card.classList.add('active');
@@ -2936,7 +3162,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
    ============================================================ */
 (function init() {
   /* 버전 기반 강제 키 갱신 */
-  const APP_VER = '2.9';
+  const APP_VER = '3.0';
 
   /* ── API 키 보안 처리 ──────────────────────────────────────────────────
      키를 분할 저장하여 단순 소스 검색·크롤러 노출을 최소화합니다.
@@ -2955,6 +3181,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
 
   loadApiKey();
   loadProfile();
+  initFortune();
   renderDiary();
   initPersonSection();
 
