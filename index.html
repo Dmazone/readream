@@ -852,6 +852,72 @@
       line-height: 1.6;
     }
 
+    /* ===== 운세 공유 & 기록 ===== */
+    .fortune-share {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(139,92,246,0.15);
+    }
+    .fortune-share-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .fortune-share-btns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .btn-fortune-share {
+      padding: 9px 4px;
+      border-radius: 10px;
+      border: 1px solid rgba(139,92,246,0.25);
+      background: rgba(109,40,217,0.1);
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-fortune-share:hover { background: rgba(109,40,217,0.22); }
+    .fortune-history {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(139,92,246,0.12);
+      display: none;
+    }
+    .fortune-history-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+    .fortune-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .fortune-chip {
+      padding: 5px 11px;
+      border-radius: 20px;
+      border: 1px solid rgba(139,92,246,0.22);
+      background: rgba(109,40,217,0.08);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .fortune-chip:hover { border-color: rgba(139,92,246,0.45); color: var(--text-secondary); }
+    .fortune-chip.active {
+      background: rgba(109,40,217,0.28);
+      border-color: rgba(139,92,246,0.55);
+      color: #c4b5fd;
+    }
+
     /* ===== 광고 영역 ===== */
     .ad-unit {
       margin: 14px 0;
@@ -1736,6 +1802,20 @@
           </div>
         </div>
         <div class="fortune-caution" id="fortuneCaution"></div>
+        <!-- 운세 공유 -->
+        <div class="fortune-share" id="fortuneShare">
+          <div class="fortune-share-label">공 유 하 기</div>
+          <div class="fortune-share-btns">
+            <button class="btn-fortune-share" id="btnFShareKakao">💬 카카오톡</button>
+            <button class="btn-fortune-share" id="btnFShareX">𝕏 트위터</button>
+            <button class="btn-fortune-share" id="btnFShareCopy">🔗 링크 복사</button>
+          </div>
+        </div>
+      </div>
+      <!-- 지난 달빛 기록 -->
+      <div class="fortune-history" id="fortuneHistory">
+        <div class="fortune-history-label">📅 지난 달빛 기록</div>
+        <div class="fortune-chips" id="fortuneHistoryChips"></div>
       </div>
     </div>
 
@@ -2412,6 +2492,7 @@ function initFortune() {
       document.getElementById('btnFortune').style.display = 'none';
     } catch {}
   }
+  loadFortuneHistory();
 }
 
 function renderFortune(data) {
@@ -2421,6 +2502,70 @@ function renderFortune(data) {
   document.getElementById('fortuneDirection').textContent = data.luckyDirection || '—';
   document.getElementById('fortuneCaution').textContent   = data.caution        || '';
   document.getElementById('fortuneResult').classList.add('active');
+}
+
+/* ── 운세 공유 텍스트 ── */
+function buildFortuneShareText() {
+  const msg    = document.getElementById('fortuneMessage').textContent;
+  const num    = document.getElementById('fortuneNumber').textContent;
+  const color  = document.getElementById('fortuneColor').textContent;
+  const dir    = document.getElementById('fortuneDirection').textContent;
+  const label  = document.getElementById('fortuneDateLabel').textContent;
+  return `🌙 달빛 운세 (${label})\n\n${msg}\n\n✨ 행운의 숫자: ${num}  🎨 ${color}  🧭 ${dir}\n\n#ReaDream #꿈해몽\nhttps://dmazone.github.io/readream/`;
+}
+
+document.getElementById('btnFShareKakao').addEventListener('click', async () => {
+  const text = buildFortuneShareText();
+  if (navigator.share) { try { await navigator.share({ title: '달빛 운세', text }); return; } catch {} }
+  await copyTextFallback(text, '운세를 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
+});
+
+document.getElementById('btnFShareX').addEventListener('click', () => {
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(buildFortuneShareText())}`, '_blank', 'noopener');
+});
+
+document.getElementById('btnFShareCopy').addEventListener('click', async () => {
+  await copyTextFallback(buildFortuneShareText(), '운세 내용을 복사했어요 🔗');
+});
+
+/* ── 지난 달빛 기록 ── */
+function loadFortuneHistory() {
+  const today    = getTodayKey();
+  const pastKeys = Object.keys(localStorage)
+    .filter(k => k.startsWith(FORTUNE_PREFIX) && k.replace(FORTUNE_PREFIX, '') !== today)
+    .sort().reverse()
+    .slice(0, 10);
+
+  const container = document.getElementById('fortuneHistory');
+  const chips     = document.getElementById('fortuneHistoryChips');
+  if (pastKeys.length === 0) { container.style.display = 'none'; return; }
+
+  container.style.display = 'block';
+  chips.innerHTML = '';
+  pastKeys.forEach(key => {
+    const dateKey = key.replace(FORTUNE_PREFIX, '');
+    const [y, m, d] = dateKey.split('-').map(Number);
+    const label = new Date(y, m - 1, d)
+      .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
+    const chip = document.createElement('button');
+    chip.className   = 'fortune-chip';
+    chip.textContent = label;
+    chip.dataset.key = key;
+    chip.addEventListener('click', () => loadPastFortune(key, label, chip));
+    chips.appendChild(chip);
+  });
+}
+
+function loadPastFortune(key, label, chipEl) {
+  try {
+    const data = JSON.parse(localStorage.getItem(key));
+    document.getElementById('fortuneDateLabel').textContent = label;
+    renderFortune(data);
+    document.getElementById('btnFortune').style.display = 'none';
+    document.querySelectorAll('.fortune-chip').forEach(c => c.classList.remove('active'));
+    chipEl.classList.add('active');
+    document.getElementById('fortuneResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch {}
 }
 
 document.getElementById('btnFortune').addEventListener('click', async () => {
@@ -2458,6 +2603,7 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
     localStorage.setItem(FORTUNE_PREFIX + getTodayKey(), JSON.stringify(parsed));
     renderFortune(parsed);
     btn.style.display = 'none';
+    loadFortuneHistory();
   } catch {
     btn.disabled    = false;
     btn.textContent = '✦ 오늘의 운세 보기';
