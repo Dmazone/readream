@@ -1942,7 +1942,7 @@
            data-ad-format="rectangle"></ins>
     </div>
     <div class="interstitial-countdown">
-      <span id="interstitialSec">30</span>
+      <span id="interstitialSec">10</span>
       초 후 결과를 확인할 수 있어요
     </div>
     <button class="interstitial-skip" id="interstitialSkip">
@@ -2225,7 +2225,7 @@ const SYSTEM_PROMPT =
   '  "interpretation": "전체 해석 (3~4문장)",\n' +
   '  "forecast": "앞으로 3일 내 찾아올 일 (2~3문장, 신비롭고 구체적으로)",\n' +
   '  "advice": "오늘의 조언 (1~2문장)",\n' +
-  '  "lucky": {"numbers": [숫자1, 숫자2, 숫자3], "color": "행운의 색상명", "symbol": "행운의 상징물 단어 1개"}\n' +
+  '  "lucky": {"numbers": [3, 17, 42], "color": "행운의 색상명", "symbol": "행운의 상징물 단어 1개"}\n' +
   '}\n' +
   '항상 한국어로 답변하세요. 따뜻하고 신비로운 톤을 유지하세요.';
 
@@ -2345,7 +2345,7 @@ async function interpretDream() {
     currentResult = parsed;
     showLoading(false);
 
-    /* 광고 인터스티셜: API 완료 후 30초 대기 */
+    /* 광고 인터스티셜: API 완료 후 10초 대기 */
     const action = await showInterstitial(10);
     if (action === 'rewrite') return;
 
@@ -2437,7 +2437,7 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
   const prompt =
     `오늘은 ${dateStr}입니다. 이 날의 달빛 기운을 바탕으로 오늘 하루의 운세를 알려주세요.\n` +
     `다른 텍스트 없이 순수 JSON만 출력하세요:\n` +
-    `{"message":"오늘의 운세 (2~3문장, 신비롭고 따뜻하게)","luckyNumber":숫자1개,"luckyColor":"색상명","luckyDirection":"방위(예:동쪽)","caution":"오늘 주의할 점 (1문장)"}`;
+    `{"message":"오늘의 운세 (2~3문장, 신비롭고 따뜻하게)","luckyNumber":7,"luckyColor":"색상명","luckyDirection":"방위(예:동쪽)","caution":"오늘 주의할 점 (1문장)"}`;
 
   try {
     const model    = await resolveModel(apiKey);
@@ -2447,7 +2447,7 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 300, temperature: 0.85 },
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.85 },
       }),
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
@@ -2610,7 +2610,7 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 500, temperature: 0.9 },
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.9 },
       }),
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
@@ -2823,7 +2823,11 @@ function resetSaveBtn() {
 function buildShareText() {
   if (!currentResult) return 'ReaDream 🌙';
   const symbols = currentResult.symbols.map(s => `${s.emoji} ${s.name}`).join(' · ');
-  return `ReaDream 🌙\n\n핵심 상징: ${symbols}\n\n${currentResult.advice}`;
+  let text = `ReaDream 🌙\n\n핵심 상징: ${symbols}\n\n${currentResult.advice}`;
+  if (currentResult.lucky?.numbers?.length) {
+    text += `\n\n✨ 행운의 숫자: ${currentResult.lucky.numbers.join(', ')}`;
+  }
+  return text;
 }
 
 /* 꿈 해몽 다시 하기 — 메인으로 버튼과 동일 */
