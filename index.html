@@ -814,10 +814,9 @@ document.getElementById('limitModalOverlay').addEventListener('click', (e) => {
 const API_BASE          = 'https://dalbit-haemong.ekaledma.workers.dev';
 const MODEL_SESSION_KEY = 'readream_model_v1';
 const MODEL_PRIORITY    = [
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
   'gemini-2.5-flash',
   'gemini-2.0-flash-lite',
+  'gemini-1.5-flash',
   'gemini-1.5-flash-8b',
 ];
 const failedModels = new Set();
@@ -905,7 +904,9 @@ async function callApiOnce(dream, model, signal) {
 
   if (!res.ok) {
     const errData = await res.json().catch(() => ({}));
-    throw new Error(errData?.error?.message || `HTTP_${res.status}`);
+    const errObj  = new Error(errData?.error?.message || `HTTP_${res.status}`);
+    errObj.status = res.status;
+    throw errObj;
   }
 
   const data      = await res.json();
@@ -980,12 +981,14 @@ async function interpretDream() {
 
   } catch (err) {
     clearTimeout(timeoutId);
-    const msg = err.name === 'AbortError' ? 'TIMEOUT' : (err.message || '');
-    console.error('[ReaDream 오류]', msg);
+    const status = err.status || 0;
+    const msg    = err.name === 'AbortError' ? 'TIMEOUT' : (err.message || '');
+    console.error('[ReaDream 오류]', status, msg);
 
     const model = pickModel();
-    const shouldSwitch = /no longer available|deprecated|not found|404/i.test(msg)
-                      || /permission_denied|forbidden|403/i.test(msg);
+    const shouldSwitch = status === 404
+                      || /no longer available|deprecated|not found/i.test(msg)
+                      || (status === 403 && /permission_denied|forbidden/i.test(msg));
     if (shouldSwitch) {
       onModelFail(model);
       const next = pickModel();
@@ -993,13 +996,13 @@ async function interpretDream() {
     }
 
     let userMsg;
-    if (/api.?key|invalid.?key|api_key_invalid/i.test(msg))
+    if (status === 401 || /api.?key|invalid.?key|api_key_invalid/i.test(msg))
       userMsg = 'API 키 오류예요. 설정을 확인해주세요 🔑';
-    else if (/quota|rate.?limit|resource.?exhausted|exceeded/i.test(msg))
-      userMsg = '오늘 해몽 요청이 많았어요. 잠시 후 다시 시도해주세요 🌙';
+    else if (status === 429 || /resource.?exhausted|rate.?limit/i.test(msg))
+      userMsg = '해몽 서버가 잠시 바빠요. 1~2분 후 다시 시도해주세요 🌙';
     else if (/network|failed to fetch|load failed|networkerror/i.test(msg))
       userMsg = '인터넷 연결을 확인하고 다시 시도해주세요 📶';
-    else if (/timeout|abort/i.test(msg))
+    else if (err.name === 'AbortError' || /timeout/i.test(msg))
       userMsg = '응답 시간이 초과됐어요. 다시 시도해주세요 ⏳';
     else
       userMsg = '해몽 연결에 실패했어요. 잠시 후 다시 시도해주세요 🌙';
