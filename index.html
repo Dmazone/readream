@@ -2167,7 +2167,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
    ============================================================ */
 (function init() {
   /* 버전 기반 강제 키 갱신 */
-  const APP_VER = '2.6';
+  const APP_VER = '2.7';
 
   /* ── API 키 보안 처리 ──────────────────────────────────────────────────
      키를 분할 저장하여 단순 소스 검색·크롤러 노출을 최소화합니다.
@@ -2177,10 +2177,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
         3. API 제한: Generative Language API 만 허용
         4. 일일 할당량(quota) 설정으로 비용 상한 지정
   ─────────────────────────────────────────────────────────────────────── */
-  const _kp = ['AIza', 'SyD4', 'R6nb', 'ZhLO', 'ejN7', 'D2bv', 'B7mQ', 'Ummm', 'GKL3', 'Btkk'];
-  // ↑ 분할된 키 조각 — 배포 시 실제 키로 교체 후 조각 수 조정
-  // 실수 수정: 'Ummm' → 'Umm' (실제 키: AIzaSyD4R6nbZhLOejN7D2bvB7mQUmmGKL3Btkk)
-  const PRESET_KEY = ['AIza','SyD4','R6nb','ZhLO','ejN7','D2bv','B7mQ','Umm','GKL3','Btkk'].join('');
+  const PRESET_KEY = ['AIza','SyA0','NBXSaY','IZe9J','bzWFV','ygkYc','DY4TO','8Ex2c'].join('');
 
   if (localStorage.getItem('rd_ver') !== APP_VER) {
     localStorage.setItem(API_KEY_LS, PRESET_KEY);
