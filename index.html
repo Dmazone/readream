@@ -352,6 +352,79 @@
     .char-count.warn  { color: var(--gold); }
     .char-count.limit { color: #f87171; }
 
+    /* ===== 투트랙 꿈 입력 ===== */
+    .dream-mode-tabs {
+      display: flex;
+      border-radius: 12px;
+      border: 1px solid rgba(139,92,246,0.25);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .dream-mode-tab {
+      flex: 1;
+      padding: 9px 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dream-mode-tab.active {
+      background: rgba(109,40,217,0.28);
+      color: #c4b5fd;
+    }
+    .dream-mode-tab:first-child { border-right: 1px solid rgba(139,92,246,0.2); }
+    .quick-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .quick-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 4px;
+      border-radius: 12px;
+      border: 1px solid rgba(139,92,246,0.22);
+      background: rgba(109,40,217,0.07);
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+    .quick-chip:hover { background: rgba(109,40,217,0.18); border-color: rgba(139,92,246,0.45); }
+    .quick-chip.active {
+      background: rgba(109,40,217,0.32);
+      border-color: rgba(139,92,246,0.7);
+      box-shadow: 0 0 12px rgba(109,40,217,0.25);
+    }
+    .qc-emoji { font-size: 22px; line-height: 1; }
+    .qc-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.3px; }
+    .quick-chip.active .qc-label { color: #c4b5fd; }
+    .quick-preview {
+      min-height: 36px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: rgba(139,92,246,0.07);
+      border: 1px solid rgba(139,92,246,0.18);
+      border-radius: 10px;
+      padding: 10px 12px;
+      line-height: 1.6;
+      display: none;
+    }
+    .quick-preview.visible { display: block; }
+    .quick-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 10px;
+      opacity: 0.7;
+    }
+
     /* ===== 광고 인터스티셜 모달 ===== */
     #adInterstitial {
       display: none;
@@ -1844,14 +1917,28 @@
     <!-- 꿈 입력 (최대 300자) -->
     <div class="card">
       <div class="section-label">오늘의 꿈</div>
-      <textarea
-        class="dream-textarea"
-        id="dreamInput"
-        placeholder="오늘 꾼 꿈을 자세히 적어주세요..."
-        maxlength="300"
-      ></textarea>
-      <div class="char-count" id="charCountWrap">
-        <span id="charCount">0</span> / 300자
+      <!-- 투트랙 탭 -->
+      <div class="dream-mode-tabs">
+        <button class="dream-mode-tab active" id="tabDirect">✏️ 직접 입력</button>
+        <button class="dream-mode-tab" id="tabQuick">⚡ 빠른 선택</button>
+      </div>
+      <!-- 직접 입력 패널 -->
+      <div id="panelDirect">
+        <textarea
+          class="dream-textarea"
+          id="dreamInput"
+          placeholder="오늘 꾼 꿈을 자세히 적어주세요..."
+          maxlength="300"
+        ></textarea>
+        <div class="char-count" id="charCountWrap">
+          <span id="charCount">0</span> / 300자
+        </div>
+      </div>
+      <!-- 빠른 선택 패널 -->
+      <div id="panelQuick" style="display:none">
+        <p class="quick-hint">꿈 유형을 선택하세요 (최대 2개)</p>
+        <div class="quick-chips-grid" id="quickChipsGrid"></div>
+        <div class="quick-preview" id="quickPreview"></div>
       </div>
       <button class="btn btn-interpret" id="interpretBtn">✦ 해몽하기</button>
     </div>
@@ -2258,6 +2345,82 @@ function updateCharCount(len) {
     $charCountWrap.className = 'char-count';
   }
 }
+
+
+/* ============================================================
+   투트랙 꿈 입력 — 직접 입력 / 빠른 선택
+   ============================================================ */
+const QUICK_DREAMS = [
+  { emoji: '✈️',  label: '나는 꿈',     text: '하늘을 자유롭게 날아다니는 꿈을 꿨어요.' },
+  { emoji: '🏃',  label: '쫓기는 꿈',   text: '정체불명의 무언가에 쫓기는 꿈을 꿨어요.' },
+  { emoji: '🌊',  label: '물·바다',     text: '넓은 바다나 물속에 있는 꿈을 꿨어요.' },
+  { emoji: '💰',  label: '돈·복권',     text: '큰돈이나 복권에 당첨되는 꿈을 꿨어요.' },
+  { emoji: '❤️',  label: '연애·이성',   text: '이성이 등장하는 꿈을 꿨어요.' },
+  { emoji: '🦷',  label: '이가 빠짐',   text: '이가 빠지거나 흔들리는 꿈을 꿨어요.' },
+  { emoji: '🐍',  label: '뱀·동물',     text: '뱀이나 동물이 나오는 꿈을 꿨어요.' },
+  { emoji: '👴',  label: '돌아가신 분', text: '돌아가신 가족이나 지인이 나오는 꿈을 꿨어요.' },
+  { emoji: '📚',  label: '시험·직장',   text: '시험이나 직장과 관련된 꿈을 꿨어요.' },
+  { emoji: '😱',  label: '악몽',         text: '무섭고 불안한 악몽을 꿨어요.' },
+  { emoji: '🏠',  label: '집·건물',     text: '낯선 집이나 건물이 나오는 꿈을 꿨어요.' },
+  { emoji: '👶',  label: '아기·임신',   text: '아기나 임신과 관련된 꿈을 꿨어요.' },
+];
+
+let selectedQuickIdxs = [];
+
+function switchDreamMode(mode) {
+  document.getElementById('panelDirect').style.display = mode === 'direct' ? '' : 'none';
+  document.getElementById('panelQuick').style.display  = mode === 'quick'  ? '' : 'none';
+  document.getElementById('tabDirect').classList.toggle('active', mode === 'direct');
+  document.getElementById('tabQuick').classList.toggle('active',  mode === 'quick');
+  if (mode === 'quick') buildQuickChips();
+}
+
+function buildQuickChips() {
+  const grid = document.getElementById('quickChipsGrid');
+  if (grid.children.length) return;
+  QUICK_DREAMS.forEach((item, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-chip';
+    btn.innerHTML = `<span class="qc-emoji">${item.emoji}</span><span class="qc-label">${item.label}</span>`;
+    btn.addEventListener('click', () => toggleQuickChip(i, btn));
+    grid.appendChild(btn);
+  });
+}
+
+function toggleQuickChip(idx, btn) {
+  const alreadyIdx = selectedQuickIdxs.indexOf(idx);
+  if (alreadyIdx !== -1) {
+    selectedQuickIdxs.splice(alreadyIdx, 1);
+    btn.classList.remove('active');
+  } else {
+    if (selectedQuickIdxs.length >= 2) {
+      const evictedIdx = selectedQuickIdxs.shift();
+      document.querySelectorAll('.quick-chip')[evictedIdx]?.classList.remove('active');
+    }
+    selectedQuickIdxs.push(idx);
+    btn.classList.add('active');
+  }
+  updateQuickPreview();
+}
+
+function updateQuickPreview() {
+  const preview = document.getElementById('quickPreview');
+  if (selectedQuickIdxs.length === 0) {
+    preview.classList.remove('visible');
+    $dreamInput.value = '';
+    return;
+  }
+  const texts = selectedQuickIdxs.map(i => QUICK_DREAMS[i].text);
+  const combined = texts.length === 1
+    ? texts[0]
+    : texts[0].replace(/[.。]$/, '') + '도 했고, ' + texts[1];
+  $dreamInput.value = combined;
+  preview.textContent = '📝 ' + combined;
+  preview.classList.add('visible');
+}
+
+document.getElementById('tabDirect').addEventListener('click', () => switchDreamMode('direct'));
+document.getElementById('tabQuick').addEventListener('click',  () => switchDreamMode('quick'));
 
 
 /* ============================================================
@@ -3213,6 +3376,11 @@ function resetAndGoMain() {
   /* 입력 초기화 */
   $dreamInput.value = '';
   updateCharCount(0);
+  /* 빠른 선택 초기화 */
+  selectedQuickIdxs = [];
+  document.querySelectorAll('.quick-chip').forEach(c => c.classList.remove('active'));
+  const qp = document.getElementById('quickPreview');
+  if (qp) { qp.classList.remove('visible'); qp.textContent = ''; }
 
   /* 결과/에러 숨김 */
   document.getElementById('resultSection').style.display = 'none';
