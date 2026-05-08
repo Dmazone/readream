@@ -2293,7 +2293,7 @@ async function interpretDream() {
       body: JSON.stringify({
         system_instruction: { parts: [{ text: buildSystemPrompt() }] },
         contents:           [{ parts: [{ text: dream }] }],
-        generationConfig:   { maxOutputTokens: 2048, temperature: 0.9 },
+        generationConfig:   { maxOutputTokens: 2048, temperature: 0.9, thinkingConfig: { thinkingBudget: 0 } },
       }),
     });
 
@@ -2447,7 +2447,7 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 2048, temperature: 0.85 },
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.85, thinkingConfig: { thinkingBudget: 0 } },
       }),
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
@@ -2610,7 +2610,7 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 2048, temperature: 0.9 },
+        generationConfig: { maxOutputTokens: 2048, temperature: 0.9, thinkingConfig: { thinkingBudget: 0 } },
       }),
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
