@@ -420,6 +420,69 @@
       opacity: 1;
       pointer-events: auto;
     }
+    .interstitial-actions {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .interstitial-btn {
+      flex: 1;
+      padding: 11px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(167,139,250,0.3);
+      background: rgba(255,255,255,0.04);
+      color: #c4b5fd;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .interstitial-btn:hover { background: rgba(167,139,250,0.12); }
+    .interstitial-btn.pay {
+      border-color: rgba(245,200,66,0.4);
+      color: #f5c842;
+    }
+    .interstitial-btn.pay:hover { background: rgba(245,200,66,0.1); }
+
+    /* 짧은 꿈 경고 팝업 */
+    #shortDreamPopup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(6,4,18,0.92);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #shortDreamPopup.active { display: flex; }
+    .short-dream-box {
+      background: #1a1040;
+      border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+    }
+    .short-dream-emoji { font-size: 40px; margin-bottom: 16px; }
+    .short-dream-msg {
+      font-size: 17px;
+      color: #e2d9f3;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .short-dream-back {
+      width: 100%;
+      padding: 13px;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(135deg, #6d28d9, #4c1d95);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     /* ===== 광고 영역 ===== */
     .ad-unit {
@@ -1427,6 +1490,19 @@
     <button class="interstitial-skip" id="interstitialSkip">
       ✦ 해몽 결과 보기
     </button>
+    <div class="interstitial-actions">
+      <button class="interstitial-btn" id="interstitialRewrite">↩ 다시 꿈내용 적기</button>
+      <button class="interstitial-btn pay" id="interstitialPay">✦ 광고 제거하기</button>
+    </div>
+  </div>
+
+  <!-- 짧은 꿈 내용 경고 팝업 -->
+  <div id="shortDreamPopup">
+    <div class="short-dream-box">
+      <div class="short-dream-emoji">🌙</div>
+      <div class="short-dream-msg">내용을 좀 더<br>자세히 적어 주세요</div>
+      <button class="short-dream-back" id="shortDreamBack">돌아가기</button>
+    </div>
   </div>
 
   <!-- ========== 꿈 일기 상세 뷰 (일기 항목 클릭 시 표시) ========== -->
@@ -1698,7 +1774,7 @@ async function interpretDream() {
   const dream  = $dreamInput.value.trim();
 
   if (!apiKey) { showApiError('auth_missing'); return; }
-  if (!dream)  { showApiError('dream_missing'); return; }
+  if (dream.length < 10) { showShortDreamPopup(); return; }
 
   hideResult();
   showLoading(true);
@@ -1770,7 +1846,8 @@ async function interpretDream() {
     showLoading(false);
 
     /* 광고 인터스티셜: API 완료 후 30초 대기 */
-    await showInterstitial(30);
+    const action = await showInterstitial(30);
+    if (action === 'rewrite') return;
 
     renderResult(parsed);
     showResult();
@@ -1898,37 +1975,60 @@ function showLoading(on) {
   document.getElementById('interpretBtn').disabled = on;
 }
 
-/* 광고 인터스티셜: seconds초 카운트다운 후 resolve */
+/* 광고 인터스티셜: seconds초 카운트다운 후 resolve('show'|'rewrite') */
 function showInterstitial(seconds) {
   return new Promise(resolve => {
-    const overlay  = document.getElementById('adInterstitial');
-    const secEl    = document.getElementById('interstitialSec');
-    const skipBtn  = document.getElementById('interstitialSkip');
-    let remaining  = seconds;
+    const overlay     = document.getElementById('adInterstitial');
+    const secEl       = document.getElementById('interstitialSec');
+    const skipBtn     = document.getElementById('interstitialSkip');
+    const rewriteBtn  = document.getElementById('interstitialRewrite');
+    const payBtn      = document.getElementById('interstitialPay');
+    let remaining     = seconds;
 
     overlay.classList.add('active');
     secEl.textContent = remaining;
     skipBtn.classList.remove('visible');
 
-    /* AdSense 광고 로드 */
     try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+
+    const cleanup = (action) => {
+      clearInterval(tick);
+      overlay.classList.remove('active');
+      skipBtn.onclick = rewriteBtn.onclick = payBtn.onclick = null;
+      resolve(action);
+    };
 
     const tick = setInterval(() => {
       remaining--;
       secEl.textContent = remaining;
-      if (remaining <= 0) {
-        clearInterval(tick);
-        skipBtn.classList.add('visible');
-      }
+      if (remaining <= 0) { clearInterval(tick); skipBtn.classList.add('visible'); }
     }, 1000);
 
-    skipBtn.onclick = () => {
-      clearInterval(tick);
-      overlay.classList.remove('active');
-      skipBtn.onclick = null;
-      resolve();
+    skipBtn.onclick   = () => cleanup('show');
+    rewriteBtn.onclick = () => {
+      cleanup('rewrite');
+      $dreamInput.focus();
+      const len = $dreamInput.value.length;
+      $dreamInput.setSelectionRange(len, len);
+    };
+    payBtn.onclick = () => {
+      /* TODO: 결제 페이지 연결 — 개발자 승인 후 구현 */
+      alert('준비 중입니다 🌙');
     };
   });
+}
+
+/* 10자 미만 경고 팝업 */
+function showShortDreamPopup() {
+  const popup = document.getElementById('shortDreamPopup');
+  const backBtn = document.getElementById('shortDreamBack');
+  popup.classList.add('active');
+  backBtn.onclick = () => {
+    popup.classList.remove('active');
+    $dreamInput.focus();
+    const len = $dreamInput.value.length;
+    $dreamInput.setSelectionRange(len, len);
+  };
 }
 
 function showResult() {
