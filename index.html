@@ -31,13 +31,10 @@
 
   <!-- ====== 보안: CSP — API 호출 도메인만 허용 ====== -->
   <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://generativelanguage.googleapis.com https://pagead2.googlesyndication.com https://www.googletagservices.com;">
+        content="connect-src 'self' https://generativelanguage.googleapis.com https://pagead2.googlesyndication.com https://www.googletagservices.com https://googleads.g.doubleclick.net https://adservice.google.com; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;">
 
-  <!-- ====== Google AdSense ======
-       1. https://www.google.com/adsense 에서 승인 후
-       2. 아래 ca-pub-XXXXXXXXXXXXXXXX 를 본인 퍼블리셔 ID로 교체하세요
-  -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+  <!-- Google AdSense (Auto Ads + 수동 유닛) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2811607286789792"
           crossorigin="anonymous"></script>
   <style>
     /* === 기본 리셋 === */
@@ -1230,20 +1227,15 @@
       <button class="btn btn-interpret" id="interpretBtn">✦ 해몽하기</button>
     </div>
 
-    <!-- ====== 광고 (상단 배너) ======
-         AdSense 승인 후: dev-placeholder 클래스 제거 + ins 태그 활성화
-         슬롯 ID는 AdSense 대시보드에서 발급 후 교체하세요 -->
-    <div class="ad-unit dev-placeholder" id="adTop">
-      📢 광고 영역 (상단 배너)
-      <!-- AdSense 승인 후 아래 주석 해제:
+    <!-- 광고: 상단 배너 -->
+    <div class="ad-unit" id="adTop">
       <ins class="adsbygoogle"
            style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-client="ca-pub-2811607286789792"
            data-ad-slot="1111111111"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      -->
     </div>
 
     <!-- 에러 배너 -->
@@ -1311,18 +1303,15 @@
       </div>
     </div>
 
-    <!-- ====== 광고 (결과 하단 인피드) ====== -->
-    <div class="ad-unit dev-placeholder" id="adMid">
-      📢 광고 영역 (결과 하단 인피드)
-      <!-- AdSense 승인 후 아래 주석 해제:
+    <!-- 광고: 결과 하단 인피드 -->
+    <div class="ad-unit" id="adMid">
       <ins class="adsbygoogle"
            style="display:block; text-align:center;"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-client="ca-pub-2811607286789792"
            data-ad-slot="3333333333"
            data-ad-layout="in-article"
            data-ad-format="fluid"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      -->
     </div>
 
     <!-- 꿈 일기 아코디언 -->
@@ -1338,18 +1327,15 @@
       <div class="diary-list" id="diaryList"></div>
     </div>
 
-    <!-- ====== 광고 (하단 직사각형) ====== -->
-    <div class="ad-unit dev-placeholder" id="adBottom" style="margin-top: 22px;">
-      📢 광고 영역 (하단 300×250)
-      <!-- AdSense 승인 후 아래 주석 해제:
+    <!-- 광고: 하단 직사각형 -->
+    <div class="ad-unit" id="adBottom" style="margin-top: 22px;">
       <ins class="adsbygoogle"
            style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-client="ca-pub-2811607286789792"
            data-ad-slot="2222222222"
-           data-ad-format="rectangle"
+           data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      -->
     </div>
 
   </div><!-- /mainContent -->
