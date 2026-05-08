@@ -484,6 +484,273 @@
       cursor: pointer;
     }
 
+    /* ===== 프로필 (사주 연계) 카드 ===== */
+    .profile-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+    }
+    .profile-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .profile-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .profile-badge {
+      font-size: 10px;
+      padding: 2px 9px;
+      border-radius: 10px;
+      background: rgba(109,40,217,0.25);
+      color: #c4b5fd;
+    }
+    .profile-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+    .profile-body.open { max-height: 220px; }
+    .profile-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .profile-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .profile-input:focus { border-color: var(--purple-light); }
+    .gender-btns { display: flex; gap: 6px; flex-shrink: 0; }
+    .gender-btn {
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .gender-btn.active {
+      background: var(--purple-mid);
+      border-color: var(--purple-mid);
+      color: #fff;
+    }
+    .btn-save-profile {
+      width: 100%;
+      margin-top: 12px;
+      padding: 11px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #5b21b6, #4338ca);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .profile-saved-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ===== 3일 예측 카드 ===== */
+    .forecast-card {
+      background: linear-gradient(135deg,
+        rgba(79,70,229,0.1) 0%,
+        rgba(109,40,217,0.1) 100%
+      );
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .forecast-card::before {
+      content: '🔮';
+      position: absolute;
+      bottom: -12px;
+      right: 4px;
+      font-size: 72px;
+      opacity: 0.07;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .forecast-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: #a78bfa;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .forecast-card p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-primary);
+    }
+
+    /* ===== 행운 정보 카드 ===== */
+    .lucky-card {
+      background: linear-gradient(135deg,
+        rgba(245,158,11,0.07) 0%,
+        rgba(253,211,77,0.05) 100%
+      );
+      border: 1px solid rgba(245,158,11,0.22);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .lucky-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .lucky-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .lucky-item {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.18);
+      border-radius: 12px;
+      padding: 14px 8px;
+      text-align: center;
+    }
+    .lucky-item-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+    .lucky-item-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    .lucky-item-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    /* ===== 꿈 속 그 사람 분석 ===== */
+    #personSection { margin-top: 10px; }
+    .person-trigger {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px dashed rgba(196,181,253,0.3);
+      background: rgba(109,40,217,0.07);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .person-trigger:hover {
+      background: rgba(109,40,217,0.15);
+      border-color: rgba(196,181,253,0.5);
+    }
+    #personForm { display: none; margin-top: 14px; }
+    #personForm.open { display: block; }
+    .person-question {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .person-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .person-opt {
+      padding: 10px 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(196,181,253,0.2);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .person-opt.selected, .person-opt:hover {
+      background: rgba(109,40,217,0.2);
+      border-color: rgba(139,92,246,0.5);
+      color: var(--text-primary);
+    }
+    .btn-person-analyze {
+      width: 100%;
+      padding: 13px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #5b21b6, #4338ca);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-person-analyze:disabled { opacity: 0.5; cursor: not-allowed; }
+    .person-result-card {
+      display: none;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 14px;
+      animation: fadeInUp 0.4s ease both;
+    }
+    .person-result-card.active { display: block; }
+    .person-result-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #f9a8d4;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .person-result-card p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--text-primary);
+    }
+
     /* ===== 광고 영역 ===== */
     .ad-unit {
       margin: 14px 0;
@@ -1344,6 +1611,28 @@
       </div>
     </div>
 
+    <!-- 프로필 (사주 연계 맞춤 해몽) -->
+    <div class="profile-card">
+      <div class="profile-toggle" id="profileToggle">
+        <div class="profile-toggle-left">
+          🔯 맞춤 해몽 프로필
+          <span class="profile-badge" id="profileBadge">미등록</span>
+        </div>
+        <span class="api-chevron" id="profileChevron">▾</span>
+      </div>
+      <div class="profile-body" id="profileBody">
+        <div class="profile-row">
+          <input type="date" class="profile-input" id="profileBirth">
+          <div class="gender-btns">
+            <button class="gender-btn" id="genderF">♀ 여성</button>
+            <button class="gender-btn" id="genderM">♂ 남성</button>
+          </div>
+        </div>
+        <button class="btn-save-profile" id="btnSaveProfile">저장하기</button>
+        <div class="profile-saved-info" id="profileSavedInfo"></div>
+      </div>
+    </div>
+
     <!-- 꿈 입력 (최대 300자) -->
     <div class="card">
       <div class="section-label">오늘의 꿈</div>
@@ -1401,9 +1690,47 @@
         <div class="section-label">전체 해석</div>
         <p id="interpretationText"></p>
       </div>
+      <div class="forecast-card" id="forecastCard" style="display:none;">
+        <div class="forecast-label">✦ 앞으로 3일 내 찾아올 일</div>
+        <p id="forecastText"></p>
+      </div>
       <div class="advice-card">
         <div class="advice-label">✦ 오늘의 조언</div>
         <p id="adviceText"></p>
+      </div>
+      <div class="lucky-card" id="luckyCard" style="display:none;">
+        <div class="lucky-label">✦ 꿈이 알려준 행운</div>
+        <div class="lucky-grid">
+          <div class="lucky-item">
+            <span class="lucky-item-icon">🎲</span>
+            <div class="lucky-item-label">행운의 숫자</div>
+            <div class="lucky-item-value" id="luckyNumbers">—</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-item-icon">🎨</span>
+            <div class="lucky-item-label">행운의 색상</div>
+            <div class="lucky-item-value" id="luckyColor">—</div>
+          </div>
+          <div class="lucky-item">
+            <span class="lucky-item-icon">✨</span>
+            <div class="lucky-item-label">행운의 상징</div>
+            <div class="lucky-item-value" id="luckySymbol">—</div>
+          </div>
+        </div>
+      </div>
+      <div id="personSection">
+        <button class="person-trigger" id="btnPersonTrigger">
+          👤 꿈 속 그 사람의 의미 분석하기
+        </button>
+        <div id="personForm">
+          <p class="person-question">꿈에 등장한 인물과의 관계는?</p>
+          <div class="person-options" id="personOptions"></div>
+          <button class="btn-person-analyze" id="btnPersonAnalyze">🔮 분석하기</button>
+        </div>
+        <div class="person-result-card" id="personResultCard">
+          <div class="person-result-label">💫 그 사람이 나타난 이유</div>
+          <p id="personResultText"></p>
+        </div>
       </div>
       <div class="result-actions">
         <!-- 저장 버튼: 저장 후 비활성화 -->
@@ -1535,10 +1862,38 @@
       <p id="detailInterpretationText"></p>
     </div>
 
+    <!-- 3일 예측 -->
+    <div class="forecast-card" id="detailForecastCard" style="display:none;">
+      <div class="forecast-label">✦ 앞으로 3일 내 찾아올 일</div>
+      <p id="detailForecastText"></p>
+    </div>
+
     <!-- 오늘의 조언 -->
     <div class="advice-card">
       <div class="advice-label">✦ 오늘의 조언</div>
       <p id="detailAdviceText"></p>
+    </div>
+
+    <!-- 행운 정보 -->
+    <div class="lucky-card" id="detailLuckyCard" style="display:none;">
+      <div class="lucky-label">✦ 꿈이 알려준 행운</div>
+      <div class="lucky-grid">
+        <div class="lucky-item">
+          <span class="lucky-item-icon">🎲</span>
+          <div class="lucky-item-label">행운의 숫자</div>
+          <div class="lucky-item-value" id="detailLuckyNumbers">—</div>
+        </div>
+        <div class="lucky-item">
+          <span class="lucky-item-icon">🎨</span>
+          <div class="lucky-item-label">행운의 색상</div>
+          <div class="lucky-item-value" id="detailLuckyColor">—</div>
+        </div>
+        <div class="lucky-item">
+          <span class="lucky-item-icon">✨</span>
+          <div class="lucky-item-label">행운의 상징</div>
+          <div class="lucky-item-value" id="detailLuckySymbol">—</div>
+        </div>
+      </div>
     </div>
 
     <!-- 하단 버튼 -->
@@ -1729,17 +2084,31 @@ function renderSymbolsGrid(container, symbols) {
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
 const SYSTEM_PROMPT =
-  '당신은 융 분석심리학과 프로이트 심리학에 기반한 꿈 해몽 전문가입니다.\n' +
+  '당신은 융 분석심리학·프로이트 심리학과 동양 사주 명리학에 기반한 꿈 해몽 전문가입니다.\n' +
   '사용자가 꿈 내용을 입력하면 반드시 아래 JSON 형식으로만 응답하세요.\n' +
   '다른 텍스트나 마크다운 없이 순수 JSON만 출력하세요:\n' +
   '{\n' +
   '  "symbols": [\n' +
-  '    {"emoji": "상징을 나타내는 이모지 1개", "name": "상징명", "meaning": "의미 설명"}\n' +
+  '    {"emoji": "상징 이모지 1개", "name": "상징명", "meaning": "의미 설명"}\n' +
   '  ],\n' +
-  '  "interpretation": "전체 해석 텍스트 (3~4문장)",\n' +
-  '  "advice": "오늘의 조언 (1~2문장)"\n' +
+  '  "interpretation": "전체 해석 (3~4문장)",\n' +
+  '  "forecast": "앞으로 3일 내 찾아올 일 (2~3문장, 신비롭고 구체적으로)",\n' +
+  '  "advice": "오늘의 조언 (1~2문장)",\n' +
+  '  "lucky": {"numbers": [숫자1, 숫자2, 숫자3], "color": "행운의 색상명", "symbol": "행운의 상징물 단어 1개"}\n' +
   '}\n' +
   '항상 한국어로 답변하세요. 따뜻하고 신비로운 톤을 유지하세요.';
+
+function buildSystemPrompt() {
+  const profile = getProfile();
+  if (profile && profile.birth && profile.gender) {
+    const d = new Date(profile.birth);
+    const birthStr = d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+    return SYSTEM_PROMPT +
+      `\n사용자 정보: 생년월일 ${birthStr}, 성별 ${profile.gender}.` +
+      ' 이 정보를 꿈 해석에 반영하여 12간지·사주와 연결된 맞춤 해몽을 제공하세요.';
+  }
+  return SYSTEM_PROMPT;
+}
 
 let cachedModel   = null;
 let currentResult = null;
@@ -1791,7 +2160,7 @@ async function interpretDream() {
       headers: { 'Content-Type': 'application/json' },
       signal:  controller.signal,
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        system_instruction: { parts: [{ text: buildSystemPrompt() }] },
         contents:           [{ parts: [{ text: dream }] }],
         generationConfig:   { maxOutputTokens: 2048, temperature: 0.9 },
       }),
@@ -1866,7 +2235,170 @@ function renderResult(data) {
   renderSymbolsGrid(document.getElementById('symbolsGrid'), data.symbols);
   document.getElementById('interpretationText').textContent = data.interpretation;
   document.getElementById('adviceText').textContent         = data.advice;
+
+  const forecastCard = document.getElementById('forecastCard');
+  if (data.forecast) {
+    document.getElementById('forecastText').textContent = data.forecast;
+    forecastCard.style.display = 'block';
+  } else {
+    forecastCard.style.display = 'none';
+  }
+
+  const luckyCard = document.getElementById('luckyCard');
+  if (data.lucky) {
+    const nums = Array.isArray(data.lucky.numbers) ? data.lucky.numbers.slice(0, 3).join(', ') : '';
+    document.getElementById('luckyNumbers').textContent = nums || '—';
+    document.getElementById('luckyColor').textContent   = data.lucky.color  || '—';
+    document.getElementById('luckySymbol').textContent  = data.lucky.symbol || '—';
+    luckyCard.style.display = 'block';
+  } else {
+    luckyCard.style.display = 'none';
+  }
+
+  resetPersonSection();
 }
+
+
+/* ============================================================
+   프로필 (사주 연계)
+   ============================================================ */
+const PROFILE_LS    = 'rd_profile';
+let selectedGender  = '';
+
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem(PROFILE_LS)); } catch { return null; }
+}
+
+function selectGender(g) {
+  selectedGender = g;
+  document.getElementById('genderF').classList.toggle('active', g === '여성');
+  document.getElementById('genderM').classList.toggle('active', g === '남성');
+}
+
+function loadProfile() {
+  const p = getProfile();
+  const badge  = document.getElementById('profileBadge');
+  const info   = document.getElementById('profileSavedInfo');
+  if (p && p.birth && p.gender) {
+    document.getElementById('profileBirth').value = p.birth;
+    selectGender(p.gender);
+    badge.textContent         = p.gender === '여성' ? '♀ 등록됨' : '♂ 등록됨';
+    badge.style.background    = 'rgba(16,185,129,0.2)';
+    badge.style.color         = '#6ee7b7';
+    const d = new Date(p.birth);
+    const birthStr = d.toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' });
+    info.textContent = `${birthStr} · ${p.gender}`;
+  }
+}
+
+document.getElementById('profileToggle').addEventListener('click', () => {
+  const body    = document.getElementById('profileBody');
+  const chevron = document.getElementById('profileChevron');
+  const isOpen  = body.classList.toggle('open');
+  chevron.classList.toggle('open', isOpen);
+});
+
+document.getElementById('genderF').addEventListener('click', () => selectGender('여성'));
+document.getElementById('genderM').addEventListener('click', () => selectGender('남성'));
+
+document.getElementById('btnSaveProfile').addEventListener('click', () => {
+  const birth = document.getElementById('profileBirth').value;
+  if (!birth)         { showToast('생년월일을 입력해주세요 🌙'); return; }
+  if (!selectedGender){ showToast('성별을 선택해주세요 🌙');     return; }
+  localStorage.setItem(PROFILE_LS, JSON.stringify({ birth, gender: selectedGender }));
+  loadProfile();
+  document.getElementById('profileBody').classList.remove('open');
+  document.getElementById('profileChevron').classList.remove('open');
+  showToast('프로필이 저장되었습니다 🌙');
+});
+
+
+/* ============================================================
+   꿈 속 그 사람 분석
+   ============================================================ */
+const PERSON_TYPES = [
+  { value: '연인',       emoji: '💕' },
+  { value: '가족',       emoji: '👨‍👩‍👧' },
+  { value: '친구',       emoji: '🤝' },
+  { value: '직장동료',   emoji: '💼' },
+  { value: '모르는 사람',emoji: '👤' },
+  { value: '고인',       emoji: '🕯️' },
+];
+
+let selectedPerson = '';
+
+function initPersonSection() {
+  const opts = document.getElementById('personOptions');
+  opts.innerHTML = '';
+  PERSON_TYPES.forEach(pt => {
+    const btn = document.createElement('button');
+    btn.className   = 'person-opt';
+    btn.innerHTML   = `${pt.emoji}<br>${pt.value}`;
+    btn.dataset.value = pt.value;
+    btn.addEventListener('click', () => {
+      selectedPerson = pt.value;
+      opts.querySelectorAll('.person-opt').forEach(b =>
+        b.classList.toggle('selected', b.dataset.value === pt.value)
+      );
+    });
+    opts.appendChild(btn);
+  });
+}
+
+function resetPersonSection() {
+  selectedPerson = '';
+  document.getElementById('personForm').classList.remove('open');
+  document.getElementById('personResultCard').classList.remove('active');
+  const opts = document.getElementById('personOptions');
+  if (opts) opts.querySelectorAll('.person-opt').forEach(b => b.classList.remove('selected'));
+}
+
+document.getElementById('btnPersonTrigger').addEventListener('click', () => {
+  document.getElementById('personForm').classList.toggle('open');
+});
+
+document.getElementById('btnPersonAnalyze').addEventListener('click', async () => {
+  if (!selectedPerson) { showToast('관계를 선택해주세요 🌙'); return; }
+  const apiKey = localStorage.getItem(API_KEY_LS);
+  const dream  = $dreamInput.value.trim();
+  if (!apiKey || !dream) return;
+
+  const btn     = document.getElementById('btnPersonAnalyze');
+  btn.disabled  = true;
+  btn.textContent = '분석 중...';
+
+  const prompt =
+    `꿈 내용: ${dream}\n\n` +
+    `이 꿈에 "${selectedPerson}"이(가) 등장했습니다. ` +
+    `왜 이 사람이 꿈에 나타났는지, 이 사람이 상징하는 무의식적 의미는 무엇인지, ` +
+    `그리고 이 관계에서 내면이 전하는 메시지를 3~4문장으로 신비롭고 따뜻하게 해석해주세요. ` +
+    `JSON 없이 순수 텍스트로만 답해주세요. 한국어로 답변하세요.`;
+
+  try {
+    const model    = await resolveModel(apiKey);
+    const endpoint = `${GEMINI_BASE}/models/${model}:generateContent`;
+    const res = await fetch(`${endpoint}?key=${encodeURIComponent(apiKey)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents:         [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 500, temperature: 0.9 },
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP_${res.status}`);
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '분석을 완료하지 못했어요.';
+    document.getElementById('personResultText').textContent = text;
+    const card = document.getElementById('personResultCard');
+    card.classList.add('active');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  } catch {
+    showToast('분석에 실패했어요. 다시 시도해주세요 🌙');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = '🔮 분석하기';
+  }
+});
 
 
 /* ============================================================
@@ -2147,7 +2679,9 @@ function saveDiary() {
     dream,
     symbols:        currentResult.symbols,
     interpretation: document.getElementById('interpretationText').textContent,
+    forecast:       currentResult.forecast  || '',
     advice:         document.getElementById('adviceText').textContent,
+    lucky:          currentResult.lucky     || null,
   });
 
   if (diary.length > 10) diary.length = 10;
@@ -2246,10 +2780,29 @@ function openDiaryDetail(entry) {
   currentDiaryEntry = entry;
 
   /* 상세 뷰 데이터 채우기 */
-  document.getElementById('detailDate').textContent             = `🌙 ${entry.date}`;
-  document.getElementById('detailDreamText').textContent        = entry.dream;
+  document.getElementById('detailDate').textContent               = `🌙 ${entry.date}`;
+  document.getElementById('detailDreamText').textContent          = entry.dream;
   document.getElementById('detailInterpretationText').textContent = entry.interpretation || '';
-  document.getElementById('detailAdviceText').textContent       = entry.advice || '';
+  document.getElementById('detailAdviceText').textContent         = entry.advice || '';
+
+  const dfc = document.getElementById('detailForecastCard');
+  if (entry.forecast) {
+    document.getElementById('detailForecastText').textContent = entry.forecast;
+    dfc.style.display = 'block';
+  } else {
+    dfc.style.display = 'none';
+  }
+
+  const dlc = document.getElementById('detailLuckyCard');
+  if (entry.lucky) {
+    const nums = Array.isArray(entry.lucky.numbers) ? entry.lucky.numbers.slice(0,3).join(', ') : '';
+    document.getElementById('detailLuckyNumbers').textContent = nums || '—';
+    document.getElementById('detailLuckyColor').textContent   = entry.lucky.color  || '—';
+    document.getElementById('detailLuckySymbol').textContent  = entry.lucky.symbol || '—';
+    dlc.style.display = 'block';
+  } else {
+    dlc.style.display = 'none';
+  }
 
   renderSymbolsGrid(
     document.getElementById('detailSymbolsGrid'),
@@ -2380,7 +2933,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
    ============================================================ */
 (function init() {
   /* 버전 기반 강제 키 갱신 */
-  const APP_VER = '2.8';
+  const APP_VER = '2.9';
 
   /* ── API 키 보안 처리 ──────────────────────────────────────────────────
      키를 분할 저장하여 단순 소스 검색·크롤러 노출을 최소화합니다.
@@ -2398,7 +2951,9 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
   }
 
   loadApiKey();
+  loadProfile();
   renderDiary();
+  initPersonSection();
 
   /* 페이지 로드 시 꿈 입력란에 자동 포커스 */
   setTimeout(() => $dreamInput.focus(), 150);
