@@ -352,6 +352,75 @@
     .char-count.warn  { color: var(--gold); }
     .char-count.limit { color: #f87171; }
 
+    /* ===== 광고 인터스티셜 모달 ===== */
+    #adInterstitial {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(6, 4, 18, 0.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      gap: 18px;
+    }
+    #adInterstitial.active { display: flex; }
+    .interstitial-label {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: rgba(167, 139, 250, 0.5);
+      text-transform: uppercase;
+    }
+    .interstitial-title {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      color: #e2d9f3;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .interstitial-ad-box {
+      width: 100%;
+      max-width: 400px;
+      min-height: 250px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(196,181,253,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .interstitial-countdown {
+      font-size: 14px;
+      color: rgba(196, 181, 253, 0.7);
+      text-align: center;
+    }
+    .interstitial-countdown span {
+      font-size: 28px;
+      font-weight: bold;
+      color: #a78bfa;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .interstitial-skip {
+      padding: 12px 32px;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(135deg, #6d28d9, #4c1d95);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .interstitial-skip.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     /* ===== 광고 영역 ===== */
     .ad-unit {
       margin: 14px 0;
@@ -1340,6 +1409,26 @@
 
   </div><!-- /mainContent -->
 
+  <!-- 광고 인터스티셜 오버레이 -->
+  <div id="adInterstitial">
+    <div class="interstitial-label">🌙 잠시만요</div>
+    <div class="interstitial-title">달빛이 꿈을 해석하는 동안<br>짧은 광고를 시청해주세요</div>
+    <div class="interstitial-ad-box">
+      <ins class="adsbygoogle"
+           style="display:block;width:300px;height:250px;"
+           data-ad-client="ca-pub-2811607286789792"
+           data-ad-slot="4444444444"
+           data-ad-format="rectangle"></ins>
+    </div>
+    <div class="interstitial-countdown">
+      <span id="interstitialSec">30</span>
+      초 후 결과를 확인할 수 있어요
+    </div>
+    <button class="interstitial-skip" id="interstitialSkip">
+      ✦ 해몽 결과 보기
+    </button>
+  </div>
+
   <!-- ========== 꿈 일기 상세 뷰 (일기 항목 클릭 시 표시) ========== -->
   <div id="diaryDetailSection" style="display:none;">
 
@@ -1678,6 +1767,11 @@ async function interpretDream() {
     }
 
     currentResult = parsed;
+    showLoading(false);
+
+    /* 광고 인터스티셜: API 완료 후 30초 대기 */
+    await showInterstitial(30);
+
     renderResult(parsed);
     showResult();
 
@@ -1802,6 +1896,39 @@ document.getElementById('retryBtn').addEventListener('click', () => {
 function showLoading(on) {
   document.getElementById('loadingSection').classList.toggle('active', on);
   document.getElementById('interpretBtn').disabled = on;
+}
+
+/* 광고 인터스티셜: seconds초 카운트다운 후 resolve */
+function showInterstitial(seconds) {
+  return new Promise(resolve => {
+    const overlay  = document.getElementById('adInterstitial');
+    const secEl    = document.getElementById('interstitialSec');
+    const skipBtn  = document.getElementById('interstitialSkip');
+    let remaining  = seconds;
+
+    overlay.classList.add('active');
+    secEl.textContent = remaining;
+    skipBtn.classList.remove('visible');
+
+    /* AdSense 광고 로드 */
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+
+    const tick = setInterval(() => {
+      remaining--;
+      secEl.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(tick);
+        skipBtn.classList.add('visible');
+      }
+    }, 1000);
+
+    skipBtn.onclick = () => {
+      clearInterval(tick);
+      overlay.classList.remove('active');
+      skipBtn.onclick = null;
+      resolve();
+    };
+  });
 }
 
 function showResult() {
