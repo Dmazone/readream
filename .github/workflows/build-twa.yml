@@ -69,10 +69,10 @@ jobs:
       - name: Build AAB
         working-directory: ./twa-project
         env:
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
           gradle :app:bundleRelease
 
       - name: Upload AAB artifact
