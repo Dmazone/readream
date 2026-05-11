@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.dmazone.readream'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.dmazone.readream"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("${rootDir}/../readream.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: "readream2024!"
+            keyAlias "readream"
+            keyPassword System.getenv("KEY_PASSWORD") ?: "readream2024!"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReaDream - AI 꿈 해몽</string>
+    <string name="asset_statements">
+        [{
+            \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+            \"target\": {
+                \"namespace\": \"android_app\",
+                \"package_name\": \"com.dmazone.readream\",
+                \"sha256_cert_fingerprints\": []
+            }
+        }]
+    </string>
+</resources>

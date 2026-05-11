@@ -17,10 +17,10 @@ jobs:
           java-version: '17'
           distribution: 'microsoft'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          node-version: '20'
+          gradle-version: '8.7'
 
       - name: Accept Android SDK licenses
         run: |
@@ -33,8 +33,26 @@ jobs:
       - name: Install Inkscape (SVG → PNG)
         run: sudo apt-get install -y inkscape
 
-      - name: Convert SVG icons to PNG
+      - name: Convert SVG icons to PNG (multiple densities)
         run: |
+          # mipmap PNGs for legacy devices
+          for size in 48 72 96 144 192; do
+            case $size in
+              48)  density="mdpi"    ;;
+              72)  density="hdpi"    ;;
+              96)  density="xhdpi"   ;;
+              144) density="xxhdpi"  ;;
+              192) density="xxxhdpi" ;;
+            esac
+            mkdir -p twa-project/app/src/main/res/mipmap-${density}
+            inkscape --export-type=png --export-width=$size --export-height=$size \
+              --export-filename=twa-project/app/src/main/res/mipmap-${density}/ic_launcher.png \
+              playstore/icon-512.svg
+            cp twa-project/app/src/main/res/mipmap-${density}/ic_launcher.png \
+               twa-project/app/src/main/res/mipmap-${density}/ic_launcher_round.png
+          done
+
+          # public/ 폴더 아이콘 (PWA manifest용)
           inkscape --export-type=png --export-width=512 --export-height=512 \
             --export-filename=public/icon-512.png playstore/icon-512.svg
           inkscape --export-type=png --export-width=192 --export-height=192 \
@@ -42,73 +60,24 @@ jobs:
           mkdir -p public/screenshots
           cp playstore/screenshots/*.png public/screenshots/
 
-      - name: Install bubblewrap
-        run: npm install -g @bubblewrap/cli@1.24.1
-
-      - name: Configure bubblewrap (non-interactive)
-        run: |
-          mkdir -p ~/.bubblewrap
-          echo '{
-            "jdkPath": "'"$JAVA_HOME"'",
-            "androidSdkPath": "'"$ANDROID_SDK_ROOT"'"
-          }' > ~/.bubblewrap/config.json
-
       - name: Restore keystore from secret
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 -d > readream.keystore
 
-      - name: Init TWA project
-        run: |
-          export ANDROID_HOME=$ANDROID_SDK_ROOT
-          mkdir -p ./twa-app
-          yes | bubblewrap init \
-            --manifest "https://dmazone.github.io/readream/manifest.json" \
-            --directory ./twa-app \
-            --packageId com.dmazone.readream \
-            --name "ReaDream - AI 꿈 해몽" \
-            --launcherName "ReaDream" \
-            --display standalone \
-            --orientation default \
-            --themeColor "#1a0533" \
-            --navigationColor "#1a0533" \
-            --backgroundColor "#0a0118" \
-            --startUrl "/readream/" \
-            --iconUrl "https://dmazone.github.io/readream/icon-512.png" \
-            --maskableIconUrl "https://dmazone.github.io/readream/icon-512.png" \
-            --appVersion "1.0.0" \
-            --appVersionCode 1 \
-            --signingKeyPath "../readream.keystore" \
-            --signingKeyAlias readream \
-            --minSdkVersion 21 \
-            --targetSdkVersion 34 \
-            --skipPwaValidation
-
       - name: Build AAB
-        working-directory: ./twa-app
+        working-directory: ./twa-project
         env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          export ANDROID_HOME=$ANDROID_SDK_ROOT
-          yes | bubblewrap build \
-            --signingKeyPath ../readream.keystore \
-            --signingKeyAlias readream \
-            --signingKeyStorePassword "$KEYSTORE_PASSWORD" \
-            --signingKeyPassword "$KEY_PASSWORD"
+          gradle :app:bundleRelease
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
         with:
           name: readream-release-aab
-          path: twa-app/app-release-bundle.aab
+          path: twa-project/app/build/outputs/bundle/release/app-release.aab
           retention-days: 30
-
-      - name: Upload signed APK (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: readream-release-apk
-          path: twa-app/app-release-signed.apk
-          retention-days: 30
-          if-no-files-found: ignore
