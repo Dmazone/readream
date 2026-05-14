@@ -812,7 +812,8 @@ document.getElementById('limitModalOverlay').addEventListener('click', (e) => {
    API 설정 & 모델 선택 (sessionStorage 캐시)
    ============================================================ */
 const API_BASE          = 'https://generativelanguage.googleapis.com/v1beta';
-const API_KEY           = 'AIzaSyA0NBXSaYIZe9JbzWFVygkYcDY4TO8Ex2c';
+const API_KEY_LS        = 'dalbit_api_key';
+function getApiKey() { return localStorage.getItem(API_KEY_LS) || ''; }
 const MODEL_SESSION_KEY = 'readream_model_v1';
 const MODEL_PRIORITY    = [
   'gemini-2.5-flash',
@@ -892,7 +893,7 @@ function startButtonCooldown() {
 }
 
 async function callApiOnce(dream, model, signal) {
-  const res = await fetch(`${API_BASE}/models/${model}:generateContent?key=${API_KEY}`, {
+  const res = await fetch(`${API_BASE}/models/${model}:generateContent?key=${getApiKey()}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     signal,
