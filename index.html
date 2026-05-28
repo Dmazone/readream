@@ -808,7 +808,7 @@
     }
     .fortune-share-btns {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 6px;
     }
     .btn-fortune-share {
@@ -824,6 +824,8 @@
       transition: all 0.2s;
     }
     .btn-fortune-share:hover { background: rgba(109,40,217,0.22); }
+    .btn-fortune-image { border-color: rgba(226,201,126,0.35); color: #e2c97e; }
+    .btn-fortune-image:hover { background: rgba(226,201,126,0.12); }
     .fortune-history {
       margin-top: 14px;
       padding-top: 12px;
@@ -1904,6 +1906,7 @@
             <button class="btn-fortune-share" id="btnFShareKakao">💬 카카오톡</button>
             <button class="btn-fortune-share" id="btnFShareX">𝕏 트위터</button>
             <button class="btn-fortune-share" id="btnFShareCopy">🔗 링크 복사</button>
+            <button class="btn-fortune-share btn-fortune-image" id="btnFShareImage">🖼️ 이미지</button>
           </div>
         </div>
       </div>
@@ -2771,6 +2774,151 @@ document.getElementById('btnFShareX').addEventListener('click', () => {
 document.getElementById('btnFShareCopy').addEventListener('click', async () => {
   await copyTextFallback(buildFortuneShareText(), '운세 내용을 복사했어요 🔗');
 });
+
+document.getElementById('btnFShareImage').addEventListener('click', () => generateFortuneImage());
+
+function generateFortuneImage() {
+  const msg       = document.getElementById('fortuneMessage').textContent.trim();
+  const number    = document.getElementById('fortuneNumber').textContent.trim();
+  const color     = document.getElementById('fortuneColor').textContent.trim();
+  const direction = document.getElementById('fortuneDirection').textContent.trim();
+  const caution   = document.getElementById('fortuneCaution').textContent.trim();
+  const dateLabel = document.getElementById('fortuneDateLabel').textContent.trim();
+
+  if (!msg || msg === '') { showToast('먼저 오늘의 운세를 확인해 주세요.'); return; }
+
+  const S = 1080;
+  const canvas = document.createElement('canvas');
+  canvas.width = S; canvas.height = S;
+  const ctx = canvas.getContext('2d');
+
+  /* ── 배경 ── */
+  const bg = ctx.createLinearGradient(0, 0, S, S);
+  bg.addColorStop(0,    '#0c0720');
+  bg.addColorStop(0.45, '#130b35');
+  bg.addColorStop(1,    '#0c0720');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, S, S);
+
+  /* ── 별 파티클 ── */
+  for (let i = 0; i < 80; i++) {
+    const op = 0.2 + Math.random() * 0.6;
+    ctx.beginPath();
+    ctx.arc(Math.random() * S, Math.random() * S, Math.random() * 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${op})`;
+    ctx.fill();
+  }
+
+  /* ── 달 로고 ── */
+  ctx.save();
+  ctx.beginPath(); ctx.arc(S/2, 108, 38, 0, Math.PI * 2);
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  ctx.beginPath(); ctx.arc(S/2 + 24, 100, 32, 0, Math.PI * 2);
+  ctx.fillStyle = '#0c0720'; ctx.fill();
+  ctx.restore();
+
+  /* ── 앱 이름 ── */
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 52px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('ReaDream', S/2, 210);
+
+  ctx.fillStyle = 'rgba(196,181,253,0.55)';
+  ctx.font = '26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('꿈 해몽 · 상징 분석', S/2, 250);
+
+  /* ── 구분선 ── */
+  const drawDivider = (y, opacity = 0.35) => {
+    const g = ctx.createLinearGradient(S * 0.15, 0, S * 0.85, 0);
+    g.addColorStop(0, 'transparent');
+    g.addColorStop(0.5, `rgba(226,201,126,${opacity})`);
+    g.addColorStop(1, 'transparent');
+    ctx.strokeStyle = g; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(S * 0.15, y); ctx.lineTo(S * 0.85, y); ctx.stroke();
+  };
+  drawDivider(276);
+
+  /* ── 운세 타이틀 + 날짜 ── */
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 36px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('🌙 오늘의 달빛 운세', S/2, 328);
+
+  ctx.fillStyle = 'rgba(196,181,253,0.45)';
+  ctx.font = '24px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText(dateLabel, S/2, 368);
+
+  drawDivider(394, 0.2);
+
+  /* ── 운세 메시지 (텍스트 줄바꿈) ── */
+  ctx.fillStyle = 'rgba(226,220,255,0.9)';
+  ctx.font = '27px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  let y = 440;
+  const words = msg.split('');
+  let line = '';
+  const maxW = S * 0.78;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i];
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, S/2, y); y += 40; line = words[i];
+    } else { line = test; }
+    if (y > 680) { ctx.fillText(line + '…', S/2, y); line = null; break; }
+  }
+  if (line) ctx.fillText(line, S/2, y);
+  y = Math.max(y + 50, 700);
+
+  drawDivider(y - 10, 0.18);
+
+  /* ── 행운 아이템 3열 ── */
+  ctx.font = 'bold 26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  const items = [
+    { label: '행운의 숫자', value: number, x: S * 0.22 },
+    { label: '행운의 색상', value: color,  x: S * 0.5 },
+    { label: '행운의 방향', value: direction, x: S * 0.78 },
+  ];
+  items.forEach(({ label, value, x }) => {
+    ctx.fillStyle = 'rgba(196,181,253,0.45)';
+    ctx.font = '20px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    ctx.fillText(label, x, y + 10);
+    ctx.fillStyle = '#e2c97e';
+    ctx.font = 'bold 28px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    ctx.fillText(value, x, y + 46);
+  });
+  y += 80;
+
+  /* ── 주의사항 ── */
+  if (caution) {
+    drawDivider(y + 4, 0.15);
+    ctx.fillStyle = 'rgba(196,181,253,0.5)';
+    ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+    const cShort = caution.length > 45 ? caution.substring(0, 45) + '…' : caution;
+    ctx.fillText('⚠ ' + cShort, S/2, y + 38);
+    y += 60;
+  }
+
+  /* ── 하단 구분선 + 링크 ── */
+  drawDivider(S - 88);
+  ctx.fillStyle = 'rgba(196,181,253,0.35)';
+  ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('dmazone.github.io/readream', S/2, S - 48);
+
+  /* ── 저장 / Web Share ── */
+  canvas.toBlob(async blob => {
+    const file = new File([blob], 'readream-fortune.png', { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '오늘의 달빛 운세 🌙', text: 'ReaDream 달빛 운세' });
+        return;
+      } catch {}
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'readream-fortune.png';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('운세 이미지를 저장했어요 🖼️');
+  }, 'image/png');
+}
 
 /* ── 지난 달빛 기록 ── */
 function loadFortuneHistory() {
