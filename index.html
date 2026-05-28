@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>ReaDream — AI 꿈 해몽</title>
+  <title>ReaDream — 꿈 해몽</title>
 
   <!-- ====== SEO ====== -->
-  <meta name="description" content="ReaDream — AI가 당신의 꿈을 해석해드립니다. 융·프로이트 심리학 기반 꿈 상징 분석, 오늘의 조언까지.">
-  <meta name="keywords" content="꿈해몽, 꿈분석, AI해몽, 꿈일기, dream interpreter, ReaDream">
+  <meta name="description" content="ReaDream — 꿈의 상징을 분석하고 오늘의 조언까지 알려드립니다. 융·프로이트 심리학 기반 꿈 해몽.">
+  <meta name="keywords" content="꿈해몽, 꿈분석, 꿈일기, 꿈상징, dream interpreter, ReaDream">
   <meta name="author" content="ReaDream">
   <meta name="robots" content="index, follow">
 
   <!-- ====== Open Graph (소셜 공유 미리보기) ====== -->
-  <meta property="og:title"       content="ReaDream — AI 꿈 해몽">
-  <meta property="og:description" content="꿈 내용을 입력하면 AI가 심리학 기반으로 상징·해몽·오늘의 조언을 알려드립니다.">
+  <meta property="og:title"       content="ReaDream — 꿈 해몽">
+  <meta property="og:description" content="꿈 내용을 입력하면 상징·해몽·오늘의 조언을 알려드립니다.">
   <meta property="og:type"        content="website">
   <meta property="og:image"       content="https://example.com/og-image.png"><!-- 배포 후 실제 URL로 교체 -->
   <meta property="og:locale"      content="ko_KR">
   <meta name="twitter:card"       content="summary_large_image">
-  <meta name="twitter:title"      content="ReaDream — AI 꿈 해몽">
-  <meta name="twitter:description" content="AI가 당신의 꿈을 해석해드립니다.">
+  <meta name="twitter:title"      content="ReaDream — 꿈 해몽">
+  <meta name="twitter:description" content="꿈의 상징을 분석하고 오늘의 조언을 알려드립니다.">
 
   <!-- ====== PWA / 모바일 앱 ====== -->
   <meta name="theme-color"                    content="#0c0720">
@@ -31,11 +31,10 @@
 
   <!-- ====== 보안: CSP — API 호출 도메인만 허용 ====== -->
   <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://generativelanguage.googleapis.com https://pagead2.googlesyndication.com https://www.googletagservices.com https://googleads.g.doubleclick.net https://adservice.google.com; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;">
+        content="connect-src 'self' https://generativelanguage.googleapis.com https://t1.daumcdn.net https://kas.kakao.com; script-src 'self' 'unsafe-inline' https://t1.daumcdn.net; frame-src https://t1.daumcdn.net;">
 
-  <!-- Google AdSense (Auto Ads + 수동 유닛) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2811607286789792"
-          crossorigin="anonymous"></script>
+  <!-- 카카오 애드핏 -->
+  <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
   <style>
     /* === 기본 리셋 === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -425,101 +424,6 @@
       opacity: 0.7;
     }
 
-    /* ===== 광고 인터스티셜 모달 ===== */
-    #adInterstitial {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(6, 4, 18, 0.97);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 20px;
-      gap: 18px;
-    }
-    #adInterstitial.active { display: flex; }
-    .interstitial-label {
-      font-size: 12px;
-      letter-spacing: 3px;
-      color: rgba(167, 139, 250, 0.5);
-      text-transform: uppercase;
-      border: none !important;
-      outline: none !important;
-    }
-    .interstitial-title {
-      font-family: Georgia, serif;
-      font-size: 22px;
-      color: #e2d9f3;
-      text-align: center;
-      line-height: 1.4;
-      border: none !important;
-      outline: none !important;
-    }
-    .interstitial-ad-box {
-      width: 100%;
-      max-width: 400px;
-      min-height: 250px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(196,181,253,0.1);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .interstitial-countdown {
-      font-size: 14px;
-      color: rgba(196, 181, 253, 0.7);
-      text-align: center;
-    }
-    .interstitial-countdown span {
-      font-size: 28px;
-      font-weight: bold;
-      color: #a78bfa;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .interstitial-skip {
-      padding: 12px 32px;
-      border-radius: 24px;
-      border: none;
-      background: linear-gradient(135deg, #6d28d9, #4c1d95);
-      color: white;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s;
-    }
-    .interstitial-skip.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .interstitial-actions {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-      max-width: 400px;
-    }
-    .interstitial-btn {
-      flex: 1;
-      padding: 11px 8px;
-      border-radius: 20px;
-      border: 1px solid rgba(167,139,250,0.3);
-      background: rgba(255,255,255,0.04);
-      color: #c4b5fd;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .interstitial-btn:hover { background: rgba(167,139,250,0.12); }
-    .interstitial-btn.pay {
-      border-color: rgba(245,200,66,0.4);
-      color: #f5c842;
-    }
-    .interstitial-btn.pay:hover { background: rgba(245,200,66,0.1); }
 
     /* 짧은 꿈 경고 팝업 */
     #shortDreamPopup {
@@ -654,42 +558,6 @@
       text-align: center;
     }
 
-    /* ===== 3일 예측 카드 ===== */
-    .forecast-card {
-      background: linear-gradient(135deg,
-        rgba(79,70,229,0.1) 0%,
-        rgba(109,40,217,0.1) 100%
-      );
-      border: 1px solid rgba(139,92,246,0.3);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-    .forecast-card::before {
-      content: '🔮';
-      position: absolute;
-      bottom: -12px;
-      right: 4px;
-      font-size: 72px;
-      opacity: 0.07;
-      pointer-events: none;
-      line-height: 1;
-    }
-    .forecast-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      color: #a78bfa;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .forecast-card p {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--text-primary);
-    }
 
     /* ===== 행운 정보 카드 ===== */
     .lucky-card {
@@ -1002,7 +870,7 @@
       border: 1px solid rgba(196, 181, 253, 0.07);
     }
 
-    /* AdSense 승인 전 개발용 placeholder */
+    /* 카카오 애드핏 승인 전 개발용 placeholder */
     .ad-unit.dev-placeholder {
       border: 2px dashed rgba(196, 181, 253, 0.14);
       padding: 18px 16px;
@@ -1014,6 +882,140 @@
       justify-content: center;
       gap: 6px;
     }
+
+    /* 쿠팡 파트너스 섹션 */
+    .coupang-section-label {
+      font-size: 11px;
+      color: rgba(196,181,253,0.5);
+      letter-spacing: 0.5px;
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .coupang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .coupang-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196,181,253,0.07);
+      border: 1px solid rgba(196,181,253,0.13);
+      border-radius: 12px;
+      padding: 12px 6px;
+      text-decoration: none;
+      transition: background 0.18s;
+    }
+    .coupang-item:hover { background: rgba(196,181,253,0.13); }
+    .coupang-item-emoji { font-size: 22px; }
+    .coupang-item-name { font-size: 11px; color: rgba(196,181,253,0.75); text-align: center; line-height: 1.3; }
+    /* 감정 체크인 */
+    .mood-checkin {
+      background: rgba(196,181,253,0.05);
+      border: 1px solid rgba(196,181,253,0.12);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .mood-label {
+      font-size: 12px;
+      color: rgba(196,181,253,0.6);
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+    .mood-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .mood-btn {
+      font-size: 26px;
+      background: none;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      transition: border-color 0.18s, transform 0.12s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mood-btn:hover { transform: scale(1.15); }
+    .mood-btn.selected { border-color: rgba(196,181,253,0.6); background: rgba(196,181,253,0.1); }
+    .mood-selected-label {
+      display: block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: rgba(196,181,253,0.55);
+      min-height: 16px;
+    }
+
+    /* 꿈 후기 (팔로업) */
+    .dream-followup {
+      background: rgba(196,181,253,0.05);
+      border: 1px solid rgba(196,181,253,0.12);
+      border-radius: 16px;
+      padding: 18px 16px;
+      margin: 16px 0;
+    }
+    .followup-question {
+      font-size: 14px;
+      color: rgba(196,181,253,0.85);
+      text-align: center;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+    .followup-emotions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .followup-btn {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(196,181,253,0.2);
+      background: rgba(196,181,253,0.07);
+      color: rgba(196,181,253,0.8);
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .followup-btn:hover { background: rgba(196,181,253,0.15); border-color: rgba(196,181,253,0.4); }
+    .followup-btn.selected { background: rgba(196,181,253,0.2); border-color: rgba(196,181,253,0.55); color: #e2d9f3; }
+    .nightmare-care {
+      margin-top: 14px;
+      padding: 14px;
+      background: rgba(167,139,250,0.08);
+      border-radius: 12px;
+      font-size: 13px;
+      color: rgba(196,181,253,0.75);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .coupang-disclosure {
+      font-size: 9px;
+      color: rgba(196,181,253,0.3);
+      text-align: center;
+      margin: 4px 0 0;
+      line-height: 1.4;
+    }
+    .coupang-diary-link {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(196,181,253,0.45);
+      text-decoration: none;
+      margin-top: 8px;
+      padding: 6px;
+      border-radius: 8px;
+      transition: color 0.18s;
+    }
+    .coupang-diary-link:hover { color: rgba(196,181,253,0.75); }
 
     /* ===== 로딩 ===== */
     .loading {
@@ -1252,6 +1254,26 @@
 
     /* 공유 섹션 */
     .share-section { margin-top: 2px; }
+
+    .btn-share-image {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(226,201,126,0.15) 0%, rgba(196,181,253,0.12) 100%);
+      border: 1px solid rgba(226,201,126,0.35);
+      border-radius: 14px;
+      color: #e2c97e;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-share-image:hover { background: linear-gradient(135deg, rgba(226,201,126,0.22) 0%, rgba(196,181,253,0.18) 100%); }
+    .btn-share-image:active { transform: scale(0.98); }
 
     .share-label {
       text-align: center;
@@ -1915,6 +1937,19 @@
     </div>
 
     <!-- 꿈 입력 (최대 300자) -->
+    <!-- 감정 체크인 -->
+    <div class="mood-checkin" id="moodCheckin">
+      <p class="mood-label">지금 기분이 어때요?</p>
+      <div class="mood-options">
+        <button class="mood-btn" data-mood="happy" data-label="기분 좋아요">😊</button>
+        <button class="mood-btn" data-mood="calm" data-label="평온해요">😌</button>
+        <button class="mood-btn" data-mood="anxious" data-label="불안해요">😰</button>
+        <button class="mood-btn" data-mood="sad" data-label="우울해요">😔</button>
+        <button class="mood-btn" data-mood="tired" data-label="지쳐 있어요">😤</button>
+      </div>
+      <span class="mood-selected-label" id="moodSelectedLabel"></span>
+    </div>
+
     <div class="card">
       <div class="section-label">오늘의 꿈</div>
       <!-- 투트랙 탭 -->
@@ -1943,15 +1978,12 @@
       <button class="btn btn-interpret" id="interpretBtn">✦ 해몽하기</button>
     </div>
 
-    <!-- 광고: 상단 배너 -->
+    <!-- 광고: 상단 배너 (카카오 애드핏 — 승인 후 data-ad-unit 값 교체) -->
     <div class="ad-unit" id="adTop">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-2811607286789792"
-           data-ad-slot="1111111111"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <ins class="kakao_ad_area" style="display:none;"
+           data-ad-unit="DAN-JHSnsJdxk3HlpDKr"
+           data-ad-width="320"
+           data-ad-height="50"></ins>
     </div>
 
     <!-- 에러 배너 -->
@@ -1985,14 +2017,23 @@
         <div class="section-label">전체 해석</div>
         <p id="interpretationText"></p>
       </div>
-      <div class="forecast-card" id="forecastCard" style="display:none;">
-        <div class="forecast-label">✦ 앞으로 3일 내 찾아올 일</div>
-        <p id="forecastText"></p>
-      </div>
       <div class="advice-card">
         <div class="advice-label">✦ 오늘의 조언</div>
         <p id="adviceText"></p>
       </div>
+
+      <!-- 꿈 후기 팔로업 (B) -->
+      <div class="dream-followup" id="dreamFollowup" style="display:none;">
+        <p class="followup-question" id="followupQuestion"></p>
+        <div class="followup-emotions">
+          <button class="followup-btn" data-resp="relieved">😌 후련해요</button>
+          <button class="followup-btn" data-resp="curious">🤔 궁금해요</button>
+          <button class="followup-btn" data-resp="lingering">💭 마음에 걸려요</button>
+          <button class="followup-btn" data-resp="scared">😨 무섭거나 불안해요</button>
+        </div>
+        <div class="nightmare-care" id="nightmareCare" style="display:none;"></div>
+      </div>
+
       <div class="lucky-card" id="luckyCard" style="display:none;">
         <div class="lucky-label">✦ 꿈이 알려준 행운</div>
         <div class="lucky-grid">
@@ -2013,6 +2054,7 @@
           </div>
         </div>
       </div>
+
       <div id="personSection">
         <button class="person-trigger" id="btnPersonTrigger">
           👤 꿈 속 그 사람의 의미 분석하기
@@ -2036,6 +2078,9 @@
         <button class="btn-save-diary" id="btnSaveDiary">
           📖 꿈 일기에 저장하기
         </button>
+        <a href="https://link.coupang.com/a/d7eU400TDM" class="coupang-diary-link" target="_blank" rel="noopener sponsored">
+          📔 종이 꿈 일기장도 써보세요 · 쿠팡 파트너스 활동의 일환
+        </a>
         <!-- 저장 완료 후 표시되는 다시하기 버튼 -->
         <button class="btn-retry-dream" id="btnRetryDream" style="display:none;">
           🌙 꿈 해몽 다시 하기
@@ -2043,6 +2088,10 @@
         <!-- 공유 버튼 2×2 -->
         <div class="share-section">
           <div class="section-label share-label">공유하기</div>
+          <!-- 이미지 공유 버튼 (1:1 카드 생성) -->
+          <button class="btn-share-image" id="btnShareImage">
+            <span class="share-icon">🖼️</span>이미지로 저장 · 공유하기
+          </button>
           <div class="share-grid">
             <button class="btn-share btn-share-kakao" id="btnShareKakao">
               <span class="share-icon">💬</span>카카오톡으로 보내기
@@ -2061,15 +2110,12 @@
       </div>
     </div>
 
-    <!-- 광고: 결과 하단 인피드 -->
+    <!-- 광고: 결과 하단 인피드 (카카오 애드핏) -->
     <div class="ad-unit" id="adMid">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-client="ca-pub-2811607286789792"
-           data-ad-slot="3333333333"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <ins class="kakao_ad_area" style="display:none;"
+           data-ad-unit="DAN-LUQ2hB2L4jjEadsN"
+           data-ad-width="320"
+           data-ad-height="100"></ins>
     </div>
 
     <!-- 꿈 일기 아코디언 -->
@@ -2085,41 +2131,36 @@
       <div class="diary-list" id="diaryList"></div>
     </div>
 
-    <!-- 광고: 하단 직사각형 -->
+    <!-- 쿠팡 파트너스 — 다이어리 하단 (수면 준비 추천) -->
+    <div id="coupangSection" style="margin-top: 24px;">
+      <div class="coupang-section-label">💤 더 좋은 꿈을 위해</div>
+      <div class="coupang-grid">
+        <a href="https://link.coupang.com/a/d7eF02EZgq" class="coupang-item" target="_blank" rel="noopener sponsored">
+          <span class="coupang-item-emoji">😴</span>
+          <span class="coupang-item-name">수면 마스크</span>
+        </a>
+        <a href="https://link.coupang.com/a/d7eLySXtvM" class="coupang-item" target="_blank" rel="noopener sponsored">
+          <span class="coupang-item-emoji">🌿</span>
+          <span class="coupang-item-name">라벤더 디퓨저</span>
+        </a>
+        <a href="https://link.coupang.com/a/d7ePU1OTSu" class="coupang-item" target="_blank" rel="noopener sponsored">
+          <span class="coupang-item-emoji">🛏️</span>
+          <span class="coupang-item-name">수면 베개</span>
+        </a>
+      </div>
+      <p class="coupang-disclosure">이 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+    </div>
+
+    <!-- 광고: 하단 직사각형 (카카오 애드핏) -->
     <div class="ad-unit" id="adBottom" style="margin-top: 22px;">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-2811607286789792"
-           data-ad-slot="2222222222"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      <ins class="kakao_ad_area" style="display:none;"
+           data-ad-unit="DAN-LUQ2hB2L4jjEadsN"
+           data-ad-width="320"
+           data-ad-height="100"></ins>
     </div>
 
   </div><!-- /mainContent -->
 
-  <!-- 광고 인터스티셜 오버레이 -->
-  <div id="adInterstitial">
-    <div class="interstitial-label">🌙 잠시만요</div>
-    <div class="interstitial-ad-box">
-      <ins class="adsbygoogle"
-           style="display:block;width:300px;height:250px;"
-           data-ad-client="ca-pub-2811607286789792"
-           data-ad-slot="4444444444"
-           data-ad-format="rectangle"></ins>
-    </div>
-    <div class="interstitial-countdown">
-      <span id="interstitialSec">10</span>
-      초 후 결과를 확인할 수 있어요
-    </div>
-    <button class="interstitial-skip" id="interstitialSkip">
-      ✦ 해몽 결과 보기
-    </button>
-    <div class="interstitial-actions">
-      <button class="interstitial-btn" id="interstitialRewrite">↩ 다시 꿈내용 적기</button>
-      <button class="interstitial-btn pay" id="interstitialPay">✦ 광고 제거하기</button>
-    </div>
-  </div>
 
   <!-- 짧은 꿈 내용 경고 팝업 -->
   <div id="shortDreamPopup">
@@ -2160,10 +2201,6 @@
       <p id="detailInterpretationText"></p>
     </div>
 
-    <!-- 3일 예측 -->
-    <div class="forecast-card" id="detailForecastCard" style="display:none;">
-      <div class="forecast-label">✦ 앞으로 3일 내 찾아올 일</div>
-      <p id="detailForecastText"></p>
     </div>
 
     <!-- 오늘의 조언 -->
@@ -2466,26 +2503,33 @@ const SYSTEM_PROMPT =
   '    {"emoji": "상징 이모지 1개", "name": "상징명", "meaning": "의미 설명"}\n' +
   '  ],\n' +
   '  "interpretation": "전체 해석 (3~4문장)",\n' +
-  '  "forecast": "앞으로 3일 내 찾아올 일 (2~3문장, 신비롭고 구체적으로)",\n' +
   '  "advice": "오늘의 조언 (1~2문장)",\n' +
+  '  "dreamTone": "positive 또는 negative 또는 neutral 중 하나만",\n' +
+  '  "followupQuestion": "해몽 결과를 바탕으로 유저에게 자연스럽게 던지는 짧은 한마디 (30자 이내, 공감형)",\n' +
   '  "lucky": {"numbers": [3, 17, 42], "color": "행운의 색상명", "symbol": "행운의 상징물 단어 1개"}\n' +
   '}\n' +
   '항상 한국어로 답변하세요. 따뜻하고 신비로운 톤을 유지하세요.';
 
 function buildSystemPrompt() {
   const profile = getProfile();
+  let prompt = SYSTEM_PROMPT;
+  if (currentMood) {
+    const moodMap = { happy:'기분 좋음', calm:'평온함', anxious:'불안함', sad:'우울함', tired:'지침' };
+    prompt += `\n사용자의 현재 기분: ${moodMap[currentMood] || currentMood}. 이 감정 상태를 꿈 해석과 조언에 자연스럽게 반영하세요.`;
+  }
   if (profile && profile.birth && profile.gender) {
     const d = new Date(profile.birth);
     const birthStr = d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-    return SYSTEM_PROMPT +
-      `\n사용자 정보: 생년월일 ${birthStr}, 성별 ${profile.gender}.` +
+    prompt += `\n사용자 정보: 생년월일 ${birthStr}, 성별 ${profile.gender}.` +
       ' 이 정보를 꿈 해석에 반영하여 12간지·사주와 연결된 맞춤 해몽을 제공하세요.';
   }
-  return SYSTEM_PROMPT;
+  return prompt;
 }
 
 let cachedModel   = null;
 let currentResult = null;
+let currentMood   = null;   /* 감정 체크인 A */
+let currentFollowup = null; /* 팔로업 응답 B */
 
 async function resolveModel(apiKey) {
   if (cachedModel) return cachedModel;
@@ -2588,10 +2632,6 @@ async function interpretDream() {
     currentResult = parsed;
     showLoading(false);
 
-    /* 광고 인터스티셜: API 완료 후 10초 대기 */
-    const action = await showInterstitial(10);
-    if (action === 'rewrite') return;
-
     renderResult(parsed);
     showResult();
 
@@ -2610,13 +2650,6 @@ function renderResult(data) {
   document.getElementById('interpretationText').textContent = data.interpretation;
   document.getElementById('adviceText').textContent         = data.advice;
 
-  const forecastCard = document.getElementById('forecastCard');
-  if (data.forecast) {
-    document.getElementById('forecastText').textContent = data.forecast;
-    forecastCard.style.display = 'block';
-  } else {
-    forecastCard.style.display = 'none';
-  }
 
   const luckyCard = document.getElementById('luckyCard');
   if (data.lucky) {
@@ -2630,7 +2663,55 @@ function renderResult(data) {
   }
 
   resetPersonSection();
+  showFollowup(data);
 }
+
+/* ── 팔로업 질문 표시 (B) ── */
+function showFollowup(data) {
+  currentFollowup = null;
+  const section = document.getElementById('dreamFollowup');
+  const qEl     = document.getElementById('followupQuestion');
+  const careEl  = document.getElementById('nightmareCare');
+
+  const tone = (data.dreamTone || 'neutral').toLowerCase();
+  const q    = data.followupQuestion || (
+    tone === 'negative' ? '이 꿈을 꾸고 나서 어떤 느낌이 드셨나요?' :
+    tone === 'positive' ? '이 꿈에서 어떤 감정이 가장 기억에 남으세요?' :
+                          '꿈에서 깨고 나서 어떤 느낌이었나요?'
+  );
+
+  qEl.textContent = q;
+  careEl.style.display = 'none';
+  careEl.textContent = '';
+
+  /* 버튼 초기화 */
+  section.querySelectorAll('.followup-btn').forEach(btn => {
+    btn.classList.remove('selected');
+    btn.onclick = () => {
+      section.querySelectorAll('.followup-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      currentFollowup = btn.dataset.resp;
+      if ((btn.dataset.resp === 'scared' || btn.dataset.resp === 'lingering') && tone === 'negative') {
+        careEl.style.display = 'block';
+        careEl.textContent = '😌 꿈 속의 감정은 현실이 아니에요. 잠시 심호흡하고, 오늘 낮의 햇살을 느껴보세요. 반복되는 불편한 꿈은 마음이 보내는 신호일 수 있으니 가볍게 일기에 남겨두는 것도 좋아요.';
+      } else {
+        careEl.style.display = 'none';
+      }
+    };
+  });
+
+  section.style.display = 'block';
+}
+
+/* ── 감정 체크인 JS (A) ── */
+document.querySelectorAll('.mood-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    currentMood = btn.dataset.mood;
+    document.getElementById('moodSelectedLabel').textContent = btn.dataset.label;
+  });
+});
 
 
 /* ============================================================
@@ -3045,48 +3126,6 @@ function showLoading(on) {
   document.getElementById('interpretBtn').disabled = on;
 }
 
-/* 광고 인터스티셜: seconds초 카운트다운 후 resolve('show'|'rewrite') */
-function showInterstitial(seconds) {
-  return new Promise(resolve => {
-    const overlay     = document.getElementById('adInterstitial');
-    const secEl       = document.getElementById('interstitialSec');
-    const skipBtn     = document.getElementById('interstitialSkip');
-    const rewriteBtn  = document.getElementById('interstitialRewrite');
-    const payBtn      = document.getElementById('interstitialPay');
-    let remaining     = seconds;
-
-    overlay.classList.add('active');
-    secEl.textContent = remaining;
-    skipBtn.classList.remove('visible');
-
-    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-
-    const cleanup = (action) => {
-      clearInterval(tick);
-      overlay.classList.remove('active');
-      skipBtn.onclick = rewriteBtn.onclick = payBtn.onclick = null;
-      resolve(action);
-    };
-
-    const tick = setInterval(() => {
-      remaining--;
-      secEl.textContent = remaining;
-      if (remaining <= 0) { clearInterval(tick); skipBtn.classList.add('visible'); }
-    }, 1000);
-
-    skipBtn.onclick   = () => cleanup('show');
-    rewriteBtn.onclick = () => {
-      cleanup('rewrite');
-      $dreamInput.focus();
-      const len = $dreamInput.value.length;
-      $dreamInput.setSelectionRange(len, len);
-    };
-    payBtn.onclick = () => {
-      /* TODO: 결제 페이지 연결 — 개발자 승인 후 구현 */
-      alert('준비 중입니다 🌙');
-    };
-  });
-}
 
 /* 10자 미만 경고 팝업 */
 function showShortDreamPopup() {
@@ -3112,6 +3151,7 @@ function showResult() {
 
 function hideResult() {
   document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('dreamFollowup').style.display = 'none';
   hideApiError();
   /* 저장 버튼 상태 초기화 */
   resetSaveBtn();
@@ -3193,6 +3233,184 @@ document.getElementById('btnShareLink').addEventListener('click', async () => {
 });
 
 
+/* ── 이미지로 저장 · 공유하기 ── */
+document.getElementById('btnShareImage').addEventListener('click', () => generateShareImage());
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split('');
+  let line = '';
+  let lines = [];
+  for (let i = 0; i < words.length; i++) {
+    const testLine = line + words[i];
+    if (ctx.measureText(testLine).width > maxWidth && line.length > 0) {
+      lines.push({ text: line, x, y });
+      line = words[i];
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) lines.push({ text: line, x, y });
+  lines.forEach(l => ctx.fillText(l.text, l.x, l.y));
+  return y;
+}
+
+function drawStar(ctx, cx, cy, r, color) {
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function generateShareImage() {
+  if (!currentResult) { showToast('먼저 해몽하기를 실행해주세요.'); return; }
+
+  const S = 1080;
+  const canvas = document.createElement('canvas');
+  canvas.width = S; canvas.height = S;
+  const ctx = canvas.getContext('2d');
+
+  /* ── 배경 그라디언트 ── */
+  const bg = ctx.createLinearGradient(0, 0, S, S);
+  bg.addColorStop(0,   '#0c0720');
+  bg.addColorStop(0.45,'#130b35');
+  bg.addColorStop(1,   '#0c0720');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, S, S);
+
+  /* ── 별 파티클 ── */
+  const rng = (n) => Math.floor(Math.random() * n);
+  for (let i = 0; i < 80; i++) {
+    const op = 0.2 + Math.random() * 0.6;
+    drawStar(ctx, rng(S), rng(S), Math.random() * 1.8, `rgba(255,255,255,${op})`);
+  }
+
+  /* ── 달 로고 ── */
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(S/2, 108, 38, 0, Math.PI * 2);
+  ctx.fillStyle = '#f59e0b';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(S/2 + 24, 100, 32, 0, Math.PI * 2);
+  ctx.fillStyle = '#0c0720';
+  ctx.fill();
+  ctx.restore();
+
+  /* ── 앱 이름 ── */
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 52px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('ReaDream', S/2, 210);
+
+  ctx.fillStyle = 'rgba(196,181,253,0.55)';
+  ctx.font = '28px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('꿈 해몽 · 상징 분석', S/2, 252);
+
+  /* ── 상단 구분선 ── */
+  const grad1 = ctx.createLinearGradient(S*0.15, 0, S*0.85, 0);
+  grad1.addColorStop(0, 'transparent');
+  grad1.addColorStop(0.5, 'rgba(226,201,126,0.45)');
+  grad1.addColorStop(1, 'transparent');
+  ctx.strokeStyle = grad1;
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(S*0.15, 278); ctx.lineTo(S*0.85, 278); ctx.stroke();
+
+  /* ── 꿈 키워드 요약 (상징명 기반, 원문 미노출) ── */
+  const symbolNames = (currentResult.symbols || []).slice(0, 4).map(s => s.name);
+  const dreamKeyword = symbolNames.length > 0
+    ? symbolNames.join(' · ') + ' 이(가) 나타나는 꿈'
+    : '오늘 밤 꿈 이야기';
+  ctx.fillStyle = 'rgba(196,181,253,0.5)';
+  ctx.font = 'italic 26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  wrapText(ctx, dreamKeyword, S/2, 322, S * 0.78, 38);
+
+  /* ── 구분선 ── */
+  ctx.strokeStyle = 'rgba(196,181,253,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(S*0.2, 390); ctx.lineTo(S*0.8, 390); ctx.stroke();
+
+  /* ── 핵심 상징 ── */
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 30px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('✦ 핵심 상징', S/2, 435);
+
+  const symbols = (currentResult.symbols || []).slice(0, 3);
+  let sy = 480;
+  ctx.font = '26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  symbols.forEach(sym => {
+    const meanShort = sym.meaning.length > 28 ? sym.meaning.substring(0, 28) + '…' : sym.meaning;
+    ctx.fillStyle = 'rgba(196,181,253,0.9)';
+    ctx.fillText(`${sym.name}`, S/2 - 160, sy);
+    ctx.fillStyle = 'rgba(196,181,253,0.45)';
+    ctx.textAlign = 'left';
+    ctx.fillText(`— ${meanShort}`, S/2 - 100, sy);
+    ctx.textAlign = 'center';
+    sy += 46;
+  });
+
+  /* ── 구분선 ── */
+  ctx.strokeStyle = 'rgba(196,181,253,0.15)';
+  ctx.beginPath(); ctx.moveTo(S*0.2, sy + 10); ctx.lineTo(S*0.8, sy + 10); ctx.stroke();
+  sy += 50;
+
+  /* ── 전체 해석 ── */
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 30px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦ 해석', S/2, sy);
+  sy += 44;
+
+  ctx.fillStyle = 'rgba(196,181,253,0.82)';
+  ctx.font = '24px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  const interp = (currentResult.interpretation || '').substring(0, 90) + (currentResult.interpretation?.length > 90 ? '…' : '');
+  sy = wrapText(ctx, interp, S/2, sy, S * 0.78, 36) + 50;
+
+  /* ── 오늘의 조언 ── */
+  ctx.fillStyle = '#e2c97e';
+  ctx.font = 'bold 28px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('✦ 오늘의 조언', S/2, sy);
+  sy += 40;
+
+  ctx.fillStyle = 'rgba(196,181,253,0.7)';
+  ctx.font = '23px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  const advice = (currentResult.advice || '').substring(0, 60) + (currentResult.advice?.length > 60 ? '…' : '');
+  wrapText(ctx, advice, S/2, sy, S * 0.78, 34);
+
+  /* ── 하단 구분선 ── */
+  const grad2 = ctx.createLinearGradient(S*0.15, 0, S*0.85, 0);
+  grad2.addColorStop(0, 'transparent');
+  grad2.addColorStop(0.5, 'rgba(226,201,126,0.35)');
+  grad2.addColorStop(1, 'transparent');
+  ctx.strokeStyle = grad2;
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(S*0.15, S - 90); ctx.lineTo(S*0.85, S - 90); ctx.stroke();
+
+  /* ── 앱 링크 ── */
+  ctx.fillStyle = 'rgba(196,181,253,0.35)';
+  ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  ctx.fillText('dmazone.github.io/readream', S/2, S - 48);
+
+  /* ── 저장 / Web Share ── */
+  canvas.toBlob(async blob => {
+    const file = new File([blob], 'readream-result.png', { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: '내 꿈 해몽 결과 🌙', text: 'ReaDream 꿈 해몽' });
+        return;
+      } catch (e) { /* 취소 or 미지원 → fallback */ }
+    }
+    /* 데스크톱 fallback — PNG 다운로드 */
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'readream-result.png';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('이미지를 저장했어요. 카카오톡 · 인스타에 첨부해 공유하세요 🖼️');
+  }, 'image/png');
+}
+
 /* ============================================================
    꿈 일기 (localStorage, 최대 10개)
    ============================================================ */
@@ -3219,9 +3437,10 @@ function saveDiary() {
                       year: 'numeric', month: 'short', day: 'numeric', weekday: 'short',
                     }),
     dream,
+    mood:           currentMood    || null,
+    followup:       currentFollowup || null,
     symbols:        currentResult.symbols,
     interpretation: document.getElementById('interpretationText').textContent,
-    forecast:       currentResult.forecast  || '',
     advice:         document.getElementById('adviceText').textContent,
     lucky:          currentResult.lucky     || null,
   });
@@ -3455,7 +3674,7 @@ function showToast(message, onHide) {
    ============================================================ */
 document.getElementById('btnAppShare').addEventListener('click', async () => {
   const appUrl  = window.location.href;
-  const appText = 'ReaDream 🌙 — AI가 꿈을 해석해드려요! 꿈 내용을 입력하면 융·프로이트 심리학 기반으로 상징과 해몽을 알려드립니다.';
+  const appText = 'ReaDream 🌙 — 꿈의 상징을 해석해드려요! 꿈 내용을 입력하면 심리학 기반으로 상징과 해몽을 알려드립니다.';
 
   /* Web Share API 지원 시 — 모바일에서 카카오톡·인스타 등 선택 가능 */
   if (navigator.share) {
@@ -3509,9 +3728,9 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
   /* ── PWA manifest 인라인 등록 (홈 화면 추가 지원) ── */
   try {
     const manifest = {
-      name:             'ReaDream — AI 꿈 해몽',
+      name:             'ReaDream — 꿈 해몽',
       short_name:       'ReaDream',
-      description:      'AI가 당신의 꿈을 해석해드립니다. 융·프로이트 심리학 기반 꿈 상징 분석.',
+      description:      '꿈의 상징을 분석하고 해몽을 알려드립니다. 융·프로이트 심리학 기반.',
       start_url:        '.',
       display:          'standalone',
       background_color: '#0c0720',
