@@ -2547,7 +2547,7 @@ async function resolveModel(apiKey) {
 
   console.log('[ReaDream] 사용 가능한 모델:', models);
 
-  const priority = ['2.5-flash', '2.5-pro', '2.0-flash', '1.5-flash', '1.5-pro', 'gemini'];
+  const priority = ['2.0-flash', '1.5-flash', '1.5-pro', 'gemini'];
   for (const p of priority) {
     const found = models.find(m => m.includes(p));
     if (found) { cachedModel = found; return found; }
@@ -3857,7 +3857,7 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
         3. API 제한: Generative Language API 만 허용
         4. 일일 할당량(quota) 설정으로 비용 상한 지정
   ─────────────────────────────────────────────────────────────────────── */
-  const PRESET_KEY = ['AIza','SyBP','iTa6E','PAYaS','2JL-8','vKUtd','CpcKM','bPJt2','0'].join('');
+  const PRESET_KEY = '__GEMINI_KEY__';
 
   if (localStorage.getItem('rd_ver') !== APP_VER) {
     localStorage.setItem(API_KEY_LS, PRESET_KEY);
