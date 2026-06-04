@@ -2529,32 +2529,13 @@ function buildSystemPrompt() {
   return prompt;
 }
 
-let cachedModel   = null;
-let currentResult = null;
-let currentMood   = null;   /* 감정 체크인 A */
+const FIXED_MODEL  = 'gemini-2.0-flash';
+let currentResult  = null;
+let currentMood    = null;   /* 감정 체크인 A */
 let currentFollowup = null; /* 팔로업 응답 B */
 
-async function resolveModel(apiKey) {
-  if (cachedModel) return cachedModel;
-
-  const res = await fetch(`${GEMINI_BASE}/models?key=${encodeURIComponent(apiKey)}`);
-  if (!res.ok) throw new Error(`MODEL_LIST_HTTP_${res.status}`);
-
-  const data   = await res.json();
-  const models = (data.models || [])
-    .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
-    .map(m => m.name.replace('models/', ''));
-
-  console.log('[ReaDream] 사용 가능한 모델:', models);
-
-  const priority = ['2.0-flash', '1.5-flash', '1.5-pro', 'gemini'];
-  for (const p of priority) {
-    const found = models.find(m => m.includes(p));
-    if (found) { cachedModel = found; return found; }
-  }
-
-  if (models.length > 0) { cachedModel = models[0]; return models[0]; }
-  throw new Error('NO_AVAILABLE_MODEL');
+async function resolveModel(_apiKey) {
+  return FIXED_MODEL;
 }
 
 document.getElementById('interpretBtn').addEventListener('click', interpretDream);
