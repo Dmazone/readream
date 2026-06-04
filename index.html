@@ -1,42 +1,42 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>ReaDream — 꿈 해몽</title>
+  <title>ReaDream ??轅??대そ</title>
 
   <!-- ====== SEO ====== -->
-  <meta name="description" content="ReaDream — 꿈의 상징을 분석하고 오늘의 조언까지 알려드립니다. 융·프로이트 심리학 기반 꿈 해몽.">
-  <meta name="keywords" content="꿈해몽, 꿈분석, 꿈일기, 꿈상징, dream interpreter, ReaDream">
+  <meta name="description" content="ReaDream ??轅덉쓽 ?곸쭠??遺꾩꽍?섍퀬 ?ㅻ뒛??議곗뼵源뚯? ?뚮젮?쒕┰?덈떎. ?돠룻봽濡쒖씠???щ━??湲곕컲 轅??대そ.">
+  <meta name="keywords" content="轅덊빐紐? 轅덈텇?? 轅덉씪湲? 轅덉긽吏? dream interpreter, ReaDream">
   <meta name="author" content="ReaDream">
   <meta name="robots" content="index, follow">
 
-  <!-- ====== Open Graph (소셜 공유 미리보기) ====== -->
-  <meta property="og:title"       content="ReaDream — 꿈 해몽">
-  <meta property="og:description" content="꿈 내용을 입력하면 상징·해몽·오늘의 조언을 알려드립니다.">
+  <!-- ====== Open Graph (?뚯뀥 怨듭쑀 誘몃━蹂닿린) ====== -->
+  <meta property="og:title"       content="ReaDream ??轅??대そ">
+  <meta property="og:description" content="轅??댁슜???낅젰?섎㈃ ?곸쭠쨌?대そ쨌?ㅻ뒛??議곗뼵???뚮젮?쒕┰?덈떎.">
   <meta property="og:type"        content="website">
-  <meta property="og:image"       content="https://example.com/og-image.png"><!-- 배포 후 실제 URL로 교체 -->
+  <meta property="og:image"       content="https://example.com/og-image.png"><!-- 諛고룷 ???ㅼ젣 URL濡?援먯껜 -->
   <meta property="og:locale"      content="ko_KR">
   <meta name="twitter:card"       content="summary_large_image">
-  <meta name="twitter:title"      content="ReaDream — 꿈 해몽">
-  <meta name="twitter:description" content="꿈의 상징을 분석하고 오늘의 조언을 알려드립니다.">
+  <meta name="twitter:title"      content="ReaDream ??轅??대そ">
+  <meta name="twitter:description" content="轅덉쓽 ?곸쭠??遺꾩꽍?섍퀬 ?ㅻ뒛??議곗뼵???뚮젮?쒕┰?덈떎.">
 
-  <!-- ====== PWA / 모바일 앱 ====== -->
+  <!-- ====== PWA / 紐⑤컮????====== -->
   <meta name="theme-color"                    content="#0c0720">
   <meta name="apple-mobile-web-app-capable"   content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title"     content="ReaDream">
-  <!-- 인라인 SVG favicon -->
+  <!-- ?몃씪??SVG favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='14' cy='16' r='11' fill='%23f59e0b'/%3E%3Ccircle cx='19' cy='12' r='9' fill='%230c0720'/%3E%3C/svg%3E">
 
-  <!-- ====== 보안: CSP — API 호출 도메인만 허용 ====== -->
+  <!-- ====== 蹂댁븞: CSP ??API ?몄텧 ?꾨찓?몃쭔 ?덉슜 ====== -->
   <meta http-equiv="Content-Security-Policy"
         content="connect-src 'self' https://generativelanguage.googleapis.com https://t1.daumcdn.net https://kas.kakao.com; script-src 'self' 'unsafe-inline' https://t1.daumcdn.net; frame-src https://t1.daumcdn.net;">
 
-  <!-- 카카오 애드핏 -->
+  <!-- 移댁뭅???좊뱶??-->
   <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
   <style>
-    /* === 기본 리셋 === */
+    /* === 湲곕낯 由ъ뀑 === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -67,7 +67,7 @@
       line-height: 1.6;
     }
 
-    /* ===== 캔버스 배경 ===== */
+    /* ===== 罹붾쾭??諛곌꼍 ===== */
     #starCanvas {
       position: fixed;
       inset: 0;
@@ -77,7 +77,7 @@
       pointer-events: none;
     }
 
-    /* ===== 레이아웃 ===== */
+    /* ===== ?덉씠?꾩썐 ===== */
     .container {
       position: relative;
       z-index: 1;
@@ -86,13 +86,13 @@
       padding: 0 16px 48px;
     }
 
-    /* ===== 헤더 ===== */
+    /* ===== ?ㅻ뜑 ===== */
     .header {
       text-align: center;
       padding: 52px 0 36px;
     }
 
-    /* SVG 로고 마크 래퍼 — moonGlow 애니메이션 적용 */
+    /* SVG 濡쒓퀬 留덊겕 ?섑띁 ??moonGlow ?좊땲硫붿씠???곸슜 */
     .header-logo-wrap {
       display: block;
       margin: 0 auto 18px;
@@ -106,9 +106,9 @@
       50%       { filter: drop-shadow(0 0 28px rgba(245, 158, 11, 1.0)) drop-shadow(0 0 56px rgba(139, 92, 246, 0.45)); }
     }
 
-    /* ===== ReaDream 브랜드 타이포그래피 ===== */
+    /* ===== ReaDream 釉뚮옖????댄룷洹몃옒??===== */
 
-    /* Rea + D(공유) + ream 을 한 줄로 baseline 정렬 */
+    /* Rea + D(怨듭쑀) + ream ????以꾨줈 baseline ?뺣젹 */
     .brand-title {
       display: flex;
       align-items: baseline;
@@ -119,28 +119,28 @@
       line-height: 1;
     }
 
-    /* "Rea" — 소프트 퍼플 */
+    /* "Rea" ???뚰봽???쇳뵆 */
     .br-rea {
       font-weight: 700;
       color: rgba(196, 181, 253, 0.80);
       letter-spacing: 1px;
     }
 
-    /* "D" — Read의 D이자 Dream의 D: 퍼플→골드 그라디언트 + 크고 굵게 */
+    /* "D" ??Read??D?댁옄 Dream??D: ?쇳뵆?믨낏??洹몃씪?붿뼵??+ ?ш퀬 援듦쾶 */
     .br-d {
-      font-size: 1.28em;          /* 살짝 크게 — 공유 문자임을 강조 */
+      font-size: 1.28em;          /* ?댁쭩 ?ш쾶 ??怨듭쑀 臾몄옄?꾩쓣 媛뺤“ */
       font-weight: 900;
       line-height: 1;
       vertical-align: baseline;
-      /* 상단(퍼플) → 하단(골드) 그라디언트로 두 단어의 색을 자연스럽게 연결 */
+      /* ?곷떒(?쇳뵆) ???섎떒(怨⑤뱶) 洹몃씪?붿뼵?몃줈 ???⑥뼱???됱쓣 ?먯뿰?ㅻ읇寃??곌껐 */
       background: linear-gradient(175deg, #c4b5fd 0%, #f8c347 55%, #f59e0b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin: 0 -0.5px;           /* 좌우 미세 여백 제거로 광학적 밀착감 */
+      margin: 0 -0.5px;           /* 醫뚯슦 誘몄꽭 ?щ갚 ?쒓굅濡?愿묓븰??諛李⑷컧 */
     }
 
-    /* "ream" — 골드 그라디언트 */
+    /* "ream" ??怨⑤뱶 洹몃씪?붿뼵??*/
     .br-ream {
       font-weight: 800;
       background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
@@ -150,7 +150,7 @@
       letter-spacing: 1px;
     }
 
-    /* Read · Dream 브랜드 개념 힌트 (아주 작게) */
+    /* Read 쨌 Dream 釉뚮옖??媛쒕뀗 ?뚰듃 (?꾩＜ ?묎쾶) */
     .brand-split-hint {
       font-size: 10px;
       letter-spacing: 4px;
@@ -159,7 +159,7 @@
       text-transform: uppercase;
     }
 
-    /* 서브태그라인 */
+    /* ?쒕툕?쒓렇?쇱씤 */
     .header-tagline {
       font-size: 11px;
       color: var(--text-secondary);
@@ -176,7 +176,7 @@
       opacity: 0.45;
     }
 
-    /* ===== 공통 카드 ===== */
+    /* ===== 怨듯넻 移대뱶 ===== */
     .card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -197,7 +197,7 @@
       opacity: 0.8;
     }
 
-    /* ===== API 키 섹션 ===== */
+    /* ===== API ???뱀뀡 ===== */
     .api-toggle {
       display: flex;
       align-items: center;
@@ -259,7 +259,7 @@
       margin-top: 8px;
     }
 
-    /* ===== 입력 공통 ===== */
+    /* ===== ?낅젰 怨듯넻 ===== */
     input[type="password"],
     input[type="text"],
     textarea {
@@ -283,7 +283,7 @@
 
     ::placeholder { color: rgba(196, 181, 253, 0.35); }
 
-    /* ===== 버튼 ===== */
+    /* ===== 踰꾪듉 ===== */
     .btn {
       border: none;
       border-radius: 12px;
@@ -332,14 +332,14 @@
 
     .btn-interpret:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    /* ===== 꿈 텍스트에어리어 ===== */
+    /* ===== 轅??띿뒪?몄뿉?대━??===== */
     .dream-textarea {
       min-height: 148px;
       resize: vertical;
       line-height: 1.75;
     }
 
-    /* 글자 수 카운터 */
+    /* 湲????移댁슫??*/
     .char-count {
       text-align: right;
       font-size: 11px;
@@ -351,7 +351,7 @@
     .char-count.warn  { color: var(--gold); }
     .char-count.limit { color: #f87171; }
 
-    /* ===== 투트랙 꿈 입력 ===== */
+    /* ===== ?ы듃??轅??낅젰 ===== */
     .dream-mode-tabs {
       display: flex;
       border-radius: 12px;
@@ -425,7 +425,7 @@
     }
 
 
-    /* 짧은 꿈 경고 팝업 */
+    /* 吏㏃? 轅?寃쎄퀬 ?앹뾽 */
     #shortDreamPopup {
       display: none;
       position: fixed;
@@ -465,7 +465,7 @@
       cursor: pointer;
     }
 
-    /* ===== 프로필 (사주 연계) 카드 ===== */
+    /* ===== ?꾨줈??(?ъ＜ ?곌퀎) 移대뱶 ===== */
     .profile-card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -559,7 +559,7 @@
     }
 
 
-    /* ===== 행운 정보 카드 ===== */
+    /* ===== ?됱슫 ?뺣낫 移대뱶 ===== */
     .lucky-card {
       background: linear-gradient(135deg,
         rgba(245,158,11,0.07) 0%,
@@ -603,7 +603,7 @@
       color: var(--gold-light);
     }
 
-    /* ===== 꿈 속 그 사람 분석 ===== */
+    /* ===== 轅???洹??щ엺 遺꾩꽍 ===== */
     #personSection { margin-top: 10px; }
     .person-trigger {
       width: 100%;
@@ -709,7 +709,7 @@
     }
     .person-limit-banner.active { display: block; }
 
-    /* ===== 오늘의 달빛 운세 ===== */
+    /* ===== ?ㅻ뒛???щ튆 ?댁꽭 ===== */
     .fortune-card {
       background: linear-gradient(135deg, rgba(109,40,217,0.14), rgba(79,70,229,0.1));
       border: 1px solid rgba(139,92,246,0.3);
@@ -793,7 +793,7 @@
       line-height: 1.6;
     }
 
-    /* ===== 운세 공유 & 기록 ===== */
+    /* ===== ?댁꽭 怨듭쑀 & 湲곕줉 ===== */
     .fortune-share {
       margin-top: 14px;
       padding-top: 14px;
@@ -861,7 +861,7 @@
       color: #c4b5fd;
     }
 
-    /* ===== 광고 영역 ===== */
+    /* ===== 愿묎퀬 ?곸뿭 ===== */
     .ad-unit {
       margin: 14px 0;
       text-align: center;
@@ -872,7 +872,7 @@
       border: 1px solid rgba(196, 181, 253, 0.07);
     }
 
-    /* 카카오 애드핏 승인 전 개발용 placeholder */
+    /* 移댁뭅???좊뱶???뱀씤 ??媛쒕컻??placeholder */
     .ad-unit.dev-placeholder {
       border: 2px dashed rgba(196, 181, 253, 0.14);
       padding: 18px 16px;
@@ -885,7 +885,7 @@
       gap: 6px;
     }
 
-    /* 쿠팡 파트너스 섹션 */
+    /* 荑좏뙜 ?뚰듃?덉뒪 ?뱀뀡 */
     .coupang-section-label {
       font-size: 11px;
       color: rgba(196,181,253,0.5);
@@ -914,7 +914,7 @@
     .coupang-item:hover { background: rgba(196,181,253,0.13); }
     .coupang-item-emoji { font-size: 22px; }
     .coupang-item-name { font-size: 11px; color: rgba(196,181,253,0.75); text-align: center; line-height: 1.3; }
-    /* 감정 체크인 */
+    /* 媛먯젙 泥댄겕??*/
     .mood-checkin {
       background: rgba(196,181,253,0.05);
       border: 1px solid rgba(196,181,253,0.12);
@@ -955,7 +955,7 @@
       min-height: 16px;
     }
 
-    /* 꿈 후기 (팔로업) */
+    /* 轅??꾧린 (?붾줈?? */
     .dream-followup {
       background: rgba(196,181,253,0.05);
       border: 1px solid rgba(196,181,253,0.12);
@@ -1019,7 +1019,7 @@
     }
     .coupang-diary-link:hover { color: rgba(196,181,253,0.75); }
 
-    /* ===== 로딩 ===== */
+    /* ===== 濡쒕뵫 ===== */
     .loading {
       display: none;
       flex-direction: column;
@@ -1059,7 +1059,7 @@
       100% { content: '...'; }
     }
 
-    /* ===== 결과 섹션 ===== */
+    /* ===== 寃곌낵 ?뱀뀡 ===== */
     .result-section {
       display: none;
       animation: fadeInUp 0.55s ease both;
@@ -1090,7 +1090,7 @@
       border-radius: 2px;
     }
 
-    /* 핵심 상징 그리드 */
+    /* ?듭떖 ?곸쭠 洹몃━??*/
     .symbols-label {
       text-align: center;
       margin-bottom: 12px;
@@ -1136,7 +1136,7 @@
       line-height: 1.55;
     }
 
-    /* 전체 해석 카드 */
+    /* ?꾩껜 ?댁꽍 移대뱶 */
     .interpretation-card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -1151,7 +1151,7 @@
       color: var(--text-primary);
     }
 
-    /* 오늘의 조언 카드 */
+    /* ?ㅻ뒛??議곗뼵 移대뱶 */
     .advice-card {
       background: linear-gradient(135deg,
         rgba(245, 158, 11, 0.09) 0%,
@@ -1166,7 +1166,7 @@
     }
 
     .advice-card::before {
-      content: '✦';
+      content: '??;
       position: absolute;
       bottom: -20px;
       right: -6px;
@@ -1192,7 +1192,7 @@
       font-style: italic;
     }
 
-    /* ===== 결과 하단 버튼 영역 ===== */
+    /* ===== 寃곌낵 ?섎떒 踰꾪듉 ?곸뿭 ===== */
     .result-actions {
       display: flex;
       flex-direction: column;
@@ -1222,13 +1222,13 @@
       transform: translateY(-1px);
     }
 
-    /* 저장 완료 후 비활성화 상태 */
+    /* ????꾨즺 ??鍮꾪솢?깊솕 ?곹깭 */
     .btn-save-diary:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* 꿈 해몽 다시 하기 버튼 */
+    /* 轅??대そ ?ㅼ떆 ?섍린 踰꾪듉 */
     .btn-retry-dream {
       display: flex;
       align-items: center;
@@ -1254,7 +1254,7 @@
       box-shadow: 0 8px 28px rgba(91, 33, 182, 0.6);
     }
 
-    /* 공유 섹션 */
+    /* 怨듭쑀 ?뱀뀡 */
     .share-section { margin-top: 2px; }
 
     .btn-share-image {
@@ -1282,7 +1282,7 @@
       margin-bottom: 10px;
     }
 
-    /* 2×2 공유 그리드 */
+    /* 2횞2 怨듭쑀 洹몃━??*/
     .share-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1309,7 +1309,7 @@
 
     .btn-share .share-icon { font-size: 22px; line-height: 1; }
 
-    /* 카카오톡 — 노랑 */
+    /* 移댁뭅?ㅽ넚 ???몃옉 */
     .btn-share-kakao {
       background: rgba(254, 229, 0, 0.1);
       border: 1px solid rgba(254, 229, 0, 0.3);
@@ -1317,7 +1317,7 @@
     }
     .btn-share-kakao:hover { background: rgba(254, 229, 0, 0.2); transform: translateY(-2px); }
 
-    /* 인스타그램 — 핑크/퍼플 */
+    /* ?몄뒪?洹몃옩 ???묓겕/?쇳뵆 */
     .btn-share-insta {
       background: rgba(236, 72, 153, 0.1);
       border: 1px solid rgba(236, 72, 153, 0.28);
@@ -1325,7 +1325,7 @@
     }
     .btn-share-insta:hover { background: rgba(236, 72, 153, 0.2); transform: translateY(-2px); }
 
-    /* X(트위터) — 흰 */
+    /* X(?몄쐞?? ????*/
     .btn-share-x {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1333,7 +1333,7 @@
     }
     .btn-share-x:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-2px); }
 
-    /* 링크 저장 — 인디고 */
+    /* 留곹겕 ??????몃뵒怨?*/
     .btn-share-link {
       background: rgba(79, 70, 229, 0.12);
       border: 1px solid rgba(79, 70, 229, 0.3);
@@ -1341,7 +1341,7 @@
     }
     .btn-share-link:hover { background: rgba(79, 70, 229, 0.22); transform: translateY(-2px); }
 
-    /* ===== 꿈 일기 섹션 ===== */
+    /* ===== 轅??쇨린 ?뱀뀡 ===== */
     .diary-wrapper { margin-top: 6px; }
 
     .diary-toggle {
@@ -1446,7 +1446,7 @@
       padding: 24px 0;
     }
 
-    /* ===== 꿈 일기 상세 뷰 ===== */
+    /* ===== 轅??쇨린 ?곸꽭 酉?===== */
     #diaryDetailSection {
       animation: fadeInUp 0.45s ease both;
     }
@@ -1463,7 +1463,7 @@
       letter-spacing: 3px;
     }
 
-    /* 꿈 내용 카드 */
+    /* 轅??댁슜 移대뱶 */
     .detail-dream-card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -1486,7 +1486,7 @@
       word-break: break-word;
     }
 
-    /* 해몽 결과 구분선 */
+    /* ?대そ 寃곌낵 援щ텇??*/
     .detail-result-label {
       display: flex;
       align-items: center;
@@ -1512,7 +1512,7 @@
       background: var(--glass-border);
     }
 
-    /* 상세 뷰 하단 액션 버튼 */
+    /* ?곸꽭 酉??섎떒 ?≪뀡 踰꾪듉 */
     .detail-actions {
       display: flex;
       gap: 10px;
@@ -1560,7 +1560,7 @@
       transform: translateY(-2px);
     }
 
-    /* ===== 삭제 확인 모달 ===== */
+    /* ===== ??젣 ?뺤씤 紐⑤떖 ===== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -1645,7 +1645,7 @@
 
     .btn-modal-yes:hover { background: rgba(239, 68, 68, 0.28); }
 
-    /* ===== 토스트 알림 ===== */
+    /* ===== ?좎뒪???뚮┝ ===== */
     .toast {
       position: fixed;
       bottom: 36px;
@@ -1670,7 +1670,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ===== 에러 배너 ===== */
+    /* ===== ?먮윭 諛곕꼫 ===== */
     .error-banner {
       display: none;
       background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(185,28,28,0.08));
@@ -1735,7 +1735,7 @@
 
     .retry-btn:hover { background: rgba(239, 68, 68, 0.25); }
 
-    /* ===== 푸터 ===== */
+    /* ===== ?명꽣 ===== */
     .footer {
       text-align: center;
       padding: 20px 0 0;
@@ -1744,7 +1744,7 @@
       letter-spacing: 1.5px;
     }
 
-    /* ===== 앱 공유 버튼 (최하단) ===== */
+    /* ===== ??怨듭쑀 踰꾪듉 (理쒗븯?? ===== */
     .btn-app-share {
       display: flex;
       align-items: center;
@@ -1776,10 +1776,10 @@
       padding: 16px 0 12px;
     }
 
-    /* ===== API 키 카드 숨김 ===== */
+    /* ===== API ??移대뱶 ?④? ===== */
     #apiCard { display: none; }
 
-    /* ===== 반응형 ===== */
+    /* ===== 諛섏쓳??===== */
     @media (max-width: 360px) {
       .symbol-card { padding: 14px 6px 10px; }
       .symbol-emoji { font-size: 24px; }
@@ -1794,194 +1794,194 @@
 </head>
 <body>
 
-<!-- 별 파티클 캔버스 -->
+<!-- 蹂??뚰떚??罹붾쾭??-->
 <canvas id="starCanvas"></canvas>
 
 <div class="container">
 
-  <!-- ========== 헤더 (항상 표시) ========== -->
+  <!-- ========== ?ㅻ뜑 (??긽 ?쒖떆) ========== -->
   <header class="header">
 
-    <!-- ===== SVG 로고 마크 ===== -->
+    <!-- ===== SVG 濡쒓퀬 留덊겕 ===== -->
     <svg class="header-logo-wrap" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <!-- 달 본체 그라디언트 -->
+        <!-- ??蹂몄껜 洹몃씪?붿뼵??-->
         <radialGradient id="rdMoonGold" cx="38%" cy="32%" r="62%">
           <stop offset="0%"   stop-color="#fde68a"/>
           <stop offset="100%" stop-color="#d97706"/>
         </radialGradient>
-        <!-- 배경 헤일로 -->
+        <!-- 諛곌꼍 ?ㅼ씪濡?-->
         <radialGradient id="rdHalo" cx="50%" cy="50%" r="50%">
           <stop offset="0%"   stop-color="#8b5cf6" stop-opacity="0.18"/>
           <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
         </radialGradient>
       </defs>
 
-      <!-- 퍼플 헤일로 -->
+      <!-- ?쇳뵆 ?ㅼ씪濡?-->
       <circle cx="38" cy="38" r="36" fill="url(#rdHalo)"/>
 
-      <!-- 달 본체 (골드) -->
+      <!-- ??蹂몄껜 (怨⑤뱶) -->
       <circle cx="36" cy="38" r="24" fill="url(#rdMoonGold)"/>
 
-      <!-- 그림자 원으로 초승달 형태 -->
+      <!-- 洹몃┝???먯쑝濡?珥덉듅???뺥깭 -->
       <circle cx="47" cy="31" r="19" fill="#0c0720"/>
 
-      <!-- 초승달 테두리 (미세 하이라이트) -->
+      <!-- 珥덉듅???뚮몢由?(誘몄꽭 ?섏씠?쇱씠?? -->
       <circle cx="36" cy="38" r="24" fill="none" stroke="#fde68a" stroke-width="0.5" stroke-opacity="0.35"/>
 
-      <!-- 작은 별 장식들 -->
+      <!-- ?묒? 蹂??μ떇??-->
       <circle cx="16" cy="15" r="1.8" fill="#fde68a" opacity="0.9"/>
       <circle cx="10" cy="29" r="1.1" fill="#c4b5fd" opacity="0.85"/>
       <circle cx="22" cy="7"  r="1.3" fill="#c4b5fd" opacity="0.7"/>
       <circle cx="8"  cy="46" r="0.9" fill="#fde68a" opacity="0.6"/>
       <circle cx="19" cy="56" r="1.0" fill="#8b5cf6" opacity="0.55"/>
 
-      <!-- 달 안의 'R' 힌트 (초승달 밝은 부분 안에 미세하게) -->
+      <!-- ???덉쓽 'R' ?뚰듃 (珥덉듅??諛앹? 遺遺??덉뿉 誘몄꽭?섍쾶) -->
       <text x="20" y="47" font-family="Georgia, serif" font-size="18" font-weight="bold"
             fill="#fde68a" fill-opacity="0.22" letter-spacing="0">R</text>
     </svg>
 
-    <!-- ===== 브랜드 타이포그래피 ===== -->
-    <!-- Rea + D(공유) + ream: D는 Read의 끝이자 Dream의 시작 -->
+    <!-- ===== 釉뚮옖????댄룷洹몃옒??===== -->
+    <!-- Rea + D(怨듭쑀) + ream: D??Read???앹씠??Dream???쒖옉 -->
     <h1 class="brand-title">
       <span class="br-rea">Rea</span><span class="br-d">D</span><span class="br-ream">ream</span>
     </h1>
-    <p class="brand-split-hint">Read · Dream</p>
-    <p class="header-sub">꿈이 전하는 내면의 메시지</p>
+    <p class="brand-split-hint">Read 쨌 Dream</p>
+    <p class="header-sub">轅덉씠 ?꾪븯???대㈃??硫붿떆吏</p>
 
   </header>
 
-  <!-- ========== 메인 콘텐츠 (입력 ~ 일기 목록) ========== -->
+  <!-- ========== 硫붿씤 肄섑뀗痢?(?낅젰 ~ ?쇨린 紐⑸줉) ========== -->
   <div id="mainContent">
 
-    <!-- API 키 (숨김, 자동 삽입) -->
+    <!-- API ??(?④?, ?먮룞 ?쎌엯) -->
     <div class="card" id="apiCard">
       <div class="api-toggle" id="apiToggle">
         <div>
-          <div class="section-label">Gemini API 키</div>
+          <div class="section-label">Gemini API ??/div>
           <div class="api-status">
             <span class="status-dot" id="statusDot"></span>
-            <span id="statusText">키를 입력해주세요</span>
+            <span id="statusText">?ㅻ? ?낅젰?댁＜?몄슂</span>
           </div>
         </div>
-        <span class="api-chevron open" id="apiChevron">▾</span>
+        <span class="api-chevron open" id="apiChevron">??/span>
       </div>
       <div class="api-body open" id="apiBody">
         <div class="input-row">
           <input type="password" id="apiKeyInput" placeholder="AIzaSy..." autocomplete="off">
-          <button class="btn btn-key" id="btnSaveKey">저장</button>
+          <button class="btn btn-key" id="btnSaveKey">???/button>
         </div>
-        <p class="api-hint">키는 이 기기에만 저장되며 외부로 전송되지 않습니다.</p>
+        <p class="api-hint">?ㅻ뒗 ??湲곌린?먮쭔 ??λ릺硫??몃?濡??꾩넚?섏? ?딆뒿?덈떎.</p>
       </div>
     </div>
 
-    <!-- 오늘의 달빛 운세 -->
+    <!-- ?ㅻ뒛???щ튆 ?댁꽭 -->
     <div class="fortune-card">
       <div class="fortune-header">
-        <span class="fortune-title">🌙 오늘의 달빛 운세</span>
+        <span class="fortune-title">?뙔 ?ㅻ뒛???щ튆 ?댁꽭</span>
         <span class="fortune-date-label" id="fortuneDateLabel"></span>
       </div>
-      <button class="btn-fortune" id="btnFortune">✦ 오늘의 운세 보기</button>
+      <button class="btn-fortune" id="btnFortune">???ㅻ뒛???댁꽭 蹂닿린</button>
       <div class="fortune-result" id="fortuneResult">
         <p class="fortune-message" id="fortuneMessage"></p>
         <div class="fortune-items">
           <div class="fortune-item">
-            <div class="fortune-item-label">행운의 숫자</div>
-            <div class="fortune-item-value" id="fortuneNumber">—</div>
+            <div class="fortune-item-label">?됱슫???レ옄</div>
+            <div class="fortune-item-value" id="fortuneNumber">??/div>
           </div>
           <div class="fortune-item">
-            <div class="fortune-item-label">행운의 색상</div>
-            <div class="fortune-item-value" id="fortuneColor">—</div>
+            <div class="fortune-item-label">?됱슫???됱긽</div>
+            <div class="fortune-item-value" id="fortuneColor">??/div>
           </div>
           <div class="fortune-item">
-            <div class="fortune-item-label">행운의 방향</div>
-            <div class="fortune-item-value" id="fortuneDirection">—</div>
+            <div class="fortune-item-label">?됱슫??諛⑺뼢</div>
+            <div class="fortune-item-value" id="fortuneDirection">??/div>
           </div>
         </div>
         <div class="fortune-caution" id="fortuneCaution"></div>
-        <!-- 운세 공유 -->
+        <!-- ?댁꽭 怨듭쑀 -->
         <div class="fortune-share" id="fortuneShare">
-          <div class="fortune-share-label">공 유 하 기</div>
+          <div class="fortune-share-label">怨?????湲?/div>
           <div class="fortune-share-btns">
-            <button class="btn-fortune-share" id="btnFShareKakao">💬 카카오톡</button>
-            <button class="btn-fortune-share" id="btnFShareX">𝕏 트위터</button>
-            <button class="btn-fortune-share" id="btnFShareCopy">🔗 링크 복사</button>
-            <button class="btn-fortune-share btn-fortune-image" id="btnFShareImage">🖼️ 이미지</button>
+            <button class="btn-fortune-share" id="btnFShareKakao">?뮠 移댁뭅?ㅽ넚</button>
+            <button class="btn-fortune-share" id="btnFShareX">?븦 ?몄쐞??/button>
+            <button class="btn-fortune-share" id="btnFShareCopy">?뵕 留곹겕 蹂듭궗</button>
+            <button class="btn-fortune-share btn-fortune-image" id="btnFShareImage">?뼹截??대?吏</button>
           </div>
         </div>
       </div>
-      <!-- 지난 달빛 기록 -->
+      <!-- 吏???щ튆 湲곕줉 -->
       <div class="fortune-history" id="fortuneHistory">
-        <div class="fortune-history-label">📅 지난 달빛 기록</div>
+        <div class="fortune-history-label">?뱟 吏???щ튆 湲곕줉</div>
         <div class="fortune-chips" id="fortuneHistoryChips"></div>
       </div>
     </div>
 
-    <!-- 프로필 (사주 연계 맞춤 해몽) -->
+    <!-- ?꾨줈??(?ъ＜ ?곌퀎 留욎땄 ?대そ) -->
     <div class="profile-card">
       <div class="profile-toggle" id="profileToggle">
         <div class="profile-toggle-left">
-          🔯 맞춤 해몽 프로필
-          <span class="profile-badge" id="profileBadge">미등록</span>
+          ?뵱 留욎땄 ?대そ ?꾨줈??
+          <span class="profile-badge" id="profileBadge">誘몃벑濡?/span>
         </div>
-        <span class="api-chevron" id="profileChevron">▾</span>
+        <span class="api-chevron" id="profileChevron">??/span>
       </div>
       <div class="profile-body" id="profileBody">
         <div class="profile-row">
           <input type="date" class="profile-input" id="profileBirth">
           <div class="gender-btns">
-            <button class="gender-btn" id="genderF">♀ 여성</button>
-            <button class="gender-btn" id="genderM">♂ 남성</button>
+            <button class="gender-btn" id="genderF">? ?ъ꽦</button>
+            <button class="gender-btn" id="genderM">???⑥꽦</button>
           </div>
         </div>
-        <button class="btn-save-profile" id="btnSaveProfile">저장하기</button>
+        <button class="btn-save-profile" id="btnSaveProfile">??ν븯湲?/button>
         <div class="profile-saved-info" id="profileSavedInfo"></div>
       </div>
     </div>
 
-    <!-- 꿈 입력 (최대 300자) -->
-    <!-- 감정 체크인 -->
+    <!-- 轅??낅젰 (理쒕? 300?? -->
+    <!-- 媛먯젙 泥댄겕??-->
     <div class="mood-checkin" id="moodCheckin">
-      <p class="mood-label">지금 기분이 어때요?</p>
+      <p class="mood-label">吏湲?湲곕텇???대븣??</p>
       <div class="mood-options">
-        <button class="mood-btn" data-mood="happy" data-label="기분 좋아요">😊</button>
-        <button class="mood-btn" data-mood="calm" data-label="평온해요">😌</button>
-        <button class="mood-btn" data-mood="anxious" data-label="불안해요">😰</button>
-        <button class="mood-btn" data-mood="sad" data-label="우울해요">😔</button>
-        <button class="mood-btn" data-mood="tired" data-label="지쳐 있어요">😤</button>
+        <button class="mood-btn" data-mood="happy" data-label="湲곕텇 醫뗭븘??>?삃</button>
+        <button class="mood-btn" data-mood="calm" data-label="?됱삩?댁슂">?삅</button>
+        <button class="mood-btn" data-mood="anxious" data-label="遺덉븞?댁슂">?삹</button>
+        <button class="mood-btn" data-mood="sad" data-label="?곗슱?댁슂">?삍</button>
+        <button class="mood-btn" data-mood="tired" data-label="吏爾??덉뼱??>?삤</button>
       </div>
       <span class="mood-selected-label" id="moodSelectedLabel"></span>
     </div>
 
     <div class="card">
-      <div class="section-label">오늘의 꿈</div>
-      <!-- 투트랙 탭 -->
+      <div class="section-label">?ㅻ뒛??轅?/div>
+      <!-- ?ы듃????-->
       <div class="dream-mode-tabs">
-        <button class="dream-mode-tab active" id="tabDirect">✏️ 직접 입력</button>
-        <button class="dream-mode-tab" id="tabQuick">⚡ 빠른 선택</button>
+        <button class="dream-mode-tab active" id="tabDirect">?륅툘 吏곸젒 ?낅젰</button>
+        <button class="dream-mode-tab" id="tabQuick">??鍮좊Ⅸ ?좏깮</button>
       </div>
-      <!-- 직접 입력 패널 -->
+      <!-- 吏곸젒 ?낅젰 ?⑤꼸 -->
       <div id="panelDirect">
         <textarea
           class="dream-textarea"
           id="dreamInput"
-          placeholder="오늘 꾼 꿈을 자세히 적어주세요..."
+          placeholder="?ㅻ뒛 袁?轅덉쓣 ?먯꽭???곸뼱二쇱꽭??.."
           maxlength="300"
         ></textarea>
         <div class="char-count" id="charCountWrap">
-          <span id="charCount">0</span> / 300자
+          <span id="charCount">0</span> / 300??
         </div>
       </div>
-      <!-- 빠른 선택 패널 -->
+      <!-- 鍮좊Ⅸ ?좏깮 ?⑤꼸 -->
       <div id="panelQuick" style="display:none">
-        <p class="quick-hint">꿈 유형을 선택하세요 (최대 2개)</p>
+        <p class="quick-hint">轅??좏삎???좏깮?섏꽭??(理쒕? 2媛?</p>
         <div class="quick-chips-grid" id="quickChipsGrid"></div>
         <div class="quick-preview" id="quickPreview"></div>
       </div>
-      <button class="btn btn-interpret" id="interpretBtn">✦ 해몽하기</button>
+      <button class="btn btn-interpret" id="interpretBtn">???대そ?섍린</button>
     </div>
 
-    <!-- 광고: 상단 배너 (카카오 애드핏 — 승인 후 data-ad-unit 값 교체) -->
+    <!-- 愿묎퀬: ?곷떒 諛곕꼫 (移댁뭅???좊뱶?????뱀씤 ??data-ad-unit 媛?援먯껜) -->
     <div class="ad-unit" id="adTop">
       <ins class="kakao_ad_area" style="display:none;"
            data-ad-unit="DAN-JHSnsJdxk3HlpDKr"
@@ -1989,131 +1989,131 @@
            data-ad-height="50"></ins>
     </div>
 
-    <!-- 에러 배너 -->
+    <!-- ?먮윭 諛곕꼫 -->
     <div class="error-banner" id="errorBanner">
       <div class="error-banner-title">
-        <span id="errorTitle">달빛이 잠시 흐려졌어요 🌫️</span>
+        <span id="errorTitle">?щ튆???좎떆 ?먮젮議뚯뼱???뙧截?/span>
       </div>
       <p class="error-banner-msg" id="errorMsg"></p>
       <div class="retry-countdown" id="retryCountdown" style="display:none;">
-        🌙 <span id="countdownSec"></span>초 후 달빛이 돌아와요
+        ?뙔 <span id="countdownSec"></span>珥????щ튆???뚯븘???
       </div>
       <p class="error-debug" id="errorDebug"></p>
-      <button class="retry-btn" id="retryBtn">🌙 다시 해몽하기</button>
+      <button class="retry-btn" id="retryBtn">?뙔 ?ㅼ떆 ?대そ?섍린</button>
     </div>
 
-    <!-- 로딩 -->
+    <!-- 濡쒕뵫 -->
     <div class="loading" id="loadingSection">
-      <span class="loading-moon">🌕</span>
-      <p class="loading-text">꿈을 해석하는 중<span class="loading-dots"></span></p>
+      <span class="loading-moon">?뙐</span>
+      <p class="loading-text">轅덉쓣 ?댁꽍?섎뒗 以?span class="loading-dots"></span></p>
     </div>
 
-    <!-- 해몽 결과 -->
+    <!-- ?대そ 寃곌낵 -->
     <div class="result-section" id="resultSection">
       <div class="result-header">
-        <h2>✦ 해몽 결과 ✦</h2>
+        <h2>???대そ 寃곌낵 ??/h2>
         <div class="gold-divider"></div>
       </div>
-      <div class="section-label symbols-label">핵심 상징</div>
+      <div class="section-label symbols-label">?듭떖 ?곸쭠</div>
       <div class="symbols-grid" id="symbolsGrid"></div>
       <div class="interpretation-card">
-        <div class="section-label">전체 해석</div>
+        <div class="section-label">?꾩껜 ?댁꽍</div>
         <p id="interpretationText"></p>
       </div>
       <div class="advice-card">
-        <div class="advice-label">✦ 오늘의 조언</div>
+        <div class="advice-label">???ㅻ뒛??議곗뼵</div>
         <p id="adviceText"></p>
       </div>
 
-      <!-- 꿈 후기 팔로업 (B) -->
+      <!-- 轅??꾧린 ?붾줈??(B) -->
       <div class="dream-followup" id="dreamFollowup" style="display:none;">
         <p class="followup-question" id="followupQuestion"></p>
         <div class="followup-emotions">
-          <button class="followup-btn" data-resp="relieved">😌 후련해요</button>
-          <button class="followup-btn" data-resp="curious">🤔 궁금해요</button>
-          <button class="followup-btn" data-resp="lingering">💭 마음에 걸려요</button>
-          <button class="followup-btn" data-resp="scared">😨 무섭거나 불안해요</button>
+          <button class="followup-btn" data-resp="relieved">?삅 ?꾨젴?댁슂</button>
+          <button class="followup-btn" data-resp="curious">?쨺 沅곴툑?댁슂</button>
+          <button class="followup-btn" data-resp="lingering">?뮡 留덉쓬??嫄몃젮??/button>
+          <button class="followup-btn" data-resp="scared">?삩 臾댁꽠嫄곕굹 遺덉븞?댁슂</button>
         </div>
         <div class="nightmare-care" id="nightmareCare" style="display:none;"></div>
       </div>
 
       <div class="lucky-card" id="luckyCard" style="display:none;">
-        <div class="lucky-label">✦ 꿈이 알려준 행운</div>
+        <div class="lucky-label">??轅덉씠 ?뚮젮以 ?됱슫</div>
         <div class="lucky-grid">
           <div class="lucky-item">
-            <span class="lucky-item-icon">🎲</span>
-            <div class="lucky-item-label">행운의 숫자</div>
-            <div class="lucky-item-value" id="luckyNumbers">—</div>
+            <span class="lucky-item-icon">?렡</span>
+            <div class="lucky-item-label">?됱슫???レ옄</div>
+            <div class="lucky-item-value" id="luckyNumbers">??/div>
           </div>
           <div class="lucky-item">
-            <span class="lucky-item-icon">🎨</span>
-            <div class="lucky-item-label">행운의 색상</div>
-            <div class="lucky-item-value" id="luckyColor">—</div>
+            <span class="lucky-item-icon">?렓</span>
+            <div class="lucky-item-label">?됱슫???됱긽</div>
+            <div class="lucky-item-value" id="luckyColor">??/div>
           </div>
           <div class="lucky-item">
-            <span class="lucky-item-icon">✨</span>
-            <div class="lucky-item-label">행운의 상징</div>
-            <div class="lucky-item-value" id="luckySymbol">—</div>
+            <span class="lucky-item-icon">??/span>
+            <div class="lucky-item-label">?됱슫???곸쭠</div>
+            <div class="lucky-item-value" id="luckySymbol">??/div>
           </div>
         </div>
       </div>
 
       <div id="personSection">
         <button class="person-trigger" id="btnPersonTrigger">
-          👤 꿈 속 그 사람의 의미 분석하기
+          ?뫀 轅???洹??щ엺???섎? 遺꾩꽍?섍린
         </button>
         <div id="personForm">
-          <p class="person-question">꿈에 등장한 인물과의 관계는?</p>
+          <p class="person-question">轅덉뿉 ?깆옣???몃Ъ怨쇱쓽 愿怨꾨뒗?</p>
           <div class="person-options" id="personOptions"></div>
-          <button class="btn-person-analyze" id="btnPersonAnalyze">🔮 분석하기</button>
+          <button class="btn-person-analyze" id="btnPersonAnalyze">?뵰 遺꾩꽍?섍린</button>
         </div>
         <div class="person-result-card" id="personResultCard">
-          <div class="person-result-label">💫 그 사람이 나타난 이유</div>
+          <div class="person-result-label">?뮟 洹??щ엺???섑????댁쑀</div>
           <p id="personResultText"></p>
         </div>
         <div class="person-limit-banner" id="personLimitBanner">
-          오늘의 무료 분석 1회를 이미 사용했어요 🌙<br>
-          <small style="opacity:0.7;">추가 분석 기능은 곧 오픈 예정이에요</small>
+          ?ㅻ뒛??臾대즺 遺꾩꽍 1?뚮? ?대? ?ъ슜?덉뼱???뙔<br>
+          <small style="opacity:0.7;">異붽? 遺꾩꽍 湲곕뒫? 怨??ㅽ뵂 ?덉젙?댁뿉??/small>
         </div>
       </div>
       <div class="result-actions">
-        <!-- 저장 버튼: 저장 후 비활성화 -->
+        <!-- ???踰꾪듉: ?????鍮꾪솢?깊솕 -->
         <button class="btn-save-diary" id="btnSaveDiary">
-          📖 꿈 일기에 저장하기
+          ?뱰 轅??쇨린????ν븯湲?
         </button>
         <a href="https://link.coupang.com/a/d7eU400TDM" class="coupang-diary-link" target="_blank" rel="noopener sponsored">
-          📔 종이 꿈 일기장도 써보세요 · 쿠팡 파트너스 활동의 일환
+          ?뱮 醫낆씠 轅??쇨린?λ룄 ?⑤낫?몄슂 쨌 荑좏뙜 ?뚰듃?덉뒪 ?쒕룞???쇳솚
         </a>
-        <!-- 저장 완료 후 표시되는 다시하기 버튼 -->
+        <!-- ????꾨즺 ???쒖떆?섎뒗 ?ㅼ떆?섍린 踰꾪듉 -->
         <button class="btn-retry-dream" id="btnRetryDream" style="display:none;">
-          🌙 꿈 해몽 다시 하기
+          ?뙔 轅??대そ ?ㅼ떆 ?섍린
         </button>
-        <!-- 공유 버튼 2×2 -->
+        <!-- 怨듭쑀 踰꾪듉 2횞2 -->
         <div class="share-section">
-          <div class="section-label share-label">공유하기</div>
-          <!-- 이미지 공유 버튼 (1:1 카드 생성) -->
+          <div class="section-label share-label">怨듭쑀?섍린</div>
+          <!-- ?대?吏 怨듭쑀 踰꾪듉 (1:1 移대뱶 ?앹꽦) -->
           <button class="btn-share-image" id="btnShareImage">
-            <span class="share-icon">🖼️</span>이미지로 저장 · 공유하기
+            <span class="share-icon">?뼹截?/span>?대?吏濡????쨌 怨듭쑀?섍린
           </button>
           <div class="share-grid">
             <button class="btn-share btn-share-kakao" id="btnShareKakao">
-              <span class="share-icon">💬</span>카카오톡으로 보내기
+              <span class="share-icon">?뮠</span>移댁뭅?ㅽ넚?쇰줈 蹂대궡湲?
             </button>
             <button class="btn-share btn-share-insta" id="btnShareInsta">
-              <span class="share-icon">📸</span>인스타그램으로 보내기
+              <span class="share-icon">?벝</span>?몄뒪?洹몃옩?쇰줈 蹂대궡湲?
             </button>
             <button class="btn-share btn-share-x" id="btnShareX">
-              <span class="share-icon">𝕏</span>트위터로 공유
+              <span class="share-icon">?븦</span>?몄쐞?곕줈 怨듭쑀
             </button>
             <button class="btn-share btn-share-link" id="btnShareLink">
-              <span class="share-icon">🔗</span>링크 저장하기
+              <span class="share-icon">?뵕</span>留곹겕 ??ν븯湲?
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 광고: 결과 하단 인피드 (카카오 애드핏) -->
+    <!-- 愿묎퀬: 寃곌낵 ?섎떒 ?명뵾??(移댁뭅???좊뱶?? -->
     <div class="ad-unit" id="adMid">
       <ins class="kakao_ad_area" style="display:none;"
            data-ad-unit="DAN-LUQ2hB2L4jjEadsN"
@@ -2121,40 +2121,40 @@
            data-ad-height="100"></ins>
     </div>
 
-    <!-- 꿈 일기 아코디언 -->
+    <!-- 轅??쇨린 ?꾩퐫?붿뼵 -->
     <div class="diary-wrapper" style="margin-top: 20px;">
       <div class="diary-toggle" id="diaryToggle">
         <div class="diary-toggle-left">
-          <span>📔</span>
-          <span>꿈 일기</span>
+          <span>?뱮</span>
+          <span>轅??쇨린</span>
           <span class="diary-badge" id="diaryCount">0</span>
         </div>
-        <span class="diary-chevron" id="diaryChevron">▾</span>
+        <span class="diary-chevron" id="diaryChevron">??/span>
       </div>
       <div class="diary-list" id="diaryList"></div>
     </div>
 
-    <!-- 쿠팡 파트너스 — 다이어리 하단 (수면 준비 추천) -->
+    <!-- 荑좏뙜 ?뚰듃?덉뒪 ???ㅼ씠?대━ ?섎떒 (?섎㈃ 以鍮?異붿쿇) -->
     <div id="coupangSection" style="margin-top: 24px;">
-      <div class="coupang-section-label">💤 더 좋은 꿈을 위해</div>
+      <div class="coupang-section-label">?뮘 ??醫뗭? 轅덉쓣 ?꾪빐</div>
       <div class="coupang-grid">
         <a href="https://link.coupang.com/a/d7eF02EZgq" class="coupang-item" target="_blank" rel="noopener sponsored">
-          <span class="coupang-item-emoji">😴</span>
-          <span class="coupang-item-name">수면 마스크</span>
+          <span class="coupang-item-emoji">?샂</span>
+          <span class="coupang-item-name">?섎㈃ 留덉뒪??/span>
         </a>
         <a href="https://link.coupang.com/a/d7eLySXtvM" class="coupang-item" target="_blank" rel="noopener sponsored">
-          <span class="coupang-item-emoji">🌿</span>
-          <span class="coupang-item-name">라벤더 디퓨저</span>
+          <span class="coupang-item-emoji">?뙼</span>
+          <span class="coupang-item-name">?쇰깽???뷀벂?</span>
         </a>
         <a href="https://link.coupang.com/a/d7ePU1OTSu" class="coupang-item" target="_blank" rel="noopener sponsored">
-          <span class="coupang-item-emoji">🛏️</span>
-          <span class="coupang-item-name">수면 베개</span>
+          <span class="coupang-item-emoji">?썜截?/span>
+          <span class="coupang-item-name">?섎㈃ 踰좉컻</span>
         </a>
       </div>
-      <p class="coupang-disclosure">이 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+      <p class="coupang-disclosure">??留곹겕??荑좏뙜 ?뚰듃?덉뒪 ?쒕룞???쇳솚?쇰줈, ?댁뿉 ?곕Ⅸ ?쇱젙?≪쓽 ?섏닔猷뚮? ?쒓났諛쏆뒿?덈떎.</p>
     </div>
 
-    <!-- 광고: 하단 직사각형 (카카오 애드핏) -->
+    <!-- 愿묎퀬: ?섎떒 吏곸궗媛곹삎 (移댁뭅???좊뱶?? -->
     <div class="ad-unit" id="adBottom" style="margin-top: 22px;">
       <ins class="kakao_ad_area" style="display:none;"
            data-ad-unit="DAN-Ki8D52yunC7XUrsB"
@@ -2165,112 +2165,112 @@
   </div><!-- /mainContent -->
 
 
-  <!-- 짧은 꿈 내용 경고 팝업 -->
+  <!-- 吏㏃? 轅??댁슜 寃쎄퀬 ?앹뾽 -->
   <div id="shortDreamPopup">
     <div class="short-dream-box">
-      <div class="short-dream-emoji">🌙</div>
-      <div class="short-dream-msg">내용을 좀 더<br>자세히 적어 주세요</div>
-      <button class="short-dream-back" id="shortDreamBack">돌아가기</button>
+      <div class="short-dream-emoji">?뙔</div>
+      <div class="short-dream-msg">?댁슜??醫 ??br>?먯꽭???곸뼱 二쇱꽭??/div>
+      <button class="short-dream-back" id="shortDreamBack">?뚯븘媛湲?/button>
     </div>
   </div>
 
-  <!-- ========== 꿈 일기 상세 뷰 (일기 항목 클릭 시 표시) ========== -->
+  <!-- ========== 轅??쇨린 ?곸꽭 酉?(?쇨린 ??ぉ ?대┃ ???쒖떆) ========== -->
   <div id="diaryDetailSection" style="display:none;">
 
     <div class="detail-page-header">
-      <h2>📔 꿈 일기</h2>
+      <h2>?뱮 轅??쇨린</h2>
       <div class="gold-divider"></div>
     </div>
 
-    <!-- 꿈 내용 -->
+    <!-- 轅??댁슜 -->
     <div class="detail-dream-card">
-      <div class="section-label">기록된 꿈</div>
+      <div class="section-label">湲곕줉??轅?/div>
       <div class="detail-dream-date" id="detailDate"></div>
       <p class="detail-dream-text" id="detailDreamText"></p>
     </div>
 
-    <!-- 해몽 결과 구분 -->
+    <!-- ?대そ 寃곌낵 援щ텇 -->
     <div class="detail-result-label">
-      <span>해몽 결과</span>
+      <span>?대そ 寃곌낵</span>
     </div>
 
-    <!-- 핵심 상징 -->
-    <div class="section-label symbols-label">핵심 상징</div>
+    <!-- ?듭떖 ?곸쭠 -->
+    <div class="section-label symbols-label">?듭떖 ?곸쭠</div>
     <div class="symbols-grid" id="detailSymbolsGrid"></div>
 
-    <!-- 전체 해석 -->
+    <!-- ?꾩껜 ?댁꽍 -->
     <div class="interpretation-card">
-      <div class="section-label">전체 해석</div>
+      <div class="section-label">?꾩껜 ?댁꽍</div>
       <p id="detailInterpretationText"></p>
     </div>
 
     </div>
 
-    <!-- 오늘의 조언 -->
+    <!-- ?ㅻ뒛??議곗뼵 -->
     <div class="advice-card">
-      <div class="advice-label">✦ 오늘의 조언</div>
+      <div class="advice-label">???ㅻ뒛??議곗뼵</div>
       <p id="detailAdviceText"></p>
     </div>
 
-    <!-- 행운 정보 -->
+    <!-- ?됱슫 ?뺣낫 -->
     <div class="lucky-card" id="detailLuckyCard" style="display:none;">
-      <div class="lucky-label">✦ 꿈이 알려준 행운</div>
+      <div class="lucky-label">??轅덉씠 ?뚮젮以 ?됱슫</div>
       <div class="lucky-grid">
         <div class="lucky-item">
-          <span class="lucky-item-icon">🎲</span>
-          <div class="lucky-item-label">행운의 숫자</div>
-          <div class="lucky-item-value" id="detailLuckyNumbers">—</div>
+          <span class="lucky-item-icon">?렡</span>
+          <div class="lucky-item-label">?됱슫???レ옄</div>
+          <div class="lucky-item-value" id="detailLuckyNumbers">??/div>
         </div>
         <div class="lucky-item">
-          <span class="lucky-item-icon">🎨</span>
-          <div class="lucky-item-label">행운의 색상</div>
-          <div class="lucky-item-value" id="detailLuckyColor">—</div>
+          <span class="lucky-item-icon">?렓</span>
+          <div class="lucky-item-label">?됱슫???됱긽</div>
+          <div class="lucky-item-value" id="detailLuckyColor">??/div>
         </div>
         <div class="lucky-item">
-          <span class="lucky-item-icon">✨</span>
-          <div class="lucky-item-label">행운의 상징</div>
-          <div class="lucky-item-value" id="detailLuckySymbol">—</div>
+          <span class="lucky-item-icon">??/span>
+          <div class="lucky-item-label">?됱슫???곸쭠</div>
+          <div class="lucky-item-value" id="detailLuckySymbol">??/div>
         </div>
       </div>
     </div>
 
-    <!-- 하단 버튼 -->
+    <!-- ?섎떒 踰꾪듉 -->
     <div class="detail-actions">
-      <button class="btn-detail-main" id="btnDetailMain">🏠 메인으로</button>
-      <button class="btn-detail-delete" id="btnDetailDelete">🗑️ 삭제하기</button>
+      <button class="btn-detail-main" id="btnDetailMain">?룧 硫붿씤?쇰줈</button>
+      <button class="btn-detail-delete" id="btnDetailDelete">?뿊截???젣?섍린</button>
     </div>
 
   </div><!-- /diaryDetailSection -->
 
-  <!-- ========== 푸터 ========== -->
+  <!-- ========== ?명꽣 ========== -->
   <footer class="footer">
-    <!-- 앱 공유 버튼 -->
+    <!-- ??怨듭쑀 踰꾪듉 -->
     <button class="btn-app-share" id="btnAppShare">
-      🌙 ReaDream을 다른 사람들과 공유하기
+      ?뙔 ReaDream???ㅻⅨ ?щ엺?ㅺ낵 怨듭쑀?섍린
     </button>
-    <div class="footer-copy">ReaDream · 꿈이 전하는 이야기</div>
+    <div class="footer-copy">ReaDream 쨌 轅덉씠 ?꾪븯???댁빞湲?/div>
   </footer>
 
 </div><!-- /container -->
 
-<!-- ========== 삭제 확인 모달 (container 밖, fixed) ========== -->
+<!-- ========== ??젣 ?뺤씤 紐⑤떖 (container 諛? fixed) ========== -->
 <div id="deleteModal" class="modal-overlay" style="display:none;">
   <div class="modal-card">
-    <span class="modal-icon">🌙</span>
-    <p class="modal-title">현재 저장한 일기의 해몽을<br>삭제하시겠습니까?</p>
+    <span class="modal-icon">?뙔</span>
+    <p class="modal-title">?꾩옱 ??ν븳 ?쇨린???대そ??br>??젣?섏떆寃좎뒿?덇퉴?</p>
     <div class="modal-actions">
-      <button class="btn-modal btn-modal-no" id="btnDeleteNo">아니오</button>
-      <button class="btn-modal btn-modal-yes" id="btnDeleteYes">예</button>
+      <button class="btn-modal btn-modal-no" id="btnDeleteNo">?꾨땲??/button>
+      <button class="btn-modal btn-modal-yes" id="btnDeleteYes">??/button>
     </div>
   </div>
 </div>
 
-<!-- ========== 토스트 알림 ========== -->
+<!-- ========== ?좎뒪???뚮┝ ========== -->
 <div id="toast" class="toast"></div>
 
 <script>
 /* ============================================================
-   별 파티클 캔버스 애니메이션
+   蹂??뚰떚??罹붾쾭???좊땲硫붿씠??
    ============================================================ */
 (function initCanvas() {
   const canvas = document.getElementById('starCanvas');
@@ -2317,7 +2317,7 @@
 
 
 /* ============================================================
-   API 키 섹션
+   API ???뱀뀡
    ============================================================ */
 const API_KEY_LS = 'dalbit_api_key';
 let apiOpen = true;
@@ -2339,12 +2339,12 @@ function toggleApi() {
 
 function setApiStatus(ok) {
   $statusDot.classList.toggle('active', ok);
-  $statusText.textContent = ok ? '키가 등록되었습니다' : '키를 입력해주세요';
+  $statusText.textContent = ok ? '?ㅺ? ?깅줉?섏뿀?듬땲?? : '?ㅻ? ?낅젰?댁＜?몄슂';
 }
 
 function saveApiKey() {
   const key = $apiKeyInput.value.trim();
-  if (!key) { alert('API 키를 입력해주세요.'); return; }
+  if (!key) { alert('API ?ㅻ? ?낅젰?댁＜?몄슂.'); return; }
   localStorage.setItem(API_KEY_LS, key);
   setApiStatus(true);
   apiOpen = true;
@@ -2363,7 +2363,7 @@ function loadApiKey() {
 
 
 /* ============================================================
-   글자 수 카운터 (300자 제한, 270자부터 경고)
+   湲????移댁슫??(300???쒗븳, 270?먮???寃쎄퀬)
    ============================================================ */
 const $dreamInput    = document.getElementById('dreamInput');
 const $charCount     = document.getElementById('charCount');
@@ -2388,21 +2388,21 @@ function updateCharCount(len) {
 
 
 /* ============================================================
-   투트랙 꿈 입력 — 직접 입력 / 빠른 선택
+   ?ы듃??轅??낅젰 ??吏곸젒 ?낅젰 / 鍮좊Ⅸ ?좏깮
    ============================================================ */
 const QUICK_DREAMS = [
-  { emoji: '✈️',  label: '나는 꿈',     text: '하늘을 자유롭게 날아다니는 꿈을 꿨어요.' },
-  { emoji: '🏃',  label: '쫓기는 꿈',   text: '정체불명의 무언가에 쫓기는 꿈을 꿨어요.' },
-  { emoji: '🌊',  label: '물·바다',     text: '넓은 바다나 물속에 있는 꿈을 꿨어요.' },
-  { emoji: '💰',  label: '돈·복권',     text: '큰돈이나 복권에 당첨되는 꿈을 꿨어요.' },
-  { emoji: '❤️',  label: '연애·이성',   text: '이성이 등장하는 꿈을 꿨어요.' },
-  { emoji: '🦷',  label: '이가 빠짐',   text: '이가 빠지거나 흔들리는 꿈을 꿨어요.' },
-  { emoji: '🐍',  label: '뱀·동물',     text: '뱀이나 동물이 나오는 꿈을 꿨어요.' },
-  { emoji: '👴',  label: '돌아가신 분', text: '돌아가신 가족이나 지인이 나오는 꿈을 꿨어요.' },
-  { emoji: '📚',  label: '시험·직장',   text: '시험이나 직장과 관련된 꿈을 꿨어요.' },
-  { emoji: '😱',  label: '악몽',         text: '무섭고 불안한 악몽을 꿨어요.' },
-  { emoji: '🏠',  label: '집·건물',     text: '낯선 집이나 건물이 나오는 꿈을 꿨어요.' },
-  { emoji: '👶',  label: '아기·임신',   text: '아기나 임신과 관련된 꿈을 꿨어요.' },
+  { emoji: '?덌툘',  label: '?섎뒗 轅?,     text: '?섎뒛???먯쑀濡?쾶 ?좎븘?ㅻ땲??轅덉쓣 轅⑥뼱??' },
+  { emoji: '?룂',  label: '已볤린??轅?,   text: '?뺤껜遺덈챸??臾댁뼵媛??已볤린??轅덉쓣 轅⑥뼱??' },
+  { emoji: '?뙄',  label: '臾셋룸컮??,     text: '?볦? 諛붾떎??臾쇱냽???덈뒗 轅덉쓣 轅⑥뼱??' },
+  { emoji: '?뮥',  label: '?댟룸났沅?,     text: '?곕룉?대굹 蹂듦텒???뱀꺼?섎뒗 轅덉쓣 轅⑥뼱??' },
+  { emoji: '?ㅿ툘',  label: '?곗븷쨌?댁꽦',   text: '?댁꽦???깆옣?섎뒗 轅덉쓣 轅⑥뼱??' },
+  { emoji: '?┠',  label: '?닿? 鍮좎쭚',   text: '?닿? 鍮좎?嫄곕굹 ?붾뱾由щ뒗 轅덉쓣 轅⑥뼱??' },
+  { emoji: '?릫',  label: '諭쨌?숇Ъ',     text: '諭?대굹 ?숇Ъ???섏삤??轅덉쓣 轅⑥뼱??' },
+  { emoji: '?뫒',  label: '?뚯븘媛??遺?, text: '?뚯븘媛??媛議깆씠??吏?몄씠 ?섏삤??轅덉쓣 轅⑥뼱??' },
+  { emoji: '?뱴',  label: '?쒗뿕쨌吏곸옣',   text: '?쒗뿕?대굹 吏곸옣怨?愿?⑤맂 轅덉쓣 轅⑥뼱??' },
+  { emoji: '?삺',  label: '?낅そ',         text: '臾댁꽠怨?遺덉븞???낅そ??轅⑥뼱??' },
+  { emoji: '?룧',  label: '吏뫢룰굔臾?,     text: '??꽑 吏묒씠??嫄대Ъ???섏삤??轅덉쓣 轅⑥뼱??' },
+  { emoji: '?뫔',  label: '?꾧린쨌?꾩떊',   text: '?꾧린???꾩떊怨?愿?⑤맂 轅덉쓣 轅⑥뼱??' },
 ];
 
 let selectedQuickIdxs = [];
@@ -2453,9 +2453,9 @@ function updateQuickPreview() {
   const texts = selectedQuickIdxs.map(i => QUICK_DREAMS[i].text);
   const combined = texts.length === 1
     ? texts[0]
-    : texts[0].replace(/[.。]$/, '') + '도 했고, ' + texts[1];
+    : texts[0].replace(/[.??$/, '') + '???덇퀬, ' + texts[1];
   $dreamInput.value = combined;
-  preview.textContent = '📝 ' + combined;
+  preview.textContent = '?뱷 ' + combined;
   preview.classList.add('visible');
 }
 
@@ -2464,7 +2464,7 @@ document.getElementById('tabQuick').addEventListener('click',  () => switchDream
 
 
 /* ============================================================
-   심볼 그리드 렌더링 헬퍼 (메인 결과 & 상세뷰 공용)
+   ?щ낵 洹몃━???뚮뜑留??ы띁 (硫붿씤 寃곌낵 & ?곸꽭酉?怨듭슜)
    ============================================================ */
 function renderSymbolsGrid(container, symbols) {
   container.innerHTML = '';
@@ -2493,46 +2493,46 @@ function renderSymbolsGrid(container, symbols) {
 
 
 /* ============================================================
-   Gemini API 호출 및 해몽 처리
+   Gemini API ?몄텧 諛??대そ 泥섎━
    ============================================================ */
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
 const SYSTEM_PROMPT =
-  '당신은 융 분석심리학·프로이트 심리학과 동양 사주 명리학에 기반한 꿈 해몽 전문가입니다.\n' +
-  '사용자가 꿈 내용을 입력하면 반드시 아래 JSON 형식으로만 응답하세요.\n' +
-  '다른 텍스트나 마크다운 없이 순수 JSON만 출력하세요:\n' +
+  '?뱀떊? ??遺꾩꽍?щ━?쇑룻봽濡쒖씠???щ━?숆낵 ?숈뼇 ?ъ＜ 紐낅━?숈뿉 湲곕컲??轅??대そ ?꾨Ц媛?낅땲??\n' +
+  '?ъ슜?먭? 轅??댁슜???낅젰?섎㈃ 諛섎뱶???꾨옒 JSON ?뺤떇?쇰줈留??묐떟?섏꽭??\n' +
+  '?ㅻⅨ ?띿뒪?몃굹 留덊겕?ㅼ슫 ?놁씠 ?쒖닔 JSON留?異쒕젰?섏꽭??\n' +
   '{\n' +
   '  "symbols": [\n' +
-  '    {"emoji": "상징 이모지 1개", "name": "상징명", "meaning": "의미 설명"}\n' +
+  '    {"emoji": "?곸쭠 ?대え吏 1媛?, "name": "?곸쭠紐?, "meaning": "?섎? ?ㅻ챸"}\n' +
   '  ],\n' +
-  '  "interpretation": "전체 해석 (3~4문장)",\n' +
-  '  "advice": "오늘의 조언 (1~2문장)",\n' +
-  '  "dreamTone": "positive 또는 negative 또는 neutral 중 하나만",\n' +
-  '  "followupQuestion": "해몽 결과를 바탕으로 유저에게 자연스럽게 던지는 짧은 한마디 (30자 이내, 공감형)",\n' +
-  '  "lucky": {"numbers": [3, 17, 42], "color": "행운의 색상명", "symbol": "행운의 상징물 단어 1개"}\n' +
+  '  "interpretation": "?꾩껜 ?댁꽍 (3~4臾몄옣)",\n' +
+  '  "advice": "?ㅻ뒛??議곗뼵 (1~2臾몄옣)",\n' +
+  '  "dreamTone": "positive ?먮뒗 negative ?먮뒗 neutral 以??섎굹留?,\n' +
+  '  "followupQuestion": "?대そ 寃곌낵瑜?諛뷀깢?쇰줈 ?좎??먭쾶 ?먯뿰?ㅻ읇寃??섏???吏㏃? ?쒕쭏??(30???대궡, 怨듦컧??",\n' +
+  '  "lucky": {"numbers": [3, 17, 42], "color": "?됱슫???됱긽紐?, "symbol": "?됱슫???곸쭠臾??⑥뼱 1媛?}\n' +
   '}\n' +
-  '항상 한국어로 답변하세요. 따뜻하고 신비로운 톤을 유지하세요.';
+  '??긽 ?쒓뎅?대줈 ?듬??섏꽭?? ?곕쑜?섍퀬 ?좊퉬濡쒖슫 ?ㅼ쓣 ?좎??섏꽭??';
 
 function buildSystemPrompt() {
   const profile = getProfile();
   let prompt = SYSTEM_PROMPT;
   if (currentMood) {
-    const moodMap = { happy:'기분 좋음', calm:'평온함', anxious:'불안함', sad:'우울함', tired:'지침' };
-    prompt += `\n사용자의 현재 기분: ${moodMap[currentMood] || currentMood}. 이 감정 상태를 꿈 해석과 조언에 자연스럽게 반영하세요.`;
+    const moodMap = { happy:'湲곕텇 醫뗭쓬', calm:'?됱삩??, anxious:'遺덉븞??, sad:'?곗슱??, tired:'吏移? };
+    prompt += `\n?ъ슜?먯쓽 ?꾩옱 湲곕텇: ${moodMap[currentMood] || currentMood}. ??媛먯젙 ?곹깭瑜?轅??댁꽍怨?議곗뼵???먯뿰?ㅻ읇寃?諛섏쁺?섏꽭??`;
   }
   if (profile && profile.birth && profile.gender) {
     const d = new Date(profile.birth);
     const birthStr = d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-    prompt += `\n사용자 정보: 생년월일 ${birthStr}, 성별 ${profile.gender}.` +
-      ' 이 정보를 꿈 해석에 반영하여 12간지·사주와 연결된 맞춤 해몽을 제공하세요.';
+    prompt += `\n?ъ슜???뺣낫: ?앸뀈?붿씪 ${birthStr}, ?깅퀎 ${profile.gender}.` +
+      ' ???뺣낫瑜?轅??댁꽍??諛섏쁺?섏뿬 12媛꾩?쨌?ъ＜? ?곌껐??留욎땄 ?대そ???쒓났?섏꽭??';
   }
   return prompt;
 }
 
 let cachedModel   = null;
 let currentResult = null;
-let currentMood   = null;   /* 감정 체크인 A */
-let currentFollowup = null; /* 팔로업 응답 B */
+let currentMood   = null;   /* 媛먯젙 泥댄겕??A */
+let currentFollowup = null; /* ?붾줈???묐떟 B */
 
 async function resolveModel(apiKey) {
   if (cachedModel) return cachedModel;
@@ -2545,7 +2545,7 @@ async function resolveModel(apiKey) {
     .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
     .map(m => m.name.replace('models/', ''));
 
-  console.log('[ReaDream] 사용 가능한 모델:', models);
+  console.log('[ReaDream] ?ъ슜 媛?ν븳 紐⑤뜽:', models);
 
   const priority = ['2.0-flash', '1.5-flash', '1.5-pro', 'gemini'];
   for (const p of priority) {
@@ -2614,22 +2614,22 @@ async function interpretDream() {
     } catch {
       parsed = {
         symbols: [
-          { emoji: '🌙', name: '달빛', meaning: '신비로운 메시지' },
-          { emoji: '✨', name: '별빛', meaning: '내면의 빛'       },
-          { emoji: '🌿', name: '자연', meaning: '생명의 흐름'     },
+          { emoji: '?뙔', name: '?щ튆', meaning: '?좊퉬濡쒖슫 硫붿떆吏' },
+          { emoji: '??, name: '蹂꾨튆', meaning: '?대㈃??鍮?       },
+          { emoji: '?뙼', name: '?먯뿰', meaning: '?앸챸???먮쫫'     },
         ],
-        interpretation: rawText || '꿈의 메시지를 읽어내는 데 어려움이 있었어요.',
-        advice: '꿈이 전하는 메시지에 천천히 귀를 기울여 보세요.',
+        interpretation: rawText || '轅덉쓽 硫붿떆吏瑜??쎌뼱?대뒗 ???대젮????덉뿀?댁슂.',
+        advice: '轅덉씠 ?꾪븯??硫붿떆吏??泥쒖쿇??洹瑜?湲곗슱??蹂댁꽭??',
       };
     }
 
     parsed.symbols = (parsed.symbols || []).slice(0, 3).map(s => ({
-      emoji:   s.emoji   || '✨',
-      name:    s.name    || '상징',
+      emoji:   s.emoji   || '??,
+      name:    s.name    || '?곸쭠',
       meaning: s.meaning || '',
     }));
     while (parsed.symbols.length < 3) {
-      parsed.symbols.push({ emoji: '✦', name: '—', meaning: '' });
+      parsed.symbols.push({ emoji: '??, name: '??, meaning: '' });
     }
 
     currentResult = parsed;
@@ -2641,7 +2641,7 @@ async function interpretDream() {
   } catch (err) {
     clearTimeout(timeoutId);
     const msg = err.name === 'AbortError' ? 'TIMEOUT' : err.message;
-    console.error('해몽 오류:', msg);
+    console.error('?대そ ?ㅻ쪟:', msg);
     showApiError(msg);
   } finally {
     showLoading(false);
@@ -2657,9 +2657,9 @@ function renderResult(data) {
   const luckyCard = document.getElementById('luckyCard');
   if (data.lucky) {
     const nums = Array.isArray(data.lucky.numbers) ? data.lucky.numbers.slice(0, 3).join(', ') : '';
-    document.getElementById('luckyNumbers').textContent = nums || '—';
-    document.getElementById('luckyColor').textContent   = data.lucky.color  || '—';
-    document.getElementById('luckySymbol').textContent  = data.lucky.symbol || '—';
+    document.getElementById('luckyNumbers').textContent = nums || '??;
+    document.getElementById('luckyColor').textContent   = data.lucky.color  || '??;
+    document.getElementById('luckySymbol').textContent  = data.lucky.symbol || '??;
     luckyCard.style.display = 'block';
   } else {
     luckyCard.style.display = 'none';
@@ -2669,7 +2669,7 @@ function renderResult(data) {
   showFollowup(data);
 }
 
-/* ── 팔로업 질문 표시 (B) ── */
+/* ?? ?붾줈??吏덈Ц ?쒖떆 (B) ?? */
 function showFollowup(data) {
   currentFollowup = null;
   const section = document.getElementById('dreamFollowup');
@@ -2678,16 +2678,16 @@ function showFollowup(data) {
 
   const tone = (data.dreamTone || 'neutral').toLowerCase();
   const q    = data.followupQuestion || (
-    tone === 'negative' ? '이 꿈을 꾸고 나서 어떤 느낌이 드셨나요?' :
-    tone === 'positive' ? '이 꿈에서 어떤 감정이 가장 기억에 남으세요?' :
-                          '꿈에서 깨고 나서 어떤 느낌이었나요?'
+    tone === 'negative' ? '??轅덉쓣 袁멸퀬 ?섏꽌 ?대뼡 ?먮굦???쒖뀲?섏슂?' :
+    tone === 'positive' ? '??轅덉뿉???대뼡 媛먯젙??媛??湲곗뼲???⑥쑝?몄슂?' :
+                          '轅덉뿉??源④퀬 ?섏꽌 ?대뼡 ?먮굦?댁뿀?섏슂?'
   );
 
   qEl.textContent = q;
   careEl.style.display = 'none';
   careEl.textContent = '';
 
-  /* 버튼 초기화 */
+  /* 踰꾪듉 珥덇린??*/
   section.querySelectorAll('.followup-btn').forEach(btn => {
     btn.classList.remove('selected');
     btn.onclick = () => {
@@ -2696,7 +2696,7 @@ function showFollowup(data) {
       currentFollowup = btn.dataset.resp;
       if ((btn.dataset.resp === 'scared' || btn.dataset.resp === 'lingering') && tone === 'negative') {
         careEl.style.display = 'block';
-        careEl.textContent = '😌 꿈 속의 감정은 현실이 아니에요. 잠시 심호흡하고, 오늘 낮의 햇살을 느껴보세요. 반복되는 불편한 꿈은 마음이 보내는 신호일 수 있으니 가볍게 일기에 남겨두는 것도 좋아요.';
+        careEl.textContent = '?삅 轅??띿쓽 媛먯젙? ?꾩떎???꾨땲?먯슂. ?좎떆 ?ы샇?≫븯怨? ?ㅻ뒛 ??쓽 ?뉗궡???먭뺨蹂댁꽭?? 諛섎났?섎뒗 遺덊렪??轅덉? 留덉쓬??蹂대궡???좏샇?????덉쑝??媛蹂띻쾶 ?쇨린???④꺼?먮뒗 寃껊룄 醫뗭븘??';
       } else {
         careEl.style.display = 'none';
       }
@@ -2706,7 +2706,7 @@ function showFollowup(data) {
   section.style.display = 'block';
 }
 
-/* ── 감정 체크인 JS (A) ── */
+/* ?? 媛먯젙 泥댄겕??JS (A) ?? */
 document.querySelectorAll('.mood-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
@@ -2718,7 +2718,7 @@ document.querySelectorAll('.mood-btn').forEach(btn => {
 
 
 /* ============================================================
-   오늘의 달빛 운세
+   ?ㅻ뒛???щ튆 ?댁꽭
    ============================================================ */
 const FORTUNE_PREFIX = 'rd_fortune_';
 
@@ -2744,27 +2744,27 @@ function initFortune() {
 
 function renderFortune(data) {
   document.getElementById('fortuneMessage').textContent   = data.message        || '';
-  document.getElementById('fortuneNumber').textContent    = data.luckyNumber    || '—';
-  document.getElementById('fortuneColor').textContent     = data.luckyColor     || '—';
-  document.getElementById('fortuneDirection').textContent = data.luckyDirection || '—';
+  document.getElementById('fortuneNumber').textContent    = data.luckyNumber    || '??;
+  document.getElementById('fortuneColor').textContent     = data.luckyColor     || '??;
+  document.getElementById('fortuneDirection').textContent = data.luckyDirection || '??;
   document.getElementById('fortuneCaution').textContent   = data.caution        || '';
   document.getElementById('fortuneResult').classList.add('active');
 }
 
-/* ── 운세 공유 텍스트 ── */
+/* ?? ?댁꽭 怨듭쑀 ?띿뒪???? */
 function buildFortuneShareText() {
   const msg    = document.getElementById('fortuneMessage').textContent;
   const num    = document.getElementById('fortuneNumber').textContent;
   const color  = document.getElementById('fortuneColor').textContent;
   const dir    = document.getElementById('fortuneDirection').textContent;
   const label  = document.getElementById('fortuneDateLabel').textContent;
-  return `🌙 달빛 운세 (${label})\n\n${msg}\n\n✨ 행운의 숫자: ${num}  🎨 ${color}  🧭 ${dir}\n\n#ReaDream #꿈해몽\nhttps://dmazone.github.io/readream/`;
+  return `?뙔 ?щ튆 ?댁꽭 (${label})\n\n${msg}\n\n???됱슫???レ옄: ${num}  ?렓 ${color}  ?㎛ ${dir}\n\n#ReaDream #轅덊빐紐?nhttps://dmazone.github.io/readream/`;
 }
 
 document.getElementById('btnFShareKakao').addEventListener('click', async () => {
   const text = buildFortuneShareText();
-  if (navigator.share) { try { await navigator.share({ title: '달빛 운세', text }); return; } catch {} }
-  await copyTextFallback(text, '운세를 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
+  if (navigator.share) { try { await navigator.share({ title: '?щ튆 ?댁꽭', text }); return; } catch {} }
+  await copyTextFallback(text, '?댁꽭瑜?蹂듭궗?덉뼱?? 移댁뭅?ㅽ넚??遺숈뿬?ｌ뼱 怨듭쑀?섏꽭???뮠');
 });
 
 document.getElementById('btnFShareX').addEventListener('click', () => {
@@ -2772,7 +2772,7 @@ document.getElementById('btnFShareX').addEventListener('click', () => {
 });
 
 document.getElementById('btnFShareCopy').addEventListener('click', async () => {
-  await copyTextFallback(buildFortuneShareText(), '운세 내용을 복사했어요 🔗');
+  await copyTextFallback(buildFortuneShareText(), '?댁꽭 ?댁슜??蹂듭궗?덉뼱???뵕');
 });
 
 document.getElementById('btnFShareImage').addEventListener('click', () => generateFortuneImage());
@@ -2785,14 +2785,14 @@ function generateFortuneImage() {
   const caution   = document.getElementById('fortuneCaution').textContent.trim();
   const dateLabel = document.getElementById('fortuneDateLabel').textContent.trim();
 
-  if (!msg || msg === '') { showToast('먼저 오늘의 운세를 확인해 주세요.'); return; }
+  if (!msg || msg === '') { showToast('癒쇱? ?ㅻ뒛???댁꽭瑜??뺤씤??二쇱꽭??'); return; }
 
   const S = 1080;
   const canvas = document.createElement('canvas');
   canvas.width = S; canvas.height = S;
   const ctx = canvas.getContext('2d');
 
-  /* ── 배경 ── */
+  /* ?? 諛곌꼍 ?? */
   const bg = ctx.createLinearGradient(0, 0, S, S);
   bg.addColorStop(0,    '#0c0720');
   bg.addColorStop(0.45, '#130b35');
@@ -2800,7 +2800,7 @@ function generateFortuneImage() {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, S, S);
 
-  /* ── 별 파티클 ── */
+  /* ?? 蹂??뚰떚???? */
   for (let i = 0; i < 80; i++) {
     const op = 0.2 + Math.random() * 0.6;
     ctx.beginPath();
@@ -2809,7 +2809,7 @@ function generateFortuneImage() {
     ctx.fill();
   }
 
-  /* ── 달 로고 ── */
+  /* ?? ??濡쒓퀬 ?? */
   ctx.save();
   ctx.beginPath(); ctx.arc(S/2, 108, 38, 0, Math.PI * 2);
   ctx.fillStyle = '#f59e0b'; ctx.fill();
@@ -2817,7 +2817,7 @@ function generateFortuneImage() {
   ctx.fillStyle = '#0c0720'; ctx.fill();
   ctx.restore();
 
-  /* ── 앱 이름 ── */
+  /* ?? ???대쫫 ?? */
   ctx.textAlign = 'center';
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 52px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
@@ -2825,9 +2825,9 @@ function generateFortuneImage() {
 
   ctx.fillStyle = 'rgba(196,181,253,0.55)';
   ctx.font = '26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  ctx.fillText('꿈 해몽 · 상징 분석', S/2, 250);
+  ctx.fillText('轅??대そ 쨌 ?곸쭠 遺꾩꽍', S/2, 250);
 
-  /* ── 구분선 ── */
+  /* ?? 援щ텇???? */
   const drawDivider = (y, opacity = 0.35) => {
     const g = ctx.createLinearGradient(S * 0.15, 0, S * 0.85, 0);
     g.addColorStop(0, 'transparent');
@@ -2838,10 +2838,10 @@ function generateFortuneImage() {
   };
   drawDivider(276);
 
-  /* ── 운세 타이틀 + 날짜 ── */
+  /* ?? ?댁꽭 ??댄? + ?좎쭨 ?? */
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 36px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  ctx.fillText('🌙 오늘의 달빛 운세', S/2, 328);
+  ctx.fillText('?뙔 ?ㅻ뒛???щ튆 ?댁꽭', S/2, 328);
 
   ctx.fillStyle = 'rgba(196,181,253,0.45)';
   ctx.font = '24px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
@@ -2849,7 +2849,7 @@ function generateFortuneImage() {
 
   drawDivider(394, 0.2);
 
-  /* ── 운세 메시지 (텍스트 줄바꿈) ── */
+  /* ?? ?댁꽭 硫붿떆吏 (?띿뒪??以꾨컮轅? ?? */
   ctx.fillStyle = 'rgba(226,220,255,0.9)';
   ctx.font = '27px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   let y = 440;
@@ -2861,19 +2861,19 @@ function generateFortuneImage() {
     if (ctx.measureText(test).width > maxW && line) {
       ctx.fillText(line, S/2, y); y += 40; line = words[i];
     } else { line = test; }
-    if (y > 680) { ctx.fillText(line + '…', S/2, y); line = null; break; }
+    if (y > 680) { ctx.fillText(line + '??, S/2, y); line = null; break; }
   }
   if (line) ctx.fillText(line, S/2, y);
   y = Math.max(y + 50, 700);
 
   drawDivider(y - 10, 0.18);
 
-  /* ── 행운 아이템 3열 ── */
+  /* ?? ?됱슫 ?꾩씠??3???? */
   ctx.font = 'bold 26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   const items = [
-    { label: '행운의 숫자', value: number, x: S * 0.22 },
-    { label: '행운의 색상', value: color,  x: S * 0.5 },
-    { label: '행운의 방향', value: direction, x: S * 0.78 },
+    { label: '?됱슫???レ옄', value: number, x: S * 0.22 },
+    { label: '?됱슫???됱긽', value: color,  x: S * 0.5 },
+    { label: '?됱슫??諛⑺뼢', value: direction, x: S * 0.78 },
   ];
   items.forEach(({ label, value, x }) => {
     ctx.fillStyle = 'rgba(196,181,253,0.45)';
@@ -2885,28 +2885,28 @@ function generateFortuneImage() {
   });
   y += 80;
 
-  /* ── 주의사항 ── */
+  /* ?? 二쇱쓽?ы빆 ?? */
   if (caution) {
     drawDivider(y + 4, 0.15);
     ctx.fillStyle = 'rgba(196,181,253,0.5)';
     ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-    const cShort = caution.length > 45 ? caution.substring(0, 45) + '…' : caution;
-    ctx.fillText('⚠ ' + cShort, S/2, y + 38);
+    const cShort = caution.length > 45 ? caution.substring(0, 45) + '?? : caution;
+    ctx.fillText('??' + cShort, S/2, y + 38);
     y += 60;
   }
 
-  /* ── 하단 구분선 + 링크 ── */
+  /* ?? ?섎떒 援щ텇??+ 留곹겕 ?? */
   drawDivider(S - 88);
   ctx.fillStyle = 'rgba(196,181,253,0.35)';
   ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   ctx.fillText('dmazone.github.io/readream', S/2, S - 48);
 
-  /* ── 저장 / Web Share ── */
+  /* ?? ???/ Web Share ?? */
   canvas.toBlob(async blob => {
     const file = new File([blob], 'readream-fortune.png', { type: 'image/png' });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        await navigator.share({ files: [file], title: '오늘의 달빛 운세 🌙', text: 'ReaDream 달빛 운세' });
+        await navigator.share({ files: [file], title: '?ㅻ뒛???щ튆 ?댁꽭 ?뙔', text: 'ReaDream ?щ튆 ?댁꽭' });
         return;
       } catch {}
     }
@@ -2916,11 +2916,11 @@ function generateFortuneImage() {
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast('운세 이미지를 저장했어요 🖼️');
+    showToast('?댁꽭 ?대?吏瑜???ν뻽?댁슂 ?뼹截?);
   }, 'image/png');
 }
 
-/* ── 지난 달빛 기록 ── */
+/* ?? 吏???щ튆 湲곕줉 ?? */
 function loadFortuneHistory() {
   const today    = getTodayKey();
   const pastKeys = Object.keys(localStorage)
@@ -2962,19 +2962,19 @@ function loadPastFortune(key, label, chipEl) {
 
 document.getElementById('btnFortune').addEventListener('click', async () => {
   const apiKey = localStorage.getItem(API_KEY_LS);
-  if (!apiKey) { showToast('해몽 키가 필요해요 🌙'); return; }
+  if (!apiKey) { showToast('?대そ ?ㅺ? ?꾩슂?댁슂 ?뙔'); return; }
 
   const btn     = document.getElementById('btnFortune');
   btn.disabled  = true;
-  btn.textContent = '달빛을 읽는 중...';
+  btn.textContent = '?щ튆???쎈뒗 以?..';
 
   const dateStr = new Date().toLocaleDateString('ko-KR',
     { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
 
   const prompt =
-    `오늘은 ${dateStr}입니다. 이 날의 달빛 기운을 바탕으로 오늘 하루의 운세를 알려주세요.\n` +
-    `다른 텍스트 없이 순수 JSON만 출력하세요:\n` +
-    `{"message":"오늘의 운세 (2~3문장, 신비롭고 따뜻하게)","luckyNumber":7,"luckyColor":"색상명","luckyDirection":"방위(예:동쪽)","caution":"오늘 주의할 점 (1문장)"}`;
+    `?ㅻ뒛? ${dateStr}?낅땲?? ???좎쓽 ?щ튆 湲곗슫??諛뷀깢?쇰줈 ?ㅻ뒛 ?섎（???댁꽭瑜??뚮젮二쇱꽭??\n` +
+    `?ㅻⅨ ?띿뒪???놁씠 ?쒖닔 JSON留?異쒕젰?섏꽭??\n` +
+    `{"message":"?ㅻ뒛???댁꽭 (2~3臾몄옣, ?좊퉬濡?퀬 ?곕쑜?섍쾶)","luckyNumber":7,"luckyColor":"?됱긽紐?,"luckyDirection":"諛⑹쐞(???숈そ)","caution":"?ㅻ뒛 二쇱쓽????(1臾몄옣)"}`;
 
   try {
     const model    = await resolveModel(apiKey);
@@ -2998,14 +2998,14 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
     loadFortuneHistory();
   } catch {
     btn.disabled    = false;
-    btn.textContent = '✦ 오늘의 운세 보기';
-    showToast('운세를 가져오지 못했어요. 다시 시도해주세요 🌙');
+    btn.textContent = '???ㅻ뒛???댁꽭 蹂닿린';
+    showToast('?댁꽭瑜?媛?몄삤吏 紐삵뻽?댁슂. ?ㅼ떆 ?쒕룄?댁＜?몄슂 ?뙔');
   }
 });
 
 
 /* ============================================================
-   프로필 (사주 연계)
+   ?꾨줈??(?ъ＜ ?곌퀎)
    ============================================================ */
 const PROFILE_LS    = 'rd_profile';
 let selectedGender  = '';
@@ -3016,8 +3016,8 @@ function getProfile() {
 
 function selectGender(g) {
   selectedGender = g;
-  document.getElementById('genderF').classList.toggle('active', g === '여성');
-  document.getElementById('genderM').classList.toggle('active', g === '남성');
+  document.getElementById('genderF').classList.toggle('active', g === '?ъ꽦');
+  document.getElementById('genderM').classList.toggle('active', g === '?⑥꽦');
 }
 
 function loadProfile() {
@@ -3027,12 +3027,12 @@ function loadProfile() {
   if (p && p.birth && p.gender) {
     document.getElementById('profileBirth').value = p.birth;
     selectGender(p.gender);
-    badge.textContent         = p.gender === '여성' ? '♀ 등록됨' : '♂ 등록됨';
+    badge.textContent         = p.gender === '?ъ꽦' ? '? ?깅줉?? : '???깅줉??;
     badge.style.background    = 'rgba(16,185,129,0.2)';
     badge.style.color         = '#6ee7b7';
     const d = new Date(p.birth);
     const birthStr = d.toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' });
-    info.textContent = `${birthStr} · ${p.gender}`;
+    info.textContent = `${birthStr} 쨌 ${p.gender}`;
   }
 }
 
@@ -3043,23 +3043,23 @@ document.getElementById('profileToggle').addEventListener('click', () => {
   chevron.classList.toggle('open', isOpen);
 });
 
-document.getElementById('genderF').addEventListener('click', () => selectGender('여성'));
-document.getElementById('genderM').addEventListener('click', () => selectGender('남성'));
+document.getElementById('genderF').addEventListener('click', () => selectGender('?ъ꽦'));
+document.getElementById('genderM').addEventListener('click', () => selectGender('?⑥꽦'));
 
 document.getElementById('btnSaveProfile').addEventListener('click', () => {
   const birth = document.getElementById('profileBirth').value;
-  if (!birth)         { showToast('생년월일을 입력해주세요 🌙'); return; }
-  if (!selectedGender){ showToast('성별을 선택해주세요 🌙');     return; }
+  if (!birth)         { showToast('?앸뀈?붿씪???낅젰?댁＜?몄슂 ?뙔'); return; }
+  if (!selectedGender){ showToast('?깅퀎???좏깮?댁＜?몄슂 ?뙔');     return; }
   localStorage.setItem(PROFILE_LS, JSON.stringify({ birth, gender: selectedGender }));
   loadProfile();
   document.getElementById('profileBody').classList.remove('open');
   document.getElementById('profileChevron').classList.remove('open');
-  showToast('프로필이 저장되었습니다 🌙');
+  showToast('?꾨줈?꾩씠 ??λ릺?덉뒿?덈떎 ?뙔');
 });
 
 
 /* ============================================================
-   꿈 속 그 사람 분석
+   轅???洹??щ엺 遺꾩꽍
    ============================================================ */
 const PERSON_LIMIT_PREFIX = 'rd_person_';
 const FREE_PERSON_PER_DAY = 1;
@@ -3072,12 +3072,12 @@ function incrementPersonUsed() {
 }
 
 const PERSON_TYPES = [
-  { value: '연인',       emoji: '💕' },
-  { value: '가족',       emoji: '👨‍👩‍👧' },
-  { value: '친구',       emoji: '🤝' },
-  { value: '직장동료',   emoji: '💼' },
-  { value: '모르는 사람',emoji: '👤' },
-  { value: '고인',       emoji: '🕯️' },
+  { value: '?곗씤',       emoji: '?뮆' },
+  { value: '媛議?,       emoji: '?뫅?랅윉⒱랅윉? },
+  { value: '移쒓뎄',       emoji: '?쩃' },
+  { value: '吏곸옣?숇즺',   emoji: '?뮳' },
+  { value: '紐⑤Ⅴ???щ엺',emoji: '?뫀' },
+  { value: '怨좎씤',       emoji: '?빉截? },
 ];
 
 let selectedPerson = '';
@@ -3108,7 +3108,7 @@ function resetPersonSection() {
   const opts = document.getElementById('personOptions');
   if (opts) opts.querySelectorAll('.person-opt').forEach(b => b.classList.remove('selected'));
   if (getPersonUsedToday() >= FREE_PERSON_PER_DAY) {
-    document.getElementById('btnPersonTrigger').textContent = '👤 꿈 속 그 사람의 의미 (오늘 1회 사용 완료)';
+    document.getElementById('btnPersonTrigger').textContent = '?뫀 轅???洹??щ엺???섎? (?ㅻ뒛 1???ъ슜 ?꾨즺)';
   }
 }
 
@@ -3117,7 +3117,7 @@ document.getElementById('btnPersonTrigger').addEventListener('click', () => {
 });
 
 document.getElementById('btnPersonAnalyze').addEventListener('click', async () => {
-  if (!selectedPerson) { showToast('관계를 선택해주세요 🌙'); return; }
+  if (!selectedPerson) { showToast('愿怨꾨? ?좏깮?댁＜?몄슂 ?뙔'); return; }
 
   if (getPersonUsedToday() >= FREE_PERSON_PER_DAY) {
     document.getElementById('personLimitBanner').classList.add('active');
@@ -3131,14 +3131,14 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
 
   const btn     = document.getElementById('btnPersonAnalyze');
   btn.disabled  = true;
-  btn.textContent = '분석 중...';
+  btn.textContent = '遺꾩꽍 以?..';
 
   const prompt =
-    `꿈 내용: ${dream}\n\n` +
-    `이 꿈에 "${selectedPerson}"이(가) 등장했습니다. ` +
-    `왜 이 사람이 꿈에 나타났는지, 이 사람이 상징하는 무의식적 의미는 무엇인지, ` +
-    `그리고 이 관계에서 내면이 전하는 메시지를 3~4문장으로 신비롭고 따뜻하게 해석해주세요. ` +
-    `JSON 없이 순수 텍스트로만 답해주세요. 한국어로 답변하세요.`;
+    `轅??댁슜: ${dream}\n\n` +
+    `??轅덉뿉 "${selectedPerson}"??媛) ?깆옣?덉뒿?덈떎. ` +
+    `?????щ엺??轅덉뿉 ?섑??щ뒗吏, ???щ엺???곸쭠?섎뒗 臾댁쓽?앹쟻 ?섎???臾댁뾿?몄?, ` +
+    `洹몃━怨???愿怨꾩뿉???대㈃???꾪븯??硫붿떆吏瑜?3~4臾몄옣?쇰줈 ?좊퉬濡?퀬 ?곕쑜?섍쾶 ?댁꽍?댁＜?몄슂. ` +
+    `JSON ?놁씠 ?쒖닔 ?띿뒪?몃줈留??듯빐二쇱꽭?? ?쒓뎅?대줈 ?듬??섏꽭??`;
 
   try {
     const model    = await resolveModel(apiKey);
@@ -3153,26 +3153,26 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
     });
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '분석을 완료하지 못했어요.';
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '遺꾩꽍???꾨즺?섏? 紐삵뻽?댁슂.';
     incrementPersonUsed();
     document.getElementById('personResultText').textContent = text;
     const card = document.getElementById('personResultCard');
     card.classList.add('active');
     setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
   } catch {
-    showToast('분석에 실패했어요. 다시 시도해주세요 🌙');
+    showToast('遺꾩꽍???ㅽ뙣?덉뼱?? ?ㅼ떆 ?쒕룄?댁＜?몄슂 ?뙔');
   } finally {
     btn.disabled    = false;
-    btn.textContent = '🔮 분석하기';
+    btn.textContent = '?뵰 遺꾩꽍?섍린';
   }
 });
 
 
 /* ============================================================
-   에러 배너 + 카운트다운 처리
+   ?먮윭 諛곕꼫 + 移댁슫?몃떎??泥섎━
    ============================================================ */
 let countdownTimer = null;
-let lastErrorType  = '';   /* 마지막 에러 종류 — retryBtn 동작 분기에 사용 */
+let lastErrorType  = '';   /* 留덉?留??먮윭 醫낅쪟 ??retryBtn ?숈옉 遺꾧린???ъ슜 */
 
 function showApiError(rawMsg) {
   const banner      = document.getElementById('errorBanner');
@@ -3183,7 +3183,7 @@ function showApiError(rawMsg) {
   const countdownEl = document.getElementById('countdownSec');
   const retryBtn    = document.getElementById('retryBtn');
 
-  console.error('[ReaDream 오류]', rawMsg);
+  console.error('[ReaDream ?ㅻ쪟]', rawMsg);
 
   if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
 
@@ -3198,33 +3198,33 @@ function showApiError(rawMsg) {
   const isDream   = rawMsg === 'dream_missing';
   const isEmpty   = rawMsg === 'NO_CANDIDATE';
 
-  /* 에러 타입 저장 — 버튼 동작 분기용 */
+  /* ?먮윭 ????????踰꾪듉 ?숈옉 遺꾧린??*/
   lastErrorType = isDream ? 'dream_missing' : 'other';
 
   if (isDream) {
-    errorTitle.textContent = '꿈 이야기를 들려주세요 🌙';
-    errorMsg.textContent   = '오늘 꾼 꿈을 입력하면 해몽을 시작할게요.';
+    errorTitle.textContent = '轅??댁빞湲곕? ?ㅻ젮二쇱꽭???뙔';
+    errorMsg.textContent   = '?ㅻ뒛 袁?轅덉쓣 ?낅젰?섎㈃ ?대そ???쒖옉?좉쾶??';
   } else if (isNetwork) {
-    errorTitle.textContent = '달빛이 하늘에 닿지 못했어요 🌐';
-    errorMsg.textContent   = '인터넷 연결을 확인하고 다시 시도해주세요.';
+    errorTitle.textContent = '?щ튆???섎뒛???우? 紐삵뻽?댁슂 ?뙋';
+    errorMsg.textContent   = '?명꽣???곌껐???뺤씤?섍퀬 ?ㅼ떆 ?쒕룄?댁＜?몄슂.';
   } else if (isAuthErr) {
-    errorTitle.textContent = '달빛의 문이 열리지 않아요 🔒';
-    errorMsg.textContent   = '해몽의 기운을 불러오는 데 문제가 생겼어요.';
+    errorTitle.textContent = '?щ튆??臾몄씠 ?대━吏 ?딆븘???뵏';
+    errorMsg.textContent   = '?대そ??湲곗슫??遺덈윭?ㅻ뒗 ??臾몄젣媛 ?앷꼈?댁슂.';
   } else if (isQuota) {
-    errorTitle.textContent = '달빛이 잠시 흐려졌어요 🌫️';
-    errorMsg.textContent   = '별들이 잠시 쉬어가는 시간이에요. 조금 후 다시 꿈을 들려주세요.';
+    errorTitle.textContent = '?щ튆???좎떆 ?먮젮議뚯뼱???뙧截?;
+    errorMsg.textContent   = '蹂꾨뱾???좎떆 ?ъ뼱媛???쒓컙?댁뿉?? 議곌툑 ???ㅼ떆 轅덉쓣 ?ㅻ젮二쇱꽭??';
   } else if (isTimeout) {
-    errorTitle.textContent = '달빛이 닿지 않았어요 ⏳';
-    errorMsg.textContent   = '응답이 너무 오래 걸렸어요. 잠시 후 다시 시도해주세요.';
+    errorTitle.textContent = '?щ튆???우? ?딆븯?댁슂 ??;
+    errorMsg.textContent   = '?묐떟???덈Т ?ㅻ옒 嫄몃졇?댁슂. ?좎떆 ???ㅼ떆 ?쒕룄?댁＜?몄슂.';
   } else if (isSafety) {
-    errorTitle.textContent = '이 꿈은 해몽이 어렵네요 🌑';
-    errorMsg.textContent   = '다른 꿈 이야기를 들려주시면 더 잘 해석해드릴 수 있어요.';
+    errorTitle.textContent = '??轅덉? ?대そ???대졄?ㅼ슂 ?뙌';
+    errorMsg.textContent   = '?ㅻⅨ 轅??댁빞湲곕? ?ㅻ젮二쇱떆硫??????댁꽍?대뱶由????덉뼱??';
   } else if (isEmpty) {
-    errorTitle.textContent = '꿈의 형체가 보이지 않아요 🌫️';
-    errorMsg.textContent   = '응답이 비어 있었어요. 다시 한번 시도해주세요.';
+    errorTitle.textContent = '轅덉쓽 ?뺤껜媛 蹂댁씠吏 ?딆븘???뙧截?;
+    errorMsg.textContent   = '?묐떟??鍮꾩뼱 ?덉뿀?댁슂. ?ㅼ떆 ?쒕쾲 ?쒕룄?댁＜?몄슂.';
   } else {
-    errorTitle.textContent = '꿈의 실이 잠시 끊어졌어요 🌙';
-    errorMsg.textContent   = '해몽 중 알 수 없는 기운이 방해했어요. 잠시 후 다시 시도해주세요.';
+    errorTitle.textContent = '轅덉쓽 ?ㅼ씠 ?좎떆 ?딆뼱議뚯뼱???뙔';
+    errorMsg.textContent   = '?대そ 以??????녿뒗 湲곗슫??諛⑺빐?덉뼱?? ?좎떆 ???ㅼ떆 ?쒕룄?댁＜?몄슂.';
   }
 
   errorDebug.textContent = rawMsg ? `(${rawMsg.slice(0, 120)})` : '';
@@ -3260,11 +3260,11 @@ function hideApiError() {
 document.getElementById('retryBtn').addEventListener('click', () => {
   hideApiError();
   if (lastErrorType === 'dream_missing') {
-    /* 빈 입력 에러 → 메인으로 복귀 후 textarea 포커스 */
+    /* 鍮??낅젰 ?먮윭 ??硫붿씤?쇰줈 蹂듦? ??textarea ?ъ빱??*/
     resetAndGoMain();
     setTimeout(() => $dreamInput.focus(), 80);
   } else {
-    /* 그 외 에러 → 다시 해몽 시도 */
+    /* 洹????먮윭 ???ㅼ떆 ?대そ ?쒕룄 */
     interpretDream();
   }
 });
@@ -3275,7 +3275,7 @@ function showLoading(on) {
 }
 
 
-/* 10자 미만 경고 팝업 */
+/* 10??誘몃쭔 寃쎄퀬 ?앹뾽 */
 function showShortDreamPopup() {
   const popup = document.getElementById('shortDreamPopup');
   const backBtn = document.getElementById('shortDreamBack');
@@ -3301,7 +3301,7 @@ function hideResult() {
   document.getElementById('resultSection').style.display = 'none';
   document.getElementById('dreamFollowup').style.display = 'none';
   hideApiError();
-  /* 저장 버튼 상태 초기화 */
+  /* ???踰꾪듉 ?곹깭 珥덇린??*/
   resetSaveBtn();
 }
 
@@ -3309,79 +3309,79 @@ function resetSaveBtn() {
   const $save  = document.getElementById('btnSaveDiary');
   const $retry = document.getElementById('btnRetryDream');
   $save.disabled    = false;
-  $save.textContent = '📖 꿈 일기에 저장하기';
+  $save.textContent = '?뱰 轅??쇨린????ν븯湲?;
   $retry.style.display = 'none';
 }
 
 
 /* ============================================================
-   공유 기능
+   怨듭쑀 湲곕뒫
    ============================================================ */
 function buildShareText() {
-  if (!currentResult) return 'ReaDream 🌙';
-  const symbols = currentResult.symbols.map(s => `${s.emoji} ${s.name}`).join(' · ');
-  let text = `ReaDream 🌙\n\n핵심 상징: ${symbols}\n\n${currentResult.advice}`;
+  if (!currentResult) return 'ReaDream ?뙔';
+  const symbols = currentResult.symbols.map(s => `${s.emoji} ${s.name}`).join(' 쨌 ');
+  let text = `ReaDream ?뙔\n\n?듭떖 ?곸쭠: ${symbols}\n\n${currentResult.advice}`;
   if (currentResult.lucky?.numbers?.length) {
-    text += `\n\n✨ 행운의 숫자: ${currentResult.lucky.numbers.join(', ')}`;
+    text += `\n\n???됱슫???レ옄: ${currentResult.lucky.numbers.join(', ')}`;
   }
   return text;
 }
 
-/* 꿈 해몽 다시 하기 — 메인으로 버튼과 동일 */
+/* 轅??대そ ?ㅼ떆 ?섍린 ??硫붿씤?쇰줈 踰꾪듉怨??숈씪 */
 document.getElementById('btnRetryDream').addEventListener('click', resetAndGoMain);
 
-/* ── 공유: 공통 텍스트 클립보드 복사 헬퍼 ── */
+/* ?? 怨듭쑀: 怨듯넻 ?띿뒪???대┰蹂대뱶 蹂듭궗 ?ы띁 ?? */
 async function copyTextFallback(text, successMsg) {
   try {
     await navigator.clipboard.writeText(text);
     showToast(successMsg);
   } catch {
-    showToast('내용을 직접 복사해 붙여넣어 주세요');
+    showToast('?댁슜??吏곸젒 蹂듭궗??遺숈뿬?ｌ뼱 二쇱꽭??);
   }
 }
 
-/* ── 카카오톡으로 보내기 ── */
+/* ?? 移댁뭅?ㅽ넚?쇰줈 蹂대궡湲??? */
 document.getElementById('btnShareKakao').addEventListener('click', async () => {
   const text = buildShareText();
-  /* 모바일 Web Share API → 카카오톡 공유 시트에 표시됨 */
+  /* 紐⑤컮??Web Share API ??移댁뭅?ㅽ넚 怨듭쑀 ?쒗듃???쒖떆??*/
   if (navigator.share) {
-    try { await navigator.share({ title: 'ReaDream 결과', text }); return; } catch { }
+    try { await navigator.share({ title: 'ReaDream 寃곌낵', text }); return; } catch { }
   }
-  /* 데스크톱 fallback — 텍스트 복사 후 안내 */
-  await copyTextFallback(text, '내용을 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
+  /* ?곗뒪?ы넲 fallback ???띿뒪??蹂듭궗 ???덈궡 */
+  await copyTextFallback(text, '?댁슜??蹂듭궗?덉뼱?? 移댁뭅?ㅽ넚??遺숈뿬?ｌ뼱 怨듭쑀?섏꽭???뮠');
 });
 
-/* ── 인스타그램으로 보내기 ── */
+/* ?? ?몄뒪?洹몃옩?쇰줈 蹂대궡湲??? */
 document.getElementById('btnShareInsta').addEventListener('click', async () => {
   const text = buildShareText();
-  /* Instagram은 텍스트 URL API 미지원 — 클립보드 복사 후 앱 열기 */
-  await copyTextFallback(text, '내용을 복사했어요. 인스타그램에 붙여넣어 공유하세요 📸');
-  /* 모바일에서 인스타그램 앱 열기 시도 */
+  /* Instagram? ?띿뒪??URL API 誘몄??????대┰蹂대뱶 蹂듭궗 ?????닿린 */
+  await copyTextFallback(text, '?댁슜??蹂듭궗?덉뼱?? ?몄뒪?洹몃옩??遺숈뿬?ｌ뼱 怨듭쑀?섏꽭???벝');
+  /* 紐⑤컮?쇱뿉???몄뒪?洹몃옩 ???닿린 ?쒕룄 */
   setTimeout(() => {
     const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
     if (isMobile) window.location.href = 'instagram://';
   }, 300);
 });
 
-/* ── 트위터/X로 공유 ── */
+/* ?? ?몄쐞??X濡?怨듭쑀 ?? */
 document.getElementById('btnShareX').addEventListener('click', () => {
   const text = encodeURIComponent(buildShareText());
   window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank', 'noopener');
 });
 
-/* ── 링크 저장하기 — 페이지 URL 클립보드 복사 ── */
+/* ?? 留곹겕 ??ν븯湲????섏씠吏 URL ?대┰蹂대뱶 蹂듭궗 ?? */
 document.getElementById('btnShareLink').addEventListener('click', async () => {
   const url = window.location.href;
   try {
     await navigator.clipboard.writeText(url);
-    showToast('링크가 복사되었습니다 🔗');
+    showToast('留곹겕媛 蹂듭궗?섏뿀?듬땲???뵕');
   } catch {
-    showToast('링크 복사를 지원하지 않는 환경이에요');
+    showToast('留곹겕 蹂듭궗瑜?吏?먰븯吏 ?딅뒗 ?섍꼍?댁뿉??);
   }
 });
 
 
-/* ── 이미지로 저장 · 공유하기 ── */
+/* ?? ?대?吏濡????쨌 怨듭쑀?섍린 ?? */
 document.getElementById('btnShareImage').addEventListener('click', () => generateShareImage());
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -3411,14 +3411,14 @@ function drawStar(ctx, cx, cy, r, color) {
 }
 
 function generateShareImage() {
-  if (!currentResult) { showToast('먼저 해몽하기를 실행해주세요.'); return; }
+  if (!currentResult) { showToast('癒쇱? ?대そ?섍린瑜??ㅽ뻾?댁＜?몄슂.'); return; }
 
   const S = 1080;
   const canvas = document.createElement('canvas');
   canvas.width = S; canvas.height = S;
   const ctx = canvas.getContext('2d');
 
-  /* ── 배경 그라디언트 ── */
+  /* ?? 諛곌꼍 洹몃씪?붿뼵???? */
   const bg = ctx.createLinearGradient(0, 0, S, S);
   bg.addColorStop(0,   '#0c0720');
   bg.addColorStop(0.45,'#130b35');
@@ -3426,14 +3426,14 @@ function generateShareImage() {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, S, S);
 
-  /* ── 별 파티클 ── */
+  /* ?? 蹂??뚰떚???? */
   const rng = (n) => Math.floor(Math.random() * n);
   for (let i = 0; i < 80; i++) {
     const op = 0.2 + Math.random() * 0.6;
     drawStar(ctx, rng(S), rng(S), Math.random() * 1.8, `rgba(255,255,255,${op})`);
   }
 
-  /* ── 달 로고 ── */
+  /* ?? ??濡쒓퀬 ?? */
   ctx.save();
   ctx.beginPath();
   ctx.arc(S/2, 108, 38, 0, Math.PI * 2);
@@ -3445,7 +3445,7 @@ function generateShareImage() {
   ctx.fill();
   ctx.restore();
 
-  /* ── 앱 이름 ── */
+  /* ?? ???대쫫 ?? */
   ctx.textAlign = 'center';
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 52px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
@@ -3453,9 +3453,9 @@ function generateShareImage() {
 
   ctx.fillStyle = 'rgba(196,181,253,0.55)';
   ctx.font = '28px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  ctx.fillText('꿈 해몽 · 상징 분석', S/2, 252);
+  ctx.fillText('轅??대そ 쨌 ?곸쭠 遺꾩꽍', S/2, 252);
 
-  /* ── 상단 구분선 ── */
+  /* ?? ?곷떒 援щ텇???? */
   const grad1 = ctx.createLinearGradient(S*0.15, 0, S*0.85, 0);
   grad1.addColorStop(0, 'transparent');
   grad1.addColorStop(0.5, 'rgba(226,201,126,0.45)');
@@ -3464,68 +3464,68 @@ function generateShareImage() {
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(S*0.15, 278); ctx.lineTo(S*0.85, 278); ctx.stroke();
 
-  /* ── 꿈 키워드 요약 (상징명 기반, 원문 미노출) ── */
+  /* ?? 轅??ㅼ썙???붿빟 (?곸쭠紐?湲곕컲, ?먮Ц 誘몃끂異? ?? */
   const symbolNames = (currentResult.symbols || []).slice(0, 4).map(s => s.name);
   const dreamKeyword = symbolNames.length > 0
-    ? symbolNames.join(' · ') + ' 이(가) 나타나는 꿈'
-    : '오늘 밤 꿈 이야기';
+    ? symbolNames.join(' 쨌 ') + ' ??媛) ?섑??섎뒗 轅?
+    : '?ㅻ뒛 諛?轅??댁빞湲?;
   ctx.fillStyle = 'rgba(196,181,253,0.5)';
   ctx.font = 'italic 26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   wrapText(ctx, dreamKeyword, S/2, 322, S * 0.78, 38);
 
-  /* ── 구분선 ── */
+  /* ?? 援щ텇???? */
   ctx.strokeStyle = 'rgba(196,181,253,0.15)';
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(S*0.2, 390); ctx.lineTo(S*0.8, 390); ctx.stroke();
 
-  /* ── 핵심 상징 ── */
+  /* ?? ?듭떖 ?곸쭠 ?? */
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 30px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  ctx.fillText('✦ 핵심 상징', S/2, 435);
+  ctx.fillText('???듭떖 ?곸쭠', S/2, 435);
 
   const symbols = (currentResult.symbols || []).slice(0, 3);
   let sy = 480;
   ctx.font = '26px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   symbols.forEach(sym => {
-    const meanShort = sym.meaning.length > 28 ? sym.meaning.substring(0, 28) + '…' : sym.meaning;
+    const meanShort = sym.meaning.length > 28 ? sym.meaning.substring(0, 28) + '?? : sym.meaning;
     ctx.fillStyle = 'rgba(196,181,253,0.9)';
     ctx.fillText(`${sym.name}`, S/2 - 160, sy);
     ctx.fillStyle = 'rgba(196,181,253,0.45)';
     ctx.textAlign = 'left';
-    ctx.fillText(`— ${meanShort}`, S/2 - 100, sy);
+    ctx.fillText(`??${meanShort}`, S/2 - 100, sy);
     ctx.textAlign = 'center';
     sy += 46;
   });
 
-  /* ── 구분선 ── */
+  /* ?? 援щ텇???? */
   ctx.strokeStyle = 'rgba(196,181,253,0.15)';
   ctx.beginPath(); ctx.moveTo(S*0.2, sy + 10); ctx.lineTo(S*0.8, sy + 10); ctx.stroke();
   sy += 50;
 
-  /* ── 전체 해석 ── */
+  /* ?? ?꾩껜 ?댁꽍 ?? */
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 30px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('✦ 해석', S/2, sy);
+  ctx.fillText('???댁꽍', S/2, sy);
   sy += 44;
 
   ctx.fillStyle = 'rgba(196,181,253,0.82)';
   ctx.font = '24px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  const interp = (currentResult.interpretation || '').substring(0, 90) + (currentResult.interpretation?.length > 90 ? '…' : '');
+  const interp = (currentResult.interpretation || '').substring(0, 90) + (currentResult.interpretation?.length > 90 ? '?? : '');
   sy = wrapText(ctx, interp, S/2, sy, S * 0.78, 36) + 50;
 
-  /* ── 오늘의 조언 ── */
+  /* ?? ?ㅻ뒛??議곗뼵 ?? */
   ctx.fillStyle = '#e2c97e';
   ctx.font = 'bold 28px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  ctx.fillText('✦ 오늘의 조언', S/2, sy);
+  ctx.fillText('???ㅻ뒛??議곗뼵', S/2, sy);
   sy += 40;
 
   ctx.fillStyle = 'rgba(196,181,253,0.7)';
   ctx.font = '23px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
-  const advice = (currentResult.advice || '').substring(0, 60) + (currentResult.advice?.length > 60 ? '…' : '');
+  const advice = (currentResult.advice || '').substring(0, 60) + (currentResult.advice?.length > 60 ? '?? : '');
   wrapText(ctx, advice, S/2, sy, S * 0.78, 34);
 
-  /* ── 하단 구분선 ── */
+  /* ?? ?섎떒 援щ텇???? */
   const grad2 = ctx.createLinearGradient(S*0.15, 0, S*0.85, 0);
   grad2.addColorStop(0, 'transparent');
   grad2.addColorStop(0.5, 'rgba(226,201,126,0.35)');
@@ -3534,33 +3534,33 @@ function generateShareImage() {
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(S*0.15, S - 90); ctx.lineTo(S*0.85, S - 90); ctx.stroke();
 
-  /* ── 앱 링크 ── */
+  /* ?? ??留곹겕 ?? */
   ctx.fillStyle = 'rgba(196,181,253,0.35)';
   ctx.font = '22px "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   ctx.fillText('dmazone.github.io/readream', S/2, S - 48);
 
-  /* ── 저장 / Web Share ── */
+  /* ?? ???/ Web Share ?? */
   canvas.toBlob(async blob => {
     const file = new File([blob], 'readream-result.png', { type: 'image/png' });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        await navigator.share({ files: [file], title: '내 꿈 해몽 결과 🌙', text: 'ReaDream 꿈 해몽' });
+        await navigator.share({ files: [file], title: '??轅??대そ 寃곌낵 ?뙔', text: 'ReaDream 轅??대そ' });
         return;
-      } catch (e) { /* 취소 or 미지원 → fallback */ }
+      } catch (e) { /* 痍⑥냼 or 誘몄?????fallback */ }
     }
-    /* 데스크톱 fallback — PNG 다운로드 */
+    /* ?곗뒪?ы넲 fallback ??PNG ?ㅼ슫濡쒕뱶 */
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = 'readream-result.png';
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast('이미지를 저장했어요. 카카오톡 · 인스타에 첨부해 공유하세요 🖼️');
+    showToast('?대?吏瑜???ν뻽?댁슂. 移댁뭅?ㅽ넚 쨌 ?몄뒪???泥⑤???怨듭쑀?섏꽭???뼹截?);
   }, 'image/png');
 }
 
 /* ============================================================
-   꿈 일기 (localStorage, 최대 10개)
+   轅??쇨린 (localStorage, 理쒕? 10媛?
    ============================================================ */
 const DIARY_LS = 'dalbit_diary';
 let diaryOpen  = false;
@@ -3574,9 +3574,9 @@ function getDiary() {
 }
 
 function saveDiary() {
-  if (!currentResult) { alert('먼저 해몽하기를 실행해주세요.'); return; }
+  if (!currentResult) { alert('癒쇱? ?대そ?섍린瑜??ㅽ뻾?댁＜?몄슂.'); return; }
   const dream = $dreamInput.value.trim();
-  if (!dream) { alert('저장할 꿈 내용이 없습니다.'); return; }
+  if (!dream) { alert('??ν븷 轅??댁슜???놁뒿?덈떎.'); return; }
 
   const diary = getDiary();
   diary.unshift({
@@ -3597,13 +3597,13 @@ function saveDiary() {
   localStorage.setItem(DIARY_LS, JSON.stringify(diary));
 
   renderDiary();
-  showToast('꿈 일기에 저장되었습니다 🌙');
+  showToast('轅??쇨린????λ릺?덉뒿?덈떎 ?뙔');
 
-  /* 저장 완료 — 저장 버튼 비활성화 + 다시하기 버튼 표시 */
+  /* ????꾨즺 ?????踰꾪듉 鍮꾪솢?깊솕 + ?ㅼ떆?섍린 踰꾪듉 ?쒖떆 */
   const $save  = document.getElementById('btnSaveDiary');
   const $retry = document.getElementById('btnRetryDream');
   $save.disabled   = true;
-  $save.textContent = '✅ 저장 완료';
+  $save.textContent = '??????꾨즺';
   $retry.style.display = 'flex';
 }
 
@@ -3617,7 +3617,7 @@ function renderDiary() {
   if (diary.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'diary-empty';
-    empty.textContent = '저장된 꿈 일기가 없습니다.';
+    empty.textContent = '??λ맂 轅??쇨린媛 ?놁뒿?덈떎.';
     list.appendChild(empty);
     return;
   }
@@ -3633,7 +3633,7 @@ function renderDiary() {
 
     const dateEl = document.createElement('span');
     dateEl.className = 'diary-date';
-    dateEl.textContent = `🌙 ${entry.date}`;
+    dateEl.textContent = `?뙔 ${entry.date}`;
 
     const emojisEl = document.createElement('span');
     emojisEl.className = 'diary-emojis';
@@ -3645,7 +3645,7 @@ function renderDiary() {
 
     const hint = document.createElement('div');
     hint.className = 'diary-item-hint';
-    hint.textContent = '탭하면 해몽 결과를 다시 볼 수 있어요';
+    hint.textContent = '??븯硫??대そ 寃곌낵瑜??ㅼ떆 蹂????덉뼱??;
 
     top.appendChild(dateEl);
     top.appendChild(emojisEl);
@@ -3653,7 +3653,7 @@ function renderDiary() {
     item.appendChild(preview);
     item.appendChild(hint);
 
-    /* 클릭 시 상세 뷰로 이동 */
+    /* ?대┃ ???곸꽭 酉곕줈 ?대룞 */
     item.addEventListener('click', () => openDiaryDetail(entry));
 
     list.appendChild(item);
@@ -3667,7 +3667,7 @@ function toggleDiary() {
 }
 
 function openDiaryWithList() {
-  /* 일기 목록이 열린 상태로 메인 뷰로 */
+  /* ?쇨린 紐⑸줉???대┛ ?곹깭濡?硫붿씤 酉곕줈 */
   showMainView();
   if (!diaryOpen) {
     diaryOpen = true;
@@ -3681,15 +3681,15 @@ function openDiaryWithList() {
 
 
 /* ============================================================
-   꿈 일기 상세 뷰
+   轅??쇨린 ?곸꽭 酉?
    ============================================================ */
-let currentDiaryEntry = null; /* 현재 열려 있는 일기 항목 */
+let currentDiaryEntry = null; /* ?꾩옱 ?대젮 ?덈뒗 ?쇨린 ??ぉ */
 
 function openDiaryDetail(entry) {
   currentDiaryEntry = entry;
 
-  /* 상세 뷰 데이터 채우기 */
-  document.getElementById('detailDate').textContent               = `🌙 ${entry.date}`;
+  /* ?곸꽭 酉??곗씠??梨꾩슦湲?*/
+  document.getElementById('detailDate').textContent               = `?뙔 ${entry.date}`;
   document.getElementById('detailDreamText').textContent          = entry.dream;
   document.getElementById('detailInterpretationText').textContent = entry.interpretation || '';
   document.getElementById('detailAdviceText').textContent         = entry.advice || '';
@@ -3705,9 +3705,9 @@ function openDiaryDetail(entry) {
   const dlc = document.getElementById('detailLuckyCard');
   if (entry.lucky) {
     const nums = Array.isArray(entry.lucky.numbers) ? entry.lucky.numbers.slice(0,3).join(', ') : '';
-    document.getElementById('detailLuckyNumbers').textContent = nums || '—';
-    document.getElementById('detailLuckyColor').textContent   = entry.lucky.color  || '—';
-    document.getElementById('detailLuckySymbol').textContent  = entry.lucky.symbol || '—';
+    document.getElementById('detailLuckyNumbers').textContent = nums || '??;
+    document.getElementById('detailLuckyColor').textContent   = entry.lucky.color  || '??;
+    document.getElementById('detailLuckySymbol').textContent  = entry.lucky.symbol || '??;
     dlc.style.display = 'block';
   } else {
     dlc.style.display = 'none';
@@ -3718,43 +3718,43 @@ function openDiaryDetail(entry) {
     entry.symbols || []
   );
 
-  /* 뷰 전환 */
+  /* 酉??꾪솚 */
   document.getElementById('mainContent').style.display        = 'none';
   const detail = document.getElementById('diaryDetailSection');
   detail.style.display = 'block';
-  /* 애니메이션 리트리거 */
+  /* ?좊땲硫붿씠??由ы듃由ш굅 */
   detail.style.animation = 'none';
   void detail.offsetWidth;
   detail.style.animation = '';
 
-  /* 상단으로 스크롤 */
+  /* ?곷떒?쇰줈 ?ㅽ겕濡?*/
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* 메인 뷰 초기 상태로 복귀 */
+/* 硫붿씤 酉?珥덇린 ?곹깭濡?蹂듦? */
 function showMainView() {
   document.getElementById('diaryDetailSection').style.display = 'none';
   document.getElementById('mainContent').style.display        = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* 앱 초기화 (메인으로 버튼용) */
+/* ??珥덇린??(硫붿씤?쇰줈 踰꾪듉?? */
 function resetAndGoMain() {
-  /* 입력 초기화 */
+  /* ?낅젰 珥덇린??*/
   $dreamInput.value = '';
   updateCharCount(0);
-  /* 빠른 선택 초기화 */
+  /* 鍮좊Ⅸ ?좏깮 珥덇린??*/
   selectedQuickIdxs = [];
   document.querySelectorAll('.quick-chip').forEach(c => c.classList.remove('active'));
   const qp = document.getElementById('quickPreview');
   if (qp) { qp.classList.remove('visible'); qp.textContent = ''; }
 
-  /* 결과/에러 숨김 */
+  /* 寃곌낵/?먮윭 ?④? */
   document.getElementById('resultSection').style.display = 'none';
   hideApiError();
   currentResult = null;
 
-  /* 일기 닫기 */
+  /* ?쇨린 ?リ린 */
   if (diaryOpen) {
     diaryOpen = false;
     document.getElementById('diaryList').classList.remove('open');
@@ -3764,39 +3764,39 @@ function resetAndGoMain() {
   showMainView();
 }
 
-/* 메인으로 버튼 */
+/* 硫붿씤?쇰줈 踰꾪듉 */
 document.getElementById('btnDetailMain').addEventListener('click', resetAndGoMain);
 
-/* 삭제하기 버튼 → 모달 열기 */
+/* ??젣?섍린 踰꾪듉 ??紐⑤떖 ?닿린 */
 document.getElementById('btnDetailDelete').addEventListener('click', () => {
   document.getElementById('deleteModal').style.display = 'flex';
 });
 
-/* 모달 — 아니오 → 일기 목록으로 돌아가기 */
+/* 紐⑤떖 ???꾨땲?????쇨린 紐⑸줉?쇰줈 ?뚯븘媛湲?*/
 document.getElementById('btnDeleteNo').addEventListener('click', () => {
   document.getElementById('deleteModal').style.display = 'none';
   openDiaryWithList();
 });
 
-/* 모달 — 예 → 삭제 후 메인으로 */
+/* 紐⑤떖 ????????젣 ??硫붿씤?쇰줈 */
 document.getElementById('btnDeleteYes').addEventListener('click', () => {
   document.getElementById('deleteModal').style.display = 'none';
 
   if (currentDiaryEntry) {
-    /* localStorage에서 해당 항목 삭제 */
+    /* localStorage?먯꽌 ?대떦 ??ぉ ??젣 */
     const diary  = getDiary().filter(e => e.id !== currentDiaryEntry.id);
     localStorage.setItem(DIARY_LS, JSON.stringify(diary));
     currentDiaryEntry = null;
     renderDiary();
   }
 
-  /* 삭제 완료 토스트 표시 후 메인으로 */
-  showToast('삭제되었습니다 🌙', () => resetAndGoMain());
+  /* ??젣 ?꾨즺 ?좎뒪???쒖떆 ??硫붿씤?쇰줈 */
+  showToast('??젣?섏뿀?듬땲???뙔', () => resetAndGoMain());
 });
 
 
 /* ============================================================
-   토스트 알림
+   ?좎뒪???뚮┝
    ============================================================ */
 let toastTimer = null;
 
@@ -3804,10 +3804,10 @@ function showToast(message, onHide) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
 
-  /* 이전 타이머 정리 */
+  /* ?댁쟾 ??대㉧ ?뺣━ */
   if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
 
-  /* 표시 */
+  /* ?쒖떆 */
   toast.classList.add('show');
   toastTimer = setTimeout(() => {
     toast.classList.remove('show');
@@ -3818,46 +3818,46 @@ function showToast(message, onHide) {
 
 
 /* ============================================================
-   앱 자체 공유 버튼 (최하단)
+   ???먯껜 怨듭쑀 踰꾪듉 (理쒗븯??
    ============================================================ */
 document.getElementById('btnAppShare').addEventListener('click', async () => {
   const appUrl  = window.location.href;
-  const appText = 'ReaDream 🌙 — 꿈의 상징을 해석해드려요! 꿈 내용을 입력하면 심리학 기반으로 상징과 해몽을 알려드립니다.';
+  const appText = 'ReaDream ?뙔 ??轅덉쓽 ?곸쭠???댁꽍?대뱶?ㅼ슂! 轅??댁슜???낅젰?섎㈃ ?щ━??湲곕컲?쇰줈 ?곸쭠怨??대そ???뚮젮?쒕┰?덈떎.';
 
-  /* Web Share API 지원 시 — 모바일에서 카카오톡·인스타 등 선택 가능 */
+  /* Web Share API 吏??????紐⑤컮?쇱뿉??移댁뭅?ㅽ넚쨌?몄뒪? ???좏깮 媛??*/
   if (navigator.share) {
     try {
       await navigator.share({ title: 'ReaDream', text: appText, url: appUrl });
       return;
-    } catch { /* 취소 무시 */ }
+    } catch { /* 痍⑥냼 臾댁떆 */ }
   }
 
-  /* 미지원 환경 — URL 클립보드 복사 */
+  /* 誘몄????섍꼍 ??URL ?대┰蹂대뱶 蹂듭궗 */
   try {
     await navigator.clipboard.writeText(appUrl);
-    showToast('앱 링크가 복사되었습니다 🔗');
+    showToast('??留곹겕媛 蹂듭궗?섏뿀?듬땲???뵕');
   } catch {
-    showToast('링크를 직접 복사해 공유해주세요');
+    showToast('留곹겕瑜?吏곸젒 蹂듭궗??怨듭쑀?댁＜?몄슂');
   }
 });
 
 
 /* ============================================================
-   초기화
+   珥덇린??
    ============================================================ */
 (function init() {
-  /* 버전 기반 강제 키 갱신 */
+  /* 踰꾩쟾 湲곕컲 媛뺤젣 ??媛깆떊 */
   const APP_VER = '3.0';
 
-  /* ── API 키 보안 처리 ──────────────────────────────────────────────────
-     키를 분할 저장하여 단순 소스 검색·크롤러 노출을 최소화합니다.
-     ★ 반드시 Google Cloud Console에서 아래 추가 제한을 설정하세요:
-        1. API 및 서비스 > 사용자 인증 정보 > 키 수정
-        2. 애플리케이션 제한: HTTP 참조 도메인 → 배포 도메인 등록
-        3. API 제한: Generative Language API 만 허용
-        4. 일일 할당량(quota) 설정으로 비용 상한 지정
-  ─────────────────────────────────────────────────────────────────────── */
-  const PRESET_KEY = '__GEMINI_KEY__';
+  /* ?? API ??蹂댁븞 泥섎━ ??????????????????????????????????????????????????
+     ?ㅻ? 遺꾪븷 ??ν븯???⑥닚 ?뚯뒪 寃?됀룻겕濡ㅻ윭 ?몄텧??理쒖냼?뷀빀?덈떎.
+     ??諛섎뱶??Google Cloud Console?먯꽌 ?꾨옒 異붽? ?쒗븳???ㅼ젙?섏꽭??
+        1. API 諛??쒕퉬??> ?ъ슜???몄쬆 ?뺣낫 > ???섏젙
+        2. ?좏뵆由ъ??댁뀡 ?쒗븳: HTTP 李몄“ ?꾨찓????諛고룷 ?꾨찓???깅줉
+        3. API ?쒗븳: Generative Language API 留??덉슜
+        4. ?쇱씪 ?좊떦??quota) ?ㅼ젙?쇰줈 鍮꾩슜 ?곹븳 吏??
+  ??????????????????????????????????????????????????????????????????????? */
+  const PRESET_KEY = 'AIzaSyAyKGfwkJi8q2zD_4KLOWwqYrQ6Wada16w';
 
   if (localStorage.getItem('rd_ver') !== APP_VER) {
     localStorage.setItem(API_KEY_LS, PRESET_KEY);
@@ -3870,15 +3870,15 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
   renderDiary();
   initPersonSection();
 
-  /* 페이지 로드 시 꿈 입력란에 자동 포커스 */
+  /* ?섏씠吏 濡쒕뱶 ??轅??낅젰????먮룞 ?ъ빱??*/
   setTimeout(() => $dreamInput.focus(), 150);
 
-  /* ── PWA manifest 인라인 등록 (홈 화면 추가 지원) ── */
+  /* ?? PWA manifest ?몃씪???깅줉 (???붾㈃ 異붽? 吏?? ?? */
   try {
     const manifest = {
-      name:             'ReaDream — 꿈 해몽',
+      name:             'ReaDream ??轅??대そ',
       short_name:       'ReaDream',
-      description:      '꿈의 상징을 분석하고 해몽을 알려드립니다. 융·프로이트 심리학 기반.',
+      description:      '轅덉쓽 ?곸쭠??遺꾩꽍?섍퀬 ?대そ???뚮젮?쒕┰?덈떎. ?돠룻봽濡쒖씠???щ━??湲곕컲.',
       start_url:        '.',
       display:          'standalone',
       background_color: '#0c0720',
@@ -3895,8 +3895,9 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
     link.rel  = 'manifest';
     link.href = URL.createObjectURL(blob);
     document.head.appendChild(link);
-  } catch { /* manifest 미지원 환경 무시 */ }
+  } catch { /* manifest 誘몄????섍꼍 臾댁떆 */ }
 })();
 </script>
 </body>
 </html>
+
