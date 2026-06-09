@@ -58,10 +58,13 @@
 
   <!-- ====== 보안: CSP — API 호출 도메인만 허용 ====== -->
   <meta http-equiv="Content-Security-Policy"
-        content="connect-src 'self' https://generativelanguage.googleapis.com https://t1.daumcdn.net https://t1.kakaocdn.net https://kas.kakao.com https://*.onkakao.net; script-src 'self' 'unsafe-inline' https://t1.daumcdn.net https://t1.kakaocdn.net; frame-src https://t1.daumcdn.net https://t1.kakaocdn.net https://kas.kakao.com;">
+        content="connect-src 'self' https://generativelanguage.googleapis.com https://t1.daumcdn.net https://t1.kakaocdn.net https://kas.kakao.com https://*.onkakao.net https://kapi.kakao.com; script-src 'self' 'unsafe-inline' https://t1.daumcdn.net https://t1.kakaocdn.net; frame-src https://t1.daumcdn.net https://t1.kakaocdn.net https://kas.kakao.com;">
 
   <!-- 카카오 애드핏 -->
   <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+  <!-- 카카오 공유 SDK -->
+  <script src="https://t1.kakaocdn.net/kakaojs/latest/kakao.js"></script>
+  <script>if (window.Kakao && !Kakao.isInitialized()) Kakao.init('9b68d1efc9d6823589bef67be4276d9b');</script>
   <style>
     /* === 기본 리셋 === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2770,9 +2773,21 @@ function buildFortuneShareText() {
 }
 
 document.getElementById('btnFShareKakao').addEventListener('click', async () => {
-  const text = buildFortuneShareText();
-  if (navigator.share) { try { await navigator.share({ title: '달빛 운세', text }); return; } catch {} }
-  await copyTextFallback(text, '운세를 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
+  if (window.Kakao && Kakao.isInitialized()) {
+    const msg   = document.getElementById('fortuneMessage').textContent.trim().substring(0, 120);
+    const num   = document.getElementById('fortuneNumber').textContent;
+    const label = document.getElementById('fortuneDateLabel').textContent;
+    Kakao.Share.sendDefault({
+      objectType: 'text',
+      text: `🌙 달빛 운세 (${label})\n\n${msg}\n\n✨ 행운의 숫자: ${num}`,
+      link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' },
+      buttons: [{ title: '나도 운세 보기', link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' } }]
+    });
+  } else {
+    const text = buildFortuneShareText();
+    if (navigator.share) { try { await navigator.share({ title: '달빛 운세', text }); return; } catch {} }
+    await copyTextFallback(text, '운세를 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
+  }
 });
 
 document.getElementById('btnFShareX').addEventListener('click', () => {
@@ -3345,13 +3360,20 @@ async function copyTextFallback(text, successMsg) {
 
 /* ── 카카오톡으로 보내기 ── */
 document.getElementById('btnShareKakao').addEventListener('click', async () => {
-  const text = buildShareText();
-  /* 모바일 Web Share API → 카카오톡 공유 시트에 표시됨 */
-  if (navigator.share) {
-    try { await navigator.share({ title: 'ReaDream 결과', text }); return; } catch { }
+  if (window.Kakao && Kakao.isInitialized()) {
+    const symbols = (currentResult?.symbols || []).map(s => `${s.emoji} ${s.name}`).join(' · ');
+    const advice  = (currentResult?.advice || '').substring(0, 80);
+    Kakao.Share.sendDefault({
+      objectType: 'text',
+      text: `🌙 ReaDream 꿈 해몽\n\n${symbols}\n\n${advice}`,
+      link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' },
+      buttons: [{ title: '내 꿈도 해몽하기', link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' } }]
+    });
+  } else {
+    const text = buildShareText();
+    if (navigator.share) { try { await navigator.share({ title: 'ReaDream 결과', text }); return; } catch {} }
+    await copyTextFallback(text, '내용을 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
   }
-  /* 데스크톱 fallback — 텍스트 복사 후 안내 */
-  await copyTextFallback(text, '내용을 복사했어요. 카카오톡에 붙여넣어 공유하세요 💬');
 });
 
 /* ── 인스타그램으로 보내기 ── */
