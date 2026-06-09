@@ -2527,7 +2527,13 @@ function renderSymbolsGrid(container, symbols) {
    ============================================================ */
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 function geminiUrl() {
-  return `${GEMINI_BASE}/models/${FIXED_MODEL}:generateContent?key=${localStorage.getItem('dalbit_api_key') || ''}`;
+  return `${GEMINI_BASE}/models/${FIXED_MODEL}:generateContent`;
+}
+function geminiHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'x-goog-api-key': localStorage.getItem('dalbit_api_key') || '',
+  };
 }
 
 const SYSTEM_PROMPT =
@@ -2587,9 +2593,9 @@ async function interpretDream() {
   try {
     const endpoint = geminiUrl();
 
-    const res = await fetch(`${endpoint}`, {
+    const res = await fetch(endpoint, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: geminiHeaders(),
       signal:  controller.signal,
       body: JSON.stringify({
         system_instruction: { parts: [{ text: buildSystemPrompt() }] },
@@ -2999,9 +3005,9 @@ document.getElementById('btnFortune').addEventListener('click', async () => {
 
   try {
     const endpoint = geminiUrl();
-    const res = await fetch(`${endpoint}`, {
+    const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: geminiHeaders(),
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
         generationConfig: { maxOutputTokens: 2048, temperature: 0.85, thinkingConfig: { thinkingBudget: 0 } },
@@ -3161,9 +3167,9 @@ document.getElementById('btnPersonAnalyze').addEventListener('click', async () =
 
   try {
     const endpoint = geminiUrl();
-    const res = await fetch(`${endpoint}`, {
+    const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: geminiHeaders(),
       body: JSON.stringify({
         contents:         [{ parts: [{ text: prompt }] }],
         generationConfig: { maxOutputTokens: 2048, temperature: 0.9, thinkingConfig: { thinkingBudget: 0 } },
