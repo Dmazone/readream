@@ -1806,8 +1806,9 @@
       padding: 16px 0 12px;
     }
 
-    /* ===== API 키 카드 ===== */
-    #apiCard { display: block; }
+    /* ===== API 키 카드 숨김 ===== */
+    #apiCard { display: none; }
+    #apiCard.visible { display: block; }
 
     /* ===== 반응형 ===== */
     @media (max-width: 360px) {
@@ -2351,6 +2352,10 @@
    ============================================================ */
 const API_KEY_LS = 'dalbit_api_key';
 let apiOpen = true;
+
+if (new URLSearchParams(location.search).has('setup')) {
+  document.getElementById('apiCard').classList.add('visible');
+}
 
 const $apiBody     = document.getElementById('apiBody');
 const $apiChevron  = document.getElementById('apiChevron');
