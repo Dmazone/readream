@@ -2814,52 +2814,14 @@ function buildFortuneShareText() {
   return `🌙 달빛 운세 (${label})\n\n${msg}\n\n✨ 행운의 숫자: ${num}  🎨 ${color}  🧭 ${dir}\n\n#ReaDream #꿈해몽\nhttps://dmazone.github.io/readream/`;
 }
 
-/* ── 카카오 닉네임 캐시 ── */
-const KAKAO_NAME_LS = 'rd_kakao_name';
-
-async function getKakaoNickname() {
-  const cached = localStorage.getItem(KAKAO_NAME_LS);
-  if (cached) return cached;
-  if (!window.Kakao || !Kakao.isInitialized()) return '';
-
-  /* 기존 토큰 확인 */
-  const hasToken = !!Kakao.Auth.getAccessToken();
-
-  const fetchProfile = () => new Promise((resolve) => {
-    Kakao.API.request({
-      url: '/v2/user/me',
-      success: (res) => {
-        const nick = res.kakao_account?.profile?.nickname || '';
-        if (nick) localStorage.setItem(KAKAO_NAME_LS, nick);
-        resolve(nick);
-      },
-      fail: () => resolve(''),
-    });
-  });
-
-  if (hasToken) return fetchProfile();
-
-  return new Promise((resolve) => {
-    Kakao.Auth.login({
-      scope: 'profile_nickname',
-      success: () => fetchProfile().then(resolve),
-      fail:    () => resolve(''),
-    });
-  });
-}
-
 document.getElementById('btnFShareKakao').addEventListener('click', async () => {
   const msg      = document.getElementById('fortuneMessage').textContent.trim().substring(0, 80);
   const label    = document.getElementById('fortuneDateLabel').textContent;
   const DEEP_URL  = 'https://dmazone.github.io/readream/?fortune=true';
   const SHARE_IMG = 'https://dmazone.github.io/readream/public/kakao_icon.png';
+  const cardTitle = `🌙 오늘의 달빛 운세 (${label}) : ${msg}`;
 
   if (window.Kakao && Kakao.isInitialized()) {
-    const name = await getKakaoNickname();
-    const cardTitle = name
-      ? `"${name}" 님 오늘의 운세 : ${msg}`
-      : `🌙 오늘의 달빛 운세 (${label}) : ${msg}`;
-
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
