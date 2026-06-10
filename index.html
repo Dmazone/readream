@@ -18,9 +18,9 @@
   <meta property="og:description" content="꿈 내용을 입력하면 심리학 기반 꿈 풀이, 상징 분석, 오늘의 조언을 바로 알려드립니다. 무료 꿈해몽 사이트.">
   <meta property="og:type"        content="website">
   <meta property="og:url"         content="https://dmazone.github.io/readream/">
-  <meta property="og:image"       content="https://dmazone.github.io/readream/public/icons.svg">
-  <meta property="og:image:width" content="512">
-  <meta property="og:image:height" content="512">
+  <meta property="og:image"       content="https://dmazone.github.io/readream/public/share.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="500">
   <meta property="og:locale"      content="ko_KR">
   <meta property="og:site_name"   content="ReaDream">
   <meta name="twitter:card"       content="summary_large_image">
@@ -2785,14 +2785,20 @@ function buildFortuneShareText() {
 
 document.getElementById('btnFShareKakao').addEventListener('click', async () => {
   if (window.Kakao && Kakao.isInitialized()) {
-    const msg   = document.getElementById('fortuneMessage').textContent.trim().substring(0, 120);
+    const msg   = document.getElementById('fortuneMessage').textContent.trim().substring(0, 100);
     const num   = document.getElementById('fortuneNumber').textContent;
     const label = document.getElementById('fortuneDateLabel').textContent;
+    const SHARE_URL = 'https://dmazone.github.io/readream/';
+    const SHARE_IMG = 'https://dmazone.github.io/readream/public/share.png';
     Kakao.Share.sendDefault({
-      objectType: 'text',
-      text: `🌙 달빛 운세 (${label})\n\n${msg}\n\n✨ 행운의 숫자: ${num}`,
-      link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' },
-      buttons: [{ title: '나도 운세 보기', link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' } }]
+      objectType: 'feed',
+      content: {
+        title: `🌙 오늘의 달빛 운세 (${label})`,
+        description: `${msg}\n\n✨ 행운의 숫자: ${num}`,
+        imageUrl: SHARE_IMG,
+        link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL }
+      },
+      buttons: [{ title: '나도 운세 보기 🌙', link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } }]
     });
   } else {
     const text = buildFortuneShareText();
@@ -3374,11 +3380,17 @@ document.getElementById('btnShareKakao').addEventListener('click', async () => {
   if (window.Kakao && Kakao.isInitialized()) {
     const symbols = (currentResult?.symbols || []).map(s => `${s.emoji} ${s.name}`).join(' · ');
     const advice  = (currentResult?.advice || '').substring(0, 80);
+    const SHARE_URL = 'https://dmazone.github.io/readream/';
+    const SHARE_IMG = 'https://dmazone.github.io/readream/public/share.png';
     Kakao.Share.sendDefault({
-      objectType: 'text',
-      text: `🌙 ReaDream 꿈 해몽\n\n${symbols}\n\n${advice}`,
-      link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' },
-      buttons: [{ title: '내 꿈도 해몽하기', link: { mobileWebUrl: 'https://dmazone.github.io/readream/', webUrl: 'https://dmazone.github.io/readream/' } }]
+      objectType: 'feed',
+      content: {
+        title: `🌙 ReaDream 꿈 해몽 결과`,
+        description: symbols ? `${symbols}\n\n${advice}` : advice,
+        imageUrl: SHARE_IMG,
+        link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL }
+      },
+      buttons: [{ title: '내 꿈도 해몽하기 ✨', link: { mobileWebUrl: SHARE_URL, webUrl: SHARE_URL } }]
     });
   } else {
     const text = buildShareText();
