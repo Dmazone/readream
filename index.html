@@ -2552,9 +2552,9 @@ function renderSymbolsGrid(container, symbols) {
 /* ============================================================
    Gemini API 호출 및 해몽 처리
    ============================================================ */
-const GEMINI_BASE = 'https://readream-proxy.ekaledma.workers.dev';
+const GEMINI_BASE = 'https://readream-proxy.ekaledma.workers.dev'; /* TODO: Vercel URL로 교체 */
 function geminiUrl() {
-  return `${GEMINI_BASE}/models/${FIXED_MODEL}:generateContent`;
+  return `${GEMINI_BASE}/api/proxy?model=${FIXED_MODEL}`;
 }
 function geminiHeaders() {
   return {
