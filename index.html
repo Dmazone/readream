@@ -2790,7 +2790,6 @@ function initFortune() {
     if (btn.style.display !== 'none') {
       setTimeout(() => btn.click(), 600);
     }
-    document.querySelector('.fortune-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 
@@ -2814,22 +2813,26 @@ function buildFortuneShareText() {
 }
 
 document.getElementById('btnFShareKakao').addEventListener('click', async () => {
-  const msg      = document.getElementById('fortuneMessage').textContent.trim().substring(0, 80);
+  const msg      = document.getElementById('fortuneMessage').textContent.trim();
   const label    = document.getElementById('fortuneDateLabel').textContent;
+  const num      = document.getElementById('fortuneNumber').textContent;
+  const color    = document.getElementById('fortuneColor').textContent;
+  const dir      = document.getElementById('fortuneDirection').textContent;
   const DEEP_URL  = 'https://dmazone.github.io/readream/?fortune=true';
   const SHARE_IMG = 'https://dmazone.github.io/readream/public/kakao_icon.png';
-  const cardTitle = `🌙 오늘의 달빛 운세 (${label}) : ${msg}`;
 
   if (window.Kakao && Kakao.isInitialized()) {
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: cardTitle,
-        description: '내 운세와 꿈해몽 결과 알아보기',
+        title: `🌙 오늘의 달빛 운세 (${label})`,
+        description: `${msg}\n\n✨ 행운의 숫자 ${num}  🎨 ${color}  🧭 ${dir}`,
         imageUrl: SHARE_IMG,
+        imageWidth: 300,
+        imageHeight: 300,
         link: { mobileWebUrl: DEEP_URL, webUrl: DEEP_URL }
       },
-      buttons: [{ title: '내 운세와 꿈해몽 결과 알아보기 🌙', link: { mobileWebUrl: DEEP_URL, webUrl: DEEP_URL } }]
+      buttons: [{ title: '내 운세 보기 🌙', link: { mobileWebUrl: DEEP_URL, webUrl: DEEP_URL } }]
     });
   } else {
     const text = buildFortuneShareText();
@@ -3930,8 +3933,12 @@ document.getElementById('btnAppShare').addEventListener('click', async () => {
   renderDiary();
   initPersonSection();
 
-  /* 페이지 로드 시 꿈 입력란에 자동 포커스 */
-  setTimeout(() => $dreamInput.focus(), 150);
+  /* 페이지 로드 시 꿈 입력란에 자동 포커스 (fortune 딥링크 제외) */
+  if (!new URLSearchParams(location.search).has('fortune')) {
+    setTimeout(() => $dreamInput.focus(), 150);
+  } else {
+    window.scrollTo(0, 0);
+  }
 
   /* ── PWA manifest 인라인 등록 (홈 화면 추가 지원) ── */
   try {
